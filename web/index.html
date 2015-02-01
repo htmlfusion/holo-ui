@@ -43,15 +43,20 @@
 	</head>
 
 	<body>
+		<video id="capture" width="640" height="480" preload="auto" loop style="display: none"></video>
 		<div id="info">
 			<a href="http://threejs.org" target="_blank">three.js</a> - effects - stereo. skybox by <a href="http://www.zfight.com/" target="_blank">Jochum Skoglund</a>
 		</div>
 
+		<script src="bower_components/jquery/dist/jquery.js"></script>
+		<script src="bower_components/clmtrackr/clmtrackr.min.js"></script>
+		<script src="bower_components/clmtrackr/models/model_pca_20_svm.js"></script>
 		<script src="bower_components/threejs/build/three.js"></script>
 
 		<script src="js/effects/StereoEffect.js"></script>
 
 		<script src="js/Detector.js"></script>
+		<script src="js/HeadTracker.js"></script>
 
 		<script>
 
@@ -70,6 +75,8 @@
 
 			var windowHalfX = window.innerWidth / 2;
 			var windowHalfY = window.innerHeight / 2;
+			
+			var tracker = new HeadTracker();
 
 			document.addEventListener( 'mousemove', onDocumentMouseMove, false );
 
@@ -78,6 +85,7 @@
 
 			function init() {
 
+				tracker.initTracker();
 				container = document.createElement( 'div' );
 				document.body.appendChild( container );
 
@@ -173,13 +181,20 @@
 				render();
 
 			}
+			
 
 			function render() {
 
 				var timer = 0.0001 * Date.now();
 
-				camera.position.x += ( mouseX - camera.position.x ) * .05;
-				camera.position.y += ( - mouseY - camera.position.y ) * .05;
+				//camera.position.x += ( mouseX - camera.position.x ) * .05;
+				//camera.position.y += ( - mouseY - camera.position.y ) * .05;
+				if(tracker.initialized){
+					var pose = tracker.getPose();
+					camera.position.x = pose[0];
+					camera.position.y = pose[1];
+					camera.position.z = pose[2];
+				};
 				camera.lookAt( scene.position );
 
 				for ( var i = 0, il = spheres.length; i < il; i ++ ) {
