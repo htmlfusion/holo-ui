@@ -90,13 +90,30 @@ THREE.StereoEffect = function ( renderer ) {
 		_outer = _halfFocalWidth * 2.0 * _ndfl * _outerFactor;
 		_inner = _halfFocalWidth * 2.0 * _ndfl * _innerFactor;
 
-		// left
+		// Off axis rendering
+		_outer += _position.x;
+		_inner += _position.x;
+		
+		_bottom += _position.y;
+		_top += _position.y;
+		
+		// _outer /= _fov / _position.z;
+		// _inner /= _fov / _position.z;
+		// _top /= _fov / _position.z;
+		// _bottom /= _fov / _position.z;
+		// _outer *= camera.near / _position.z;
+		// _inner *= camera.near / _position.z;
+		// _top *= camera.near / _position.z;
+		// _bottom *= camera.near / _position.z;
+		
 
+
+		//http://bl0rg.net/~manuel/opengl2.pde
 		_cameraL.projectionMatrix.makeFrustum(
-			-_outer,
-			_inner,
-			_bottom,
-			_top,
+			-_outer, //left
+			_inner, //right
+			_bottom, //bottom
+			_top, //top
 			camera.near,
 			camera.far
 		);

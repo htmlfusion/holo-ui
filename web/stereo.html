@@ -44,7 +44,7 @@
 		<script>
 
 			var container, stats;
-			var HEAD_TRACKING=false
+			var HEAD_TRACKING=true;
 
 			var camera, scene, renderer, effect;
 
@@ -102,12 +102,11 @@
 				loader.load( 'obj/model_mesh.obj', 'obj/model_mesh.obj.mtl', function ( object ) {
 					object.position.y = - 80;
 					if(HEAD_TRACKING){
-						object.position.z = 500;
+						object.position.z = 800;
 					}
 					scene.add( object );
 				        object.scale.set( 500, 500, 500 );
 					console.log("Object added to scene");
-				
 
 				}, onProgress, onError );
 
@@ -172,6 +171,7 @@
 				
 				if(tracker.initialized && HEAD_TRACKING){
 					var pose = tracker.getPose();
+					console.log(pose);
 					camera.position.x = pose[0];
 					camera.position.y = pose[1];
 					camera.position.z = pose[2];
