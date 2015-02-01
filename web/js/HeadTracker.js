@@ -72,12 +72,11 @@ function HeadTracker(){
     var rx = Math.sin(self.fov * centerX) * headDist * 0.5;
     var ry = Math.sin(self.fov * centerY) * headDist * 1.5;
 
-    var fx = -rx;
-    var fy = -ry;
+    var fx = rx;
+    var fy = ry;
     var fz = headDist;
     
     var vec = [fx, fy, fz];
-    console.log(vec);
     return vec;
     //Pupil distance this is an average pupile distance in mm
   };
