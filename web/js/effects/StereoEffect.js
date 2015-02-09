@@ -93,8 +93,8 @@ THREE.StereoEffect = function ( renderer ) {
 		// left
 
 		_cameraL.projectionMatrix.makeFrustum(
-			-_outer,
-			_inner,
+			- _outer,
+			 _inner,
 			_bottom,
 			_top,
 			camera.near,
@@ -108,7 +108,7 @@ THREE.StereoEffect = function ( renderer ) {
 		// right
 
 		_cameraR.projectionMatrix.makeFrustum(
-			-_inner,
+			- _inner,
 			_outer,
 			_bottom,
 			_top,
@@ -127,11 +127,11 @@ THREE.StereoEffect = function ( renderer ) {
 
 		renderer.setScissor( 0, 0, _width, _height );
 		renderer.setViewport( 0, 0, _width, _height );
-		renderer.render( scene, _cameraL );
+		renderer.render( scene, _cameraR );
 
 		renderer.setScissor( _width, 0, _width, _height );
 		renderer.setViewport( _width, 0, _width, _height );
-		renderer.render( scene, _cameraR );
+		renderer.render( scene, _cameraL );
 
 		renderer.enableScissorTest( false );
 

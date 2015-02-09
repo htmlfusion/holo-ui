@@ -1,0 +1,289 @@
+
+<html>
+  <head>
+    <!-- example coded by Robbie Tilton [www.RobbieTilton.com]
+    Please note - this example uses several images.  The links to download them can be found below:
+      + particle image can be found here: http://www.aerotwist.com/tutorials/creating-particles-with-three-js/images/particle.png
+      + cloud image can be found here: http://wiki.fis-ski.com/images/Cloud_combined.jpg
+      + the bump map image can be found here: http://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Srtm_ramp2.world.21600x10800.jpg/1024px-Srtm_ramp2.world.21600x10800.jpg
+      + earth satelite image can be found here: http://examples.maptiler.org/map-reprojection-html5-canvas/world1024.jpg
+
+    If you're new to three.js and you're using Chrome to run the web app locally you'll receive cross-domain issues with
+    loading in the files.  To run it locally - there is a simple python command you can use in your terminal: 'python -m SimpleHTTPServer 8000'
+    This will resolve cross-domain issues with Chrome and the example will be viewable on localhost:8000
+
+    If you plan to put this up on a webpage you may also want to reduce the image sizes after you download them.  Example: Photoshop > Save for Web Devices
+    -->
+    <title>Earth Rotation - Leap</title>
+    <style>
+      body{margin: 0px; padding: 0px;}
+      canvas { width: 100%; height: 100%; background-color: black; }
+    </style>
+    <script src="bower_components/threejs/build/three.min.js"></script>
+    <script src="//js.leapmotion.com/leap-0.6.4.js"></script>
+    <script src="js/libs/stats.min.js" ></script>
+    <script src="js/controls/TrackballControls.js" ></script>
+    <script src="js/effects/StereoEffect.js"></script>
+
+  </head>
+  <body>
+    <script>
+	//map function to be used to map values from leap into proper degrees (0-360)
+	function map(value, inputMin, inputMax, outputMin, outputMax){
+		outVal = ((value - inputMin) / (inputMax - inputMin) * (outputMax - outputMin) + outputMin);
+		if(outVal >  outputMax){
+		  outVal = outputMax;
+		}
+		if(outVal <  outputMin){
+		  outVal = outputMin;
+		}
+		return outVal;
+	}
+
+	var handies = {};
+	var loop = {};
+	var info, stats, controls, renderer, scene, camera; 
+	var cameraHelper, cameraHelper2, camera2; 
+	var HELPERS = true;
+	init(); 
+		
+	function init() {
+		
+		if (HELPERS) {
+		document.body.style.cssText = 'font: 600 12pt monospace; color: white; margin: 0; overflow: hidden;' ;
+		var info = document.body.appendChild( document.createElement( 'div' ) );
+		info.style.cssText = 'left: 20px; position: absolute; ';
+		info.innerHTML = '<a href="" ><h1>' + document.title + '</h1></a>' +
+		'<div id=handData ></div>' ;
+
+		stats = new Stats();
+		stats.domElement.style.cssText = 'position: absolute; right: 0; top: 0; z-index: 100; ';
+		document.body.appendChild( stats.domElement );
+		
+		}
+		//create scene
+		scene = new THREE.Scene();
+		scene.position.set(0, 0, 0);
+		renderer = new THREE.WebGLRenderer();
+		renderer.setSize(window.innerWidth, window.innerHeight);
+		document.body.appendChild(renderer.domElement);
+		
+		// Stereo effect
+		effect = new THREE.StereoEffect( renderer );
+		effect.eyeSeparation = 0.8;
+		effect.setSize( window.innerWidth, window.innerHeight );
+		
+		// create a Directional light as pretend sunshine.
+		directional = new THREE.DirectionalLight( 0xCCCCCC, 1.2 )
+		directional.castShadow = true
+		directional.position.set( 100, 200, 300 )
+		directional.target.position.copy( new THREE.Vector3(0,0,0) )
+		directional.shadowCameraTop     =  1000
+		directional.shadowCameraRight   =  1000
+		directional.shadowCameraBottom  = -1000
+		directional.shadowCameraLeft    = -1000
+		directional.shadowCameraNear    =  600
+		directional.shadowCameraFar     = -600
+		directional.shadowBias          =   -0.0001
+		directional.shadowDarkness      =    0.4
+		directional.shadowMapWidth      = directional.shadowMapHeight = 2048
+		scene.add( directional )
+
+		window.ambient = new THREE.AmbientLight( 0x666666 )
+		scene.add( ambient )
+
+        if (HELPERS) {
+		var helper = new THREE.GridHelper( 500, 20 );
+				helper.setColors( 0x0000ff, 0x808080 );
+				helper.position.y = 0;
+				scene.add( helper );
+
+		// axes
+		var axis = new THREE.AxisHelper( 250 );
+		scene.add( axis );
+	    }
+		//clouds object
+		window.clouds = new THREE.Mesh(
+		new THREE.SphereGeometry( 50 + 1, 32, 32 ),
+		new THREE.MeshLambertMaterial({
+		  map: THREE.ImageUtils.loadTexture( 'img/clouds.jpg' ),
+		  transparent: true,
+		  blending: THREE.CustomBlending,
+		  blendSrc: THREE.SrcAlphaFactor,
+		  blendDst: THREE.OneMinusSrcColorFactor,
+		  blendEquation: THREE.AddEquation
+		})
+		)
+		clouds.position.set( 0, 400, 0 )
+		clouds.receiveShadow = true
+		clouds.castShadow = true
+		scene.add( clouds )
+
+
+		//earth object  specular: 0x555555, 
+		var earthBumpImage = THREE.ImageUtils.loadTexture( "img/earthBumpMap.jpg" );
+		var geometry = new THREE.SphereGeometry(50, 40, 40)
+		var material = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture( 'img/earthSatTexture.jpg' ), 
+													ambient: 0x050505, 
+													color: 0xFFFFFF, 
+													specular: 0xFFFFFF, 
+													bumpMap: earthBumpImage, 
+													bumpScale: 19, 
+													metal: true } );
+		window.earth = new THREE.Mesh( geometry, material );
+		earth.position.set( 0, 400, 0 );
+		scene.add(earth);
+
+		//add camera
+		WIDTH      = window.innerWidth,
+		HEIGHT     = window.innerHeight,
+		VIEW_ANGLE = 45,
+		ASPECT     = WIDTH / (HEIGHT/2),
+		NEAR       = 0.1,
+		FAR        = 1000
+		camera = new THREE.PerspectiveCamera( VIEW_ANGLE, ASPECT, NEAR, FAR );
+		//camera.lookAt( scene.position )
+		//lookat = new THREE.Vector3(0,0,0);
+		//camera.up = new THREE.Vector3(0,1,0);
+		//camera.updateProjectionMatrix();
+		camera.position.set(0, 300, 300 );
+		camera.lookAt( earth.position );
+		//console.log(camera);
+
+		//cameraHelper = new THREE.CameraHelper( camera );
+		//scene.add( cameraHelper );
+
+		//camera2 =  new THREE.PerspectiveCamera( VIEW_ANGLE, ASPECT, NEAR, FAR );
+		//camera2.position.set( 150, 150, -500);
+		//camera2.lookAt( earth.position);
+		//cameraHelper2 = new THREE.CameraHelper( camera2 );
+		//scene.add( cameraHelper2 );
+
+		controls = new THREE.TrackballControls( camera, renderer.domElement );
+
+	  }
+	//initite variables
+	var firstValidFrame = null
+	var cameraRadius = 290
+	var rotateY = 90, rotateX = 0, curY = 0
+	var fov = camera.fov;
+	//request animation frame and connect to leap socket
+      
+  /***    
+      Leap.loop(function(frame) {
+        if (frame.valid) {
+
+          //rotate cloud and earth independently
+          //clouds.rotation.y+=.002
+          //earth.rotation.y+=.001
+
+          if (!firstValidFrame) firstValidFrame = frame
+          var t = firstValidFrame.translation(frame)
+
+          //limit y-axis between 0 and 180 degrees
+          curY = map(t[1], -300, 300, 0, 179)
+          //console.log(t[1]);
+          //console.log(t[0]);
+          
+          //assign rotation coordinates
+          rotateX = t[0]
+          rotateY = -curY
+
+          zoom = Math.max(0, t[2] + 200);
+          zoomFactor = 1/(1 + (zoom / 150));
+
+          //adjust 3D spherical coordinates of the camera
+          //camera.position.x = earth.position.x + cameraRadius * Math.sin(rotateY * Math.PI/180) * Math.cos(rotateX * Math.PI/180)
+          //camera.position.z = earth.position.y + cameraRadius * Math.sin(rotateY * Math.PI/180) * Math.sin(rotateX * Math.PI/180)
+          //camera.position.y = earth.position.z + cameraRadius * Math.cos(rotateY * Math.PI/180)
+          //camera.fov = fov * zoomFactor;
+          
+          // Rotating the earth instead of the camera:
+          //earth.rotation.x =  Math.sin(rotateY * Math.PI/180) * Math.cos(rotateX * Math.PI/180)
+          //earth.rotation.y =  Math.sin(rotateY * Math.PI/180) * Math.sin(rotateX * Math.PI/180)
+          //earth.rotation.z = cameraRadius * Math.cos(rotateY * Math.PI/180)
+          //camera.fov = fov * zoomFactor;  
+          
+          earth.rotation.x = 0;
+          earth.rotation.y = 6;
+          earth.rotation.z = 0;      
+          
+        }
+
+        //camera.updateProjectionMatrix();
+        //camera.lookAt(scene.position)
+        renderer.render(scene, camera)
+      });
+****/
+
+	loop.animate = function( frame ) {
+
+		frame.hands.forEach( function( hand, index ) {
+
+			var handy = ( handies[index] || ( handies[index] = new Handy()) );    
+			handy.outputData( index, hand );
+
+		});
+        clouds.rotation.y+=.002
+        earth.rotation.y+=.001
+        //cameraHelper.visible = true;
+        //cameraHelper2.visible = true;
+        camera.lookAt(earth.position);
+        camera.updateProjectionMatrix();
+        
+		//renderer.setViewport( 0, 0, window.innerWidth/2, window.innerHeight );
+		//renderer.render( scene, camera2);
+
+		//renderer.setViewport( window.innerWidth/2, 0, window.innerWidth/2, window.innerHeight );
+		//renderer.render( scene, camera );
+        
+		//renderer.render( scene, camera );
+		effect.render( scene, camera );
+		controls.update();
+		if (HELPERS) {
+			stats.update();
+		}
+
+	}
+	loop = Leap.loop( loop.animate );
+	//loop.use( 'screenPosition', { scale: 0.25 } ); // use = plugin
+
+	var Handy = function() {
+		var handy = this;
+		
+		if (HELPERS) {
+		var msg = handData.appendChild( document.createElement( 'div' ) );
+		}
+		var geometry = new THREE.BoxGeometry( 50, 20, 50 );
+		var material = new THREE.MeshNormalMaterial();
+		var box = new THREE.Mesh( geometry, material );
+		scene.add( box );
+
+		handy.outputData = function( index, hand  ) {
+
+			if (HELPERS) {
+			msg.innerHTML = 'Hand id:' + index + ' x:' + hand.stabilizedPalmPosition[0].toFixed(0) + 
+				' y:' + hand.stabilizedPalmPosition[1].toFixed(0) + ' z:' + hand.stabilizedPalmPosition[2].toFixed(0);
+			}
+			box.position.set( hand.stabilizedPalmPosition[0], hand.stabilizedPalmPosition[1], hand.stabilizedPalmPosition[2] );
+
+			box.rotation.set( hand.pitch(), -hand.yaw(), hand.roll() );
+
+		};
+
+	};
+
+
+      //window resize method
+      window.addEventListener( 'resize', onWindowResize, false );
+      function onWindowResize(){
+          camera.aspect = window.innerWidth / window.innerHeight;
+          camera.updateProjectionMatrix();
+
+          //renderer.setSize( window.innerWidth, window.innerHeight );
+          effect.setSize( window.innerWidth, window.innerHeight );
+      }
+    </script>
+  </body>
+</html>
+
