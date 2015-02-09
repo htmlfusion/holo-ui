@@ -1,0 +1,61 @@
+{
+	"camera": {
+		"metadata": {
+			"version": 4.3,
+			"type": "Object",
+			"generator": "ObjectExporter"
+		},
+		"object": {
+			"uuid": "0F1B963B-AE5E-402F-93ED-52978DAB5B66",
+			"type": "PerspectiveCamera",
+			"name": "Camera",
+			"fov": 50,
+			"aspect": 1.7165071770334928,
+			"near": 0.1,
+			"far": 100000,
+			"matrix": [0.9747052192687988,1.0946168971237569e-10,-0.22349447011947632,0,-0.13254255056381226,0.8051684498786926,-0.5780452489852905,0,0.17995069921016693,0.5930461883544922,0.7848018407821655,0,23.983213424682617,79.03913116455078,104.59569549560547,1]
+		}
+	},
+	"scene": {
+		"metadata": {
+			"version": 4.3,
+			"type": "Object",
+			"generator": "ObjectExporter"
+		},
+		"object": {
+			"uuid": "3741222A-BD8F-401C-A5D2-5A907E891896",
+			"type": "Scene",
+			"name": "Scene",
+			"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1],
+			"children": [
+				{
+					"uuid": "FC5D913C-DE02-48D7-AA3C-0A3D2BE9E7EB",
+					"type": "Group",
+					"name": "cameraGroup",
+					"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1],
+					"children": [
+						{
+							"uuid": "7A2B2C4A-7BD5-4592-B48E-A4439706930D",
+							"type": "PerspectiveCamera",
+							"name": "cameraRight",
+							"fov": 50,
+							"aspect": 1,
+							"near": 1,
+							"far": 10000,
+							"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,4,0,0,1]
+						},
+						{
+							"uuid": "991CCECC-CDA8-48EC-9A94-4523879E7CAC",
+							"type": "PerspectiveCamera",
+							"name": "cameraLeft",
+							"fov": 50,
+							"aspect": 1,
+							"near": 1,
+							"far": 10000,
+							"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,-4,0,0,1]
+						}]
+				}]
+		}
+	},
+	"scripts": {}
+}
