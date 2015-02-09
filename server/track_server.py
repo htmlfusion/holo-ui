@@ -8,12 +8,9 @@ WebSocketPlugin(cherrypy.engine).subscribe()
 cherrypy.tools.websocket = WebSocketTool()
 
 class TrackSocket(WebSocket):
-    
     def received_message(self, message):
         if(message.data == 'subscribe'):
-            print('sending')
-            for i in range(10):
-                self.send(str(i), message.is_binary)
+            self.send(message.data, message.is_binary)
 
 class Root(object):
     @cherrypy.expose
@@ -27,4 +24,3 @@ class Root(object):
 
 cherrypy.quickstart(Root(), '/', config={'/ws': {'tools.websocket.on': True,
                                                  'tools.websocket.handler_cls': TrackSocket}})
-
