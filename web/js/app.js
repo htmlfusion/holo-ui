@@ -8,6 +8,7 @@ var APP = {
 
     var loader = new THREE.ObjectLoader();
     var camera, scene, renderer, debugControls;
+    var debug=false;
 
     var scripts = {};
 
@@ -42,28 +43,27 @@ var APP = {
       debugControls.dynamicDampingFactor = 0.3;
 
       debugControls.keys = [ 65, 83, 68 ];
-
-      debugControls.addEventListener( 'change', function(){
-        console.log('working');
-      });
-
       
       function keydown( event) {
-        console.log(event);
           
           // <d> key for debug cam
         if(event.keyCode === 100){
           self.setCamera(debugCam);
           scene.add(camHelper);
+          debug=true;
+          debugControls.enabled = debug;
           // <r> key for render cam
         } else if (event.keyCode === 114){
           self.setCamera(renderCamL);
+          debug=false;
+          debugControls.enabled = debug;
           scene.remove(camHelper);
         }
+        
       }
       
       $(document).keypress(keydown);
-    }
+    };
 
     this.load = function ( json ) {
 
