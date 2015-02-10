@@ -65,15 +65,15 @@ var APP = {
 
         // <d> key for debug cam
         if (event.keyCode === 100) {
+          debug = true;
           self.setCamera(debugCam);
           scene.add(camHelper);
           scene.add( gridHelper );
-          debug = true;
           debugControls.enabled = debug;
           // <r> key for render cam
         } else if (event.keyCode === 114) {
-          self.setCamera(renderCamL);
           debug = false;
+          self.setCamera(renderCamL);
           debugControls.enabled = debug;
           scene.remove(camHelper);
           scene.remove( gridHelper );
@@ -148,12 +148,43 @@ var APP = {
     };
 
     this.setCamera = function (value) {
-
       camera = value;
       camera.aspect = this.width / this.height;
-      //camera.updateProjectionMatrix();
-
+      if(debug){
+        camera.updateProjectionMatrix();
+      }
     };
+    
+    var updateFrustum = function(){
+      // http://bl0rg.net/~manuel/opengl2.pde
+      
+      var leftCamera = scene.getObjectByName('cameraLeft')
+      var vector = new THREE.Vector3();
+      vector.setFromMatrixPosition(leftCamera.matrixWorld)
+      
+      var near = 50;
+      var width = 100;
+      var pxWidth = 1920;
+      var pxSize = pxWidth/width;;
+      var height = 75;
+      
+      var leftScreen = width/2.0;
+      var left = near / vector.z;
+      
+      var rightScreen = (width+vector.x)/2.0;
+      var right = near / vector.z;
+      
+      leftCamera.projectionMatrix.makeFrustum(
+        left, //left
+        right,//right
+        -100, //bottom
+        100, //top
+        near,
+        60000
+      );
+
+      
+    }
 
     this.setSize = function (width, height) {
 
@@ -193,6 +224,8 @@ var APP = {
         debugControls.update();
         camHelper.update();
       }
+      
+      updateFrustum();
 
     };
 
