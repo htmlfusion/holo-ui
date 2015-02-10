@@ -12,21 +12,6 @@ function startCamera(videoElem, cb){
   });
 };
 
-function startTracking(cb){
-  var videoElem = $('#capture');
-  var ctrack = new clm.tracker({useWebGL : true});
-  ctrack.init(pModel);
-  startCamera(videoElem, function(vid, err){
-    if(!err){
-      ctrack.start(vid[0]);
-      cb(ctrack);
-    } else {
-      cb(null, err);
-    }
-  });
-};
-
-
 function HeadTracker(){
   
   var self=this;
@@ -36,8 +21,45 @@ function HeadTracker(){
   self.fov = 25*Math.PI/180.0;
   self.eyeWidth = 62;
   
+  self.startTracking = function(cb){
+    
+    var videoElem = $('#capture');
+    var canvasOverlay = $('#overlay').get(0);
+    var overlayCC = canvasOverlay.getContext('2d');
+    var ctrack = new clm.tracker({useWebGL : true});
+    
+    ctrack.init(pModel);
+    startCamera(videoElem, function(vid, err){
+      if(!err){
+        ctrack.start(vid[0]);
+        cb(ctrack);
+      } else {
+        cb(null, err);
+      }
+    });
+    
+    var fps = 60;
+    
+    function drawLoop() {
+      window.requestAnimationFrame(drawLoop);
+      // if(self.initialized){
+      //   channel.send([1,2,3]);
+      // }
+      overlayCC.clearRect(0, 0, 400, 300);
+      //psrElement.innerHTML = "score :" + ctrack.getScore().toFixed(4);
+      if (ctrack.getCurrentPosition()) {
+        ctrack.draw(overlay);
+      }
+    };
+    
+    drawLoop();
+    
+
+  };
+
+
   this.initTracker = function(){
-    startTracking(function(tracker, err){
+    self.startTracking(function(tracker, err){
       self.tracker = tracker;
       if(!err){
         self.initialized = true;
@@ -48,6 +70,10 @@ function HeadTracker(){
   this.getPose = function(){
     var rightEyeRaw = self.tracker.getCurrentPosition()[32];
     var leftEyeRaw = self.tracker.getCurrentPosition()[27];
+    
+    if(!rightEyeRaw || !leftEyeRaw){
+      return;
+    }
     
     var rightEye = [
       0.5-rightEyeRaw[0]/640,

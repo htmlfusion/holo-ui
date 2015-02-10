@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>three.js</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <style>
+    body {
+      margin: 0px;
+      overflow: hidden;
+    }
+    </style>
+  </head>
+  <body ontouchstart="">
+    <div id="container">
+      <video id="capture" width="400" height="300" preload="auto" loop style="position: absolute">
+        <!--<video id="videoel" width="320" height="240" preload="auto">-->
+        <!--<source src="./media/franck.ogv" type="video/ogg"/>-->
+      </video>
+      <canvas id="overlay" width="400" height="300" style="position: absolute"></canvas>
+    </div>
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/socket.io-client/socket.io.js"></script>
+    <script src="bower_components/clmtrackr/clmtrackr.js"></script>
+    <script src="bower_components/clmtrackr/models/model_pca_20_svm.js"></script>
+    <script src="js/HeadTracker.js"></script>
+    <script>
+      var tracker = new HeadTracker();
+      tracker.initTracker();
+    </script>
+  </body>
+</html>

@@ -39,6 +39,7 @@ lower = None
 upper = None
 
 
+
 while(1):
     # Take each frame
     _, frame = cap.read()
@@ -47,9 +48,15 @@ while(1):
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
     # define range of blue color in HSV
-    # lower_blue = np.array([20,10,0])
-    # upper_blue = np.array([60,200,200])
+    
+    # green/red
+    # lower = np.array([56, 73, 50])
+    # upper = np.array([88, 255, 136])
 
+    # blue/orange
+    lower = np.array([105, 45, 83])
+    upper = np.array([116, 255, 187])
+    
     if upper is not None and lower is not None:
         # Threshold the HSV image to get only blue colors
         mask = cv2.inRange(hsv, lower, upper)
@@ -74,7 +81,7 @@ while(1):
             if(bestContour is not None):
                 x,y,w,h = cv2.boundingRect(bestContour)
                 cv2.rectangle(frame,(x,y),(x+w,y+h),(0,255,0),2)
-                #print('x: %s y: %s\nw: %s h:%s' % (x,y,w,h))
+                print('x: %s y: %s\nw: %s h:%s' % (x,y,w,h))
                 cv2.drawContours(frame, [bestContour], 0, (0,255,0), 3)
         
     #cv2.drawContours(mask, contours, -1, (0,255,0), 3)
