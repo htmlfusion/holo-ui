@@ -158,27 +158,34 @@ var APP = {
     var updateFrustum = function(){
       // http://bl0rg.net/~manuel/opengl2.pde
       
-      var leftCamera = scene.getObjectByName('cameraLeft')
+      var leftCamera = scene.getObjectByName('cameraLeft');
+      var group = scene.getObjectByName('cameraGroup');
       var vector = new THREE.Vector3();
-      vector.setFromMatrixPosition(leftCamera.matrixWorld)
+      vector.setFromMatrixPosition(leftCamera.matrixWorld);
       
-      var near = 50;
+      var near = 10;
       var width = 100;
       var pxWidth = 1920;
       var pxSize = pxWidth/width;;
       var height = 75;
       
-      var leftScreen = width/2.0;
-      var left = near / vector.z;
+      var leftScreen = width/2.0+vector.x;
+      var left = near / vector.z * leftScreen;
       
-      var rightScreen = (width+vector.x)/2.0;
-      var right = near / vector.z;
+      var rightScreen = width/2.0-vector.x;
+      var right = near / vector.z * rightScreen;
+      
+      var bottomScreen = -height/2.0-vector.y;
+      var bottom = near / vector.z * bottomScreen;
+      
+      var topScreen = height/2.0-vector.y;
+      var top = near / vector.z * topScreen;
       
       leftCamera.projectionMatrix.makeFrustum(
-        left, //left
+        -left, //left
         right,//right
-        -100, //bottom
-        100, //top
+        bottom, //bottom
+        top, //top
         near,
         60000
       );
