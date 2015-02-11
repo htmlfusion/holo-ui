@@ -50,8 +50,10 @@ function StereoCamera(renderer, scene, group){
     vectorL.setFromMatrixPosition(renderCamL.matrixWorld);
     
     var near = 10;
-    var width = screenOpts.width;
     var pxWidth = 1920;
+    var pxHeight = 1080;
+    
+    var width = screenOpts.width;
     var pxSize = pxWidth/width;;
     var height = screenOpts.height;
     
@@ -99,6 +101,24 @@ function StereoCamera(renderer, scene, group){
       near,
       60000
     );
+    
+    
+    renderCamR.aspect = (window.innerWidth / window.innerHeight)/2;
+    renderCamL.aspect = (window.innerWidth / window.innerHeight)/2;
+    
+    renderer.clear();
+    renderer.enableScissorTest(true);
+
+    renderer.setScissor(0, 0, pxWidth, pxHeight);
+    renderer.setViewport(0, 0, pxWidth, pxHeight);
+    renderer.render(scene, renderCamL);
+
+    renderer.setScissor(pxWidth, 0, pxWidth, pxHeight);
+    renderer.setViewport(pxWidth, 0, pxWidth, pxHeight);
+    renderer.render(scene, renderCamR);
+
+    renderer.enableScissorTest(false);
+
   };
   
 };
