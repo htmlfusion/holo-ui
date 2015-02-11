@@ -1,141 +1,116 @@
 {
-	"camera": {
-		"metadata": {
-			"version": 4.3,
-			"type": "Object",
-			"generator": "ObjectExporter"
-		},
-		"object": {
-			"uuid": "6E0E21D9-2CC9-4AFD-8C6D-86BD5381162C",
-			"type": "PerspectiveCamera",
-			"name": "Camera",
-			"fov": 50,
-			"aspect": 1.607936507936508,
-			"near": 0.1,
-			"far": 100000,
-			"matrix": [0.7796190977096558,-2.65011279587668e-9,-0.6262540221214294,0,-0.36041444540023804,0.8177958726882935,-0.4486773610115051,0,0.5121479034423828,0.5755084156990051,0.6375692486763,0,421.1299133300781,473.2301330566406,524.2615966796875,1]
-		}
+	"metadata": {
+		"version": 4.3,
+		"type": "Object",
+		"generator": "ObjectExporter"
 	},
-	"scene": {
-		"metadata": {
-			"version": 4.3,
-			"type": "Object",
-			"generator": "ObjectExporter"
+	"geometries": [
+		{
+			"uuid": "C434CE2C-7F0A-44EF-9D5F-1A27B3BD6F8E",
+			"type": "SphereGeometry",
+			"radius": 75,
+			"widthSegments": 32,
+			"heightSegments": 16,
+			"phiStart": 0,
+			"phiLength": 6.283185307179586,
+			"thetaStart": 0,
+			"thetaLength": 3.141592653589793
 		},
-		"geometries": [
+		{
+			"uuid": "99E80E2E-C138-46E1-94BC-1743CCCE7FA5",
+			"type": "PlaneGeometry",
+			"width": 100,
+			"height": 75,
+			"widthSegments": 1,
+			"heightSegments": 1
+		}],
+	"materials": [
+		{
+			"uuid": "189800E7-EADB-4741-A0E3-A16CFDBB4D57",
+			"type": "MeshPhongMaterial",
+			"color": 16777215,
+			"ambient": 16777215,
+			"emissive": 0,
+			"specular": 1118481,
+			"shininess": 30
+		},
+		{
+			"uuid": "2DA90E35-103A-4CB8-BE84-48E89860DA46",
+			"type": "MeshPhongMaterial",
+			"color": 16721664,
+			"ambient": 16777215,
+			"emissive": 0,
+			"specular": 1118481,
+			"shininess": 30,
+			"side": 2
+		}],
+	"object": {
+		"uuid": "3741222A-BD8F-401C-A5D2-5A907E891896",
+		"type": "Scene",
+		"name": "Scene",
+		"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1],
+		"children": [
 			{
-				"uuid": "C434CE2C-7F0A-44EF-9D5F-1A27B3BD6F8E",
-				"type": "SphereGeometry",
-				"radius": 75,
-				"widthSegments": 32,
-				"heightSegments": 16,
-				"phiStart": 0,
-				"phiLength": 6.283185307179586,
-				"thetaStart": 0,
-				"thetaLength": 3.141592653589793
+				"uuid": "FC5D913C-DE02-48D7-AA3C-0A3D2BE9E7EB",
+				"type": "Group",
+				"name": "cameraGroup",
+				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,100,1],
+				"children": [
+					{
+						"uuid": "7A2B2C4A-7BD5-4592-B48E-A4439706930D",
+						"type": "PerspectiveCamera",
+						"name": "cameraRight",
+						"fov": 50,
+						"aspect": 1,
+						"near": 1,
+						"far": 10000,
+						"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,3,0,0,1]
+					},
+					{
+						"uuid": "991CCECC-CDA8-48EC-9A94-4523879E7CAC",
+						"type": "PerspectiveCamera",
+						"name": "cameraLeft",
+						"fov": 50,
+						"aspect": 1,
+						"near": 1,
+						"far": 10000,
+						"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,-3,0,0,1]
+					}]
 			},
 			{
-				"uuid": "99E80E2E-C138-46E1-94BC-1743CCCE7FA5",
-				"type": "PlaneGeometry",
-				"width": 100,
-				"height": 75,
-				"widthSegments": 1,
-				"heightSegments": 1
-			}],
-		"materials": [
+				"uuid": "BCCA3C69-5E5F-48DE-A2C6-62D7D1E0877F",
+				"type": "Mesh",
+				"name": "Sphere 2",
+				"geometry": "C434CE2C-7F0A-44EF-9D5F-1A27B3BD6F8E",
+				"material": "189800E7-EADB-4741-A0E3-A16CFDBB4D57",
+				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,-606.572021484375,1]
+			},
 			{
-				"uuid": "189800E7-EADB-4741-A0E3-A16CFDBB4D57",
-				"type": "MeshPhongMaterial",
+				"uuid": "19CAD247-DFBE-4096-81AF-0001B87E5A3C",
+				"type": "PointLight",
+				"name": "PointLight 1",
 				"color": 16777215,
-				"ambient": 16777215,
-				"emissive": 0,
-				"specular": 1118481,
-				"shininess": 30
+				"intensity": 1,
+				"distance": 0,
+				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,70.5037841796875,231.6297607421875,172.09791564941406,1]
 			},
 			{
-				"uuid": "2DA90E35-103A-4CB8-BE84-48E89860DA46",
-				"type": "MeshPhongMaterial",
-				"color": 16721664,
-				"ambient": 16777215,
-				"emissive": 0,
-				"specular": 1118481,
-				"shininess": 30
-			}],
-		"object": {
-			"uuid": "3741222A-BD8F-401C-A5D2-5A907E891896",
-			"type": "Scene",
-			"name": "Scene",
-			"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1],
-			"children": [
-				{
-					"uuid": "FC5D913C-DE02-48D7-AA3C-0A3D2BE9E7EB",
-					"type": "Group",
-					"name": "cameraGroup",
-					"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,100,1],
-					"children": [
-						{
-							"uuid": "7A2B2C4A-7BD5-4592-B48E-A4439706930D",
-							"type": "PerspectiveCamera",
-							"name": "cameraRight",
-							"fov": 50,
-							"aspect": 1,
-							"near": 1,
-							"far": 10000,
-							"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,3,0,0,1]
-						},
-						{
-							"uuid": "991CCECC-CDA8-48EC-9A94-4523879E7CAC",
-							"type": "PerspectiveCamera",
-							"name": "cameraLeft",
-							"fov": 50,
-							"aspect": 1,
-							"near": 1,
-							"far": 10000,
-							"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,-3,0,0,1]
-						}]
-				},
-				{
-					"uuid": "BCCA3C69-5E5F-48DE-A2C6-62D7D1E0877F",
-					"type": "Mesh",
-					"name": "Sphere 2",
-					"geometry": "C434CE2C-7F0A-44EF-9D5F-1A27B3BD6F8E",
-					"material": "189800E7-EADB-4741-A0E3-A16CFDBB4D57",
-					"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,-606.572021484375,1]
-				},
-				{
-					"uuid": "19CAD247-DFBE-4096-81AF-0001B87E5A3C",
-					"type": "PointLight",
-					"name": "PointLight 1",
-					"color": 16777215,
-					"intensity": 1,
-					"distance": 0,
-					"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,70.5037841796875,231.6297607421875,172.09791564941406,1]
-				},
-				{
-					"uuid": "431E1BB3-92C4-4F47-92FA-49A2C5300D79",
-					"type": "PerspectiveCamera",
-					"name": "cameraDebug",
-					"fov": 50,
-					"aspect": 1,
-					"near": 1,
-					"far": 10000,
-					"matrix": [0.08842556923627853,0.007964849472045898,-0.9960509538650513,0,0.028485842049121857,0.9995388388633728,0.010521603748202324,0,0.9956753849983215,-0.02930372953414917,0.08815790712833405,0,246.9312286376953,0,-228.7039794921875,1]
-				},
-				{
-					"uuid": "117F2B53-2D5E-4171-8AB0-185E7129018F",
-					"type": "Mesh",
-					"name": "projectionPlane",
-					"geometry": "99E80E2E-C138-46E1-94BC-1743CCCE7FA5",
-					"material": "2DA90E35-103A-4CB8-BE84-48E89860DA46",
-					"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]
-				}]
-		}
-	},
-	"scripts": {
-		"3741222A-BD8F-401C-A5D2-5A907E891896": [
+				"uuid": "431E1BB3-92C4-4F47-92FA-49A2C5300D79",
+				"type": "PerspectiveCamera",
+				"name": "cameraDebug",
+				"fov": 50,
+				"aspect": 1,
+				"near": 1,
+				"far": 10000,
+				"matrix": [0.08842556923627853,0.007964850403368473,-0.9960509538650513,0,0.028485842049121857,0.9995388388633728,0.010521603748202324,0,0.9956753849983215,-0.02930372953414917,0.08815790712833405,0,246.9312286376953,0,-228.7039794921875,1]
+			},
 			{
-				"name": "Scene Script",
-				"source": "\nvar renderCamL = this.getObjectByName( 'cameraLeft' );\nvar renderCamR = this.getObjectByName( 'cameraRight' );\nvar debugCam = this.getObjectByName( 'cameraDebug' );\n\nvar controls = new THREE.TrackballControls(debugCam);\n\nvar camHelper = new THREE.CameraHelper(renderCamL);\nfunction update( event ) {\n}\n\n\nfunction keydown( event) {\n\tconsole.log(event);\n\t// <d> key for debug cam\n\tif(event.keyCode === 68){\n\t\tplayer.setCamera(debugCam);\n\t\tthis.add(camHelper);\n    // <r> key for render cam\n\t} else if (event.keyCode === 82){\n\t\tplayer.setCamera(renderCamL);\n\t\tthis.remove(camHelper);\n\t}\n}"
+				"uuid": "117F2B53-2D5E-4171-8AB0-185E7129018F",
+				"type": "Mesh",
+				"name": "projectionPlane",
+				"geometry": "99E80E2E-C138-46E1-94BC-1743CCCE7FA5",
+				"material": "2DA90E35-103A-4CB8-BE84-48E89860DA46",
+				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]
 			}]
 	}
 }
