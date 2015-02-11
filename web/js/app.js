@@ -1,13 +1,11 @@
-/**
- * @author mrdoob / http://mrdoob.com/
- */
+'use strict';
 
 var APP = {
 
   Player: function () {
 
     var loader = new THREE.ObjectLoader();
-    var camera, scene, renderer, debugControls, camHelper;
+    var camera, scene, renderer, debugControls, camHelperL;
     var debug = false;
 
     var scripts = {};
@@ -24,7 +22,7 @@ var APP = {
       var renderCamR = scene.getObjectByName('cameraRight');
       var debugCam = scene.getObjectByName('cameraDebug');
 
-      camHelper = new THREE.CameraHelper(renderCamL);
+      camHelperL = new THREE.CameraHelper(renderCamL);
       
       var size = 500;
       var step = 50;
@@ -51,15 +49,16 @@ var APP = {
         if (event.keyCode === 100) {
           debug = true;
           self.setCamera(debugCam);
-          scene.add(camHelper);
+          scene.add(camHelperL);
           scene.add( gridHelper );
           debugControls.enabled = debug;
-          // <r> key for render cam
+          
+        // <r> key for render cam
         } else if (event.keyCode === 114) {
           debug = false;
           self.setCamera(renderCamL);
           debugControls.enabled = debug;
-          scene.remove(camHelper);
+          scene.remove(camHelperL);
           scene.remove( gridHelper );
         }
 
@@ -82,7 +81,6 @@ var APP = {
       this.dom = renderer.domElement;
 
       this.setupCameras();
-      this.connectToPeer();
       
     };
 
@@ -150,10 +148,7 @@ var APP = {
 
       renderer.render(scene, camera);
 
-      if (debugControls) {
-        debugControls.update();
-        camHelper.update();
-      }
+      debugControls.update();
       
       updateFrustum();
 
