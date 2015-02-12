@@ -5,7 +5,7 @@ var APP = {
   Player: function () {
 
     var loader = new THREE.ObjectLoader();
-    var camera, scene, renderer, debugControls, camHelperL;
+    var camera, scene, renderer, debugControls, camHelperL, group;
     var debug = false;
 
     var scripts = {};
@@ -14,6 +14,24 @@ var APP = {
 
     this.width = 500;
     this.height = 500;
+    
+    
+    var ws = new WebSocket('ws://localhost:8887');
+    ws.onopen = function(){
+      console.log('socket connected');
+    };
+    ws.onmessage = function (evt) { 
+      var position = evt.data.split(',');
+      if(group){
+        group.position.x = -position[0];
+        group.position.y = position[1];
+        group.position.z = position[2];
+      }
+    };
+    ws.onclose = function() { 
+      console.log('disconnected')
+    };
+
 
     this.setupCameras = function () {
 
@@ -96,7 +114,7 @@ var APP = {
       // http://bl0rg.net/~manuel/opengl2.pde
       
       var leftCamera = scene.getObjectByName('cameraLeft');
-      var group = scene.getObjectByName('cameraGroup');
+      group = scene.getObjectByName('cameraGroup');
       var vector = new THREE.Vector3();
       vector.setFromMatrixPosition(leftCamera.matrixWorld);
       
@@ -126,6 +144,8 @@ var APP = {
         near,
         60000
       );
+      
+      camHelperL.update();
     }
 
     this.setSize = function (width, height) {
