@@ -17,17 +17,20 @@ var APP = {
     
     
     var ws = new WebSocket('ws://localhost:8887');
+    
     ws.onopen = function(){
       console.log('socket connected');
     };
+    
     ws.onmessage = function (evt) { 
       var position = evt.data.split(',');
       if(group){
-        group.position.x = -position[0];
-        group.position.y = position[1];
-        group.position.z = position[2];
+        group.position.x = -position[0]/10;
+        group.position.y = position[1]/10;
+        group.position.z = position[2]/10;
       }
     };
+    
     ws.onclose = function() { 
       console.log('disconnected')
     };
