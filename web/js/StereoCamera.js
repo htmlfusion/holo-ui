@@ -17,9 +17,11 @@ function StereoCamera(renderer, scene, group){
   
   var size = 500;
   var step = 50;
-  var debug = false
+  var debug = false;
 
   var gridHelper = new THREE.GridHelper( size, step );
+  
+  //self.setIO(8);
 
   self.debug = function(on){
     debug = on;
@@ -35,23 +37,23 @@ function StereoCamera(renderer, scene, group){
   };
   
   self.setIO = function(distance){
-    camHelperL.position.x = -distance/2;
-    camHelperR.position.x = distance/2;
+    renderCamL.position.x = -distance/2;
+    renderCamR.position.x = distance/2;
   };
+  
+  self.updateHelpers = function(){
+    camHelperL.update();
+    camHelperR.update();
+  }
   
   self.render = function(screenOpts) {
     
-    if (debug) {
-      camHelperL.update();
-      camHelperR.update();
-    }
-    
-    var vectorL = new THREE.vectorL3();
+    var vectorL = new THREE.Vector3();
     vectorL.setFromMatrixPosition(renderCamL.matrixWorld);
     
     var near = 10;
-    var pxWidth = 1920;
-    var pxHeight = 1080;
+    var pxWidth = window.innerWidth;
+    var pxHeight = window.innerHeight;
     
     var width = screenOpts.width;
     var pxSize = pxWidth/width;;
@@ -78,7 +80,7 @@ function StereoCamera(renderer, scene, group){
       60000
     );
 
-    var vectorR = new THREE.vectorL3();
+    var vectorR = new THREE.Vector3();
     vectorR.setFromMatrixPosition(renderCamR.matrixWorld);
     
     var leftScreen = width/2.0+vectorR.x;
@@ -108,15 +110,15 @@ function StereoCamera(renderer, scene, group){
     
     renderer.clear();
     renderer.enableScissorTest(true);
-
-    renderer.setScissor(0, 0, pxWidth, pxHeight);
-    renderer.setViewport(0, 0, pxWidth, pxHeight);
+    
+    renderer.setScissor(0, 0, pxWidth/2, pxHeight);
+    renderer.setViewport(0, 0, pxWidth/2, pxHeight);
     renderer.render(scene, renderCamL);
-
-    renderer.setScissor(pxWidth, 0, pxWidth, pxHeight);
-    renderer.setViewport(pxWidth, 0, pxWidth, pxHeight);
+    
+    renderer.setScissor(pxWidth/2, 0, pxWidth/2, pxHeight);
+    renderer.setViewport(pxWidth/2, 0, pxWidth/2, pxHeight);
     renderer.render(scene, renderCamR);
-
+    
     renderer.enableScissorTest(false);
 
   };
