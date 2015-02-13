@@ -24,10 +24,8 @@ var APP = {
     
     ws.onmessage = function (evt) { 
       var position = evt.data.split(',');
-      if(group){
-        group.position.x = -position[0]/10;
-        group.position.y = position[1]/10;
-        group.position.z = position[2]/10;
+      if(stereoCamera){
+        stereoCamera.setPosition(position);
       }
     };
     
@@ -86,6 +84,7 @@ var APP = {
       if(debugScene.on){
         debugScene.update();
         stereoCamera.updateHelpers();
+        stereoCamera.updateFrustum({width: 100, height: 75});
       } else {
         stereoCamera.render({width: 100, height: 75});
       }

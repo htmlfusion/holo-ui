@@ -18,6 +18,9 @@ function StereoCamera(renderer, scene, group){
   var size = 500;
   var step = 50;
   var debug = false;
+  
+  var pxWidth = window.innerWidth;
+  var pxHeight = window.innerHeight;
 
   var gridHelper = new THREE.GridHelper( size, step );
   
@@ -41,19 +44,23 @@ function StereoCamera(renderer, scene, group){
     renderCamR.position.x = distance/2;
   };
   
+  self.setPosition = function(position){
+    group.position.x = -position[0]/10;
+    group.position.y = position[1]/10;
+    group.position.z = position[2]/10;
+  };
+  
   self.updateHelpers = function(){
     camHelperL.update();
     camHelperR.update();
   }
   
-  self.render = function(screenOpts) {
-    
+  
+  self.updateFrustum = function(screenOpts){
     var vectorL = new THREE.Vector3();
     vectorL.setFromMatrixPosition(renderCamL.matrixWorld);
     
     var near = 10;
-    var pxWidth = window.innerWidth;
-    var pxHeight = window.innerHeight;
     
     var width = screenOpts.width;
     var pxSize = pxWidth/width;;
@@ -107,7 +114,11 @@ function StereoCamera(renderer, scene, group){
     
     renderCamR.aspect = (window.innerWidth / window.innerHeight)/2;
     renderCamL.aspect = (window.innerWidth / window.innerHeight)/2;
+  }
+  
+  self.render = function(screenOpts) {
     
+    self.updateFrustum(screenOpts);
     renderer.clear();
     renderer.enableScissorTest(true);
     
