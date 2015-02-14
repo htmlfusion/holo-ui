@@ -54,7 +54,7 @@ while(1):
     # upper = np.array([88, 255, 136])
 
     # blue/orange
-    lower = np.array([107, 91, 162])
+    lower = np.array([107, 91, 142])
     upper = np.array([112, 255, 255])
     
     if upper is not None and lower is not None:
