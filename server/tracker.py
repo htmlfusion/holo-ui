@@ -54,8 +54,8 @@ while(1):
     # upper = np.array([88, 255, 136])
 
     # blue/orange
-    lower = np.array([105, 45, 83])
-    upper = np.array([116, 255, 187])
+    lower = np.array([107, 91, 162])
+    upper = np.array([112, 255, 255])
     
     if upper is not None and lower is not None:
         # Threshold the HSV image to get only blue colors
@@ -69,20 +69,47 @@ while(1):
         # res = cv2.bitwise_and(frame,frame, mask= mask)
         contours, hierarchy = cv2.findContours(mask, cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
 
+        
+        areas = []
+        
         if(len(contours)):
-            bestContour=None
-            maxArea=0
+            
             for cnt in contours:
-                area = cv2.contourArea(cnt)
-                if(area>maxArea):
-                    maxArea=area
-                    bestContour = cnt
+                areas.append(cv2.contourArea(cnt))
                     
-            if(bestContour is not None):
-                x,y,w,h = cv2.boundingRect(bestContour)
-                cv2.rectangle(frame,(x,y),(x+w,y+h),(0,255,0),2)
-                print('x: %s y: %s\nw: %s h:%s' % (x,y,w,h))
-                cv2.drawContours(frame, [bestContour], 0, (0,255,0), 3)
+            print areas
+            
+            if(len(areas)>1):
+                bestMatch = np.argmax(np.array(areas))
+                
+                largeA = contours[bestMatch]
+                contours.pop(bestMatch);
+                areas.pop(bestMatch);
+                
+                bestMatch = np.argmax(np.array(areas))
+                largeB = contours[bestMatch]
+                
+                
+                x1, y1, w1, h1 = cv2.boundingRect(largeA)
+                cv2.rectangle(frame,(x1,y1),(x1+w1,y1+h1),(0,255,0),2)
+                #print('x: %s y: %s\nw: %s h:%s' % (x,y,w,h))
+                cv2.drawContours(frame, [largeA], 0, (0,255,0), 3)
+                
+                x2, y2, w2, h2 = cv2.boundingRect(largeB)
+                cv2.rectangle(frame,(x2,y2),(x2+w2,y2+h2),(255,0,0),2)
+                #print('x: %s y: %s\nw: %s h:%s' % (x,y,w,h))
+                cv2.drawContours(frame, [largeB], 0, (255,0,0), 3)
+                
+                centerX = x1+x2/2.0
+                centerY = y1+y2/2.0
+                
+                if(x1>x2):
+                    width = x1-x2
+                else:
+                    width = x2-x1
+                    
+                print('x: %s y: %s\nw: %s' % (centerX,centerY,width))
+                
         
     #cv2.drawContours(mask, contours, -1, (0,255,0), 3)
 
