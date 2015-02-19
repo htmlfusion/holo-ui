@@ -110,8 +110,8 @@ THREE.StereoEffect = function ( renderer ) {
 
 		//http://bl0rg.net/~manuel/opengl2.pde
 		_cameraL.projectionMatrix.makeFrustum(
-			-_outer, //left
-			_inner, //right
+			- _outer,
+			 _inner,
 			_bottom, //bottom
 			_top, //top
 			camera.near,
@@ -125,7 +125,7 @@ THREE.StereoEffect = function ( renderer ) {
 		// right
 
 		_cameraR.projectionMatrix.makeFrustum(
-			-_inner,
+			- _inner,
 			_outer,
 			_bottom,
 			_top,
@@ -144,11 +144,11 @@ THREE.StereoEffect = function ( renderer ) {
 
 		renderer.setScissor( 0, 0, _width, _height );
 		renderer.setViewport( 0, 0, _width, _height );
-		renderer.render( scene, _cameraL );
+		renderer.render( scene, _cameraR );
 
 		renderer.setScissor( _width, 0, _width, _height );
 		renderer.setViewport( _width, 0, _width, _height );
-		renderer.render( scene, _cameraR );
+		renderer.render( scene, _cameraL );
 
 		renderer.enableScissorTest( false );
 

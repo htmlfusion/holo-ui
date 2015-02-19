@@ -1,0 +1,187 @@
+
+<html>
+  <head>
+    <!-- example coded by Robbie Tilton [www.RobbieTilton.com]
+    Please note - this example uses several images.  The links to download them can be found below:
+      + particle image can be found here: http://www.aerotwist.com/tutorials/creating-particles-with-three-js/images/particle.png
+      + cloud image can be found here: http://wiki.fis-ski.com/images/Cloud_combined.jpg
+      + the bump map image can be found here: http://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Srtm_ramp2.world.21600x10800.jpg/1024px-Srtm_ramp2.world.21600x10800.jpg
+      + earth satelite image can be found here: http://examples.maptiler.org/map-reprojection-html5-canvas/world1024.jpg
+    -->
+    <title>Earth Rotation - Leap</title>
+    <style>
+      body{margin: 0px; padding: 0px;}
+      canvas { width: 100%; height: 100%; background-color: black; }
+    </style>
+    <script src="bower_components/threejs/build/three.min.js"></script>
+    <script src="//js.leapmotion.com/leap-0.6.4.js"></script>
+    <script src="js/libs/stats.min.js" ></script>
+    <script src="js/controls/TrackballControls.js" ></script>
+
+  </head>
+  <body>
+    <script>
+	//map function to be used to map values from leap into proper degrees (0-360)
+	function map(value, inputMin, inputMax, outputMin, outputMax){
+		outVal = ((value - inputMin) / (inputMax - inputMin) * (outputMax - outputMin) + outputMin);
+		if(outVal >  outputMax){
+		  outVal = outputMax;
+		}
+		if(outVal <  outputMin){
+		  outVal = outputMin;
+		}
+		return outVal;
+	}
+
+	var handies = {};
+	var loop = {};
+	var info, stats, controls, renderer, scene, camera; 
+	var cameraHelper, cameraHelper2, camera2; 
+	init(); 
+		
+	function init() {
+		
+		document.body.style.cssText = 'font: 600 12pt monospace; color: white; margin: 0; overflow: hidden;' ;
+		var info = document.body.appendChild( document.createElement( 'div' ) );
+		info.style.cssText = 'left: 20px; position: absolute; ';
+		info.innerHTML = '<a href="" ><h1>' + document.title + '</h1></a>' +
+		'<div id=handData ></div>' ;
+
+		stats = new Stats();
+		stats.domElement.style.cssText = 'position: absolute; right: 0; top: 0; z-index: 100; ';
+		document.body.appendChild( stats.domElement );
+
+		//create scene
+		scene = new THREE.Scene();
+		scene.position.set(0, 0, 0);
+		renderer = new THREE.WebGLRenderer();
+		renderer.setSize(window.innerWidth, window.innerHeight);
+		document.body.appendChild(renderer.domElement);
+
+		// create a Directional light as pretend sunshine.
+		directional = new THREE.DirectionalLight( 0xCCCCCC, 1.2 )
+		directional.castShadow = true
+		directional.position.set( 100, 200, 300 )
+		directional.target.position.copy( new THREE.Vector3(0,0,0) )
+		directional.shadowCameraTop     =  1000
+		directional.shadowCameraRight   =  1000
+		directional.shadowCameraBottom  = -1000
+		directional.shadowCameraLeft    = -1000
+		directional.shadowCameraNear    =  600
+		directional.shadowCameraFar     = -600
+		directional.shadowBias          =   -0.0001
+		directional.shadowDarkness      =    0.4
+		directional.shadowMapWidth      = directional.shadowMapHeight = 2048
+		scene.add( directional )
+
+		window.ambient = new THREE.AmbientLight( 0x666666 )
+		scene.add( ambient )
+
+
+		var helper = new THREE.GridHelper( 500, 20 );
+				helper.setColors( 0x0000ff, 0x808080 );
+				helper.position.y = 0;
+				scene.add( helper );
+
+		// axes
+		var axis = new THREE.AxisHelper( 250 );
+		scene.add( axis );
+
+		//clouds object
+		window.clouds = new THREE.Mesh(
+		new THREE.SphereGeometry( 50 + 1, 32, 32 ),
+		new THREE.MeshLambertMaterial({
+		  map: THREE.ImageUtils.loadTexture( 'img/clouds.jpg' ),
+		  transparent: true,
+		  blending: THREE.CustomBlending,
+		  blendSrc: THREE.SrcAlphaFactor,
+		  blendDst: THREE.OneMinusSrcColorFactor,
+		  blendEquation: THREE.AddEquation
+		})
+		)
+		clouds.position.set( 0, 200, 0 )
+		clouds.receiveShadow = true
+		clouds.castShadow = true
+		scene.add( clouds )
+
+
+		//earth object  specular: 0x555555, 
+		var earthBumpImage = THREE.ImageUtils.loadTexture( "img/earthBumpMap.jpg" );
+		var geometry = new THREE.SphereGeometry(50, 40, 40)
+		var material = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture( 'img/earthSatTexture.jpg' ), 
+													ambient: 0x050505, 
+													color: 0xFFFFFF, 
+													specular: 0xFFFFFF, 
+													bumpMap: earthBumpImage, 
+													bumpScale: 19, 
+													metal: true } );
+		window.earth = new THREE.Mesh( geometry, material );
+		earth.position.set( 0, 200, 0 );
+		scene.add(earth);
+
+		//add camera
+		WIDTH      = window.innerWidth,
+		HEIGHT     = window.innerHeight,
+		VIEW_ANGLE = 45,
+		ASPECT     = WIDTH / (HEIGHT),
+		NEAR       = 0.1,
+		FAR        = 1000
+		camera = new THREE.PerspectiveCamera( VIEW_ANGLE, ASPECT, NEAR, FAR );
+		camera.position.set(0, 300, 300 );
+		camera.lookAt( earth.position );
+		controls = new THREE.TrackballControls( camera, renderer.domElement );
+
+	  }
+
+	loop.animate = function( frame ) {
+
+		frame.hands.forEach( function( hand, index ) {
+
+			var handy = ( handies[index] || ( handies[index] = new Handy()) );    
+			handy.outputData( index, hand );
+
+		});
+        clouds.rotation.y+=.002
+        earth.rotation.y+=.001
+
+        camera.lookAt(earth.position);
+        camera.updateProjectionMatrix();
+              
+		renderer.render( scene, camera );
+		controls.update();
+		stats.update();
+
+	}
+	loop = Leap.loop( loop.animate );
+
+	var Handy = function() {
+		var handy = this;
+		var msg = handData.appendChild( document.createElement( 'div' ) );
+
+		var geometry = new THREE.BoxGeometry( 50, 20, 50 );
+		var material = new THREE.MeshNormalMaterial();
+		var box = new THREE.Mesh( geometry, material );
+		scene.add( box );
+
+		handy.outputData = function( index, hand  ) {
+			msg.innerHTML = 'Hand id:' + index + ' x:' + hand.stabilizedPalmPosition[0].toFixed(0) + 
+				' y:' + hand.stabilizedPalmPosition[1].toFixed(0) + ' z:' + hand.stabilizedPalmPosition[2].toFixed(0);
+			box.position.set( hand.stabilizedPalmPosition[0], hand.stabilizedPalmPosition[1], hand.stabilizedPalmPosition[2] );
+			box.rotation.set( hand.pitch(), -hand.yaw(), hand.roll() );
+
+		};
+
+	};
+
+
+      //window resize method
+      window.addEventListener( 'resize', onWindowResize, false );
+      function onWindowResize(){
+          camera.aspect = window.innerWidth / window.innerHeight;
+          camera.updateProjectionMatrix();
+          renderer.setSize( window.innerWidth, window.innerHeight );
+      }
+    </script>
+  </body>
+</html>
+
