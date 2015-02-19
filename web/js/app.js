@@ -6,7 +6,7 @@ var APP = {
 
     var loader = new THREE.ObjectLoader();
     var camera, scene, renderer, debugScene, 
-        stereoCamera, debugCam; 
+        stereoCamera, debugCam, hands, leftHand, rightHand; 
     var debug = false;
 
     var scripts = {};
@@ -26,13 +26,27 @@ var APP = {
     var last = null;
     ws.onmessage = function (evt) { 
       //var position = evt.data.split(',');
-      var data = JSON.parse(evt.data);
+      var bodyPos = JSON.parse(evt.data);
       if(stereoCamera){
-        var pos = [data.x, data.y, data.z];
+        var pos = [bodyPos.head.x, bodyPos.head.y, bodyPos.head.z];
         // if(last && pos[0] !== last[0] && pos[1] !== last[1] && pos[2] !== last[2]){
         //   stereoCamera.setPosition(pos);
         // }
         last = pos;
+      }
+      if(leftHand){
+        var left_pos = [bodyPos.left_hand.x, bodyPos.left_hand.y, bodyPos.left_hand.z];
+        if(left_last && left_pos[0] !== left_last[0] && left_pos[1] !== left_last[1] && left_pos[2] !== left_last[2]){
+          leftHand.setPosition(left_pos);
+        }
+        left_last = left_pos;
+	  }
+      if(rightHand){  
+        var right_pos = [bodyPos.right_hand.x, bodyPos.right_hand.y, bodyPos.right_hand.z];
+        if(right_last && right_pos[0] !== right_last[0] && right_pos[1] !== right_last[1] && right_pos[2] !== right_last[2]){
+          rightHand.setPosition(right_pos);
+        }
+        right_last = right_pos;
       }
     };
     
@@ -71,8 +85,15 @@ var APP = {
       
       stereoCamera = new StereoCamera(renderer, scene, group);
       debugScene = new DebugScene(renderer, scene, camera);
+      //hands = new Hands(scene);
+      leftHand = new LeftHand(scene);
+      rightHand = new RightHand(scene);
+      
+      debugScene.debug(false);
+      stereoCamera.debug(false);
       
     };
+
 
     this.setSize = function (width, height) {
 
