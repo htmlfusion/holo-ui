@@ -29,9 +29,9 @@ var APP = {
       var data = JSON.parse(evt.data);
       if(stereoCamera){
         var pos = [data.x, data.y, data.z];
-        if(last && pos[0] !== last[0] && pos[1] !== last[1] && pos[2] !== last[2]){
-          stereoCamera.setPosition(pos);
-        }
+        // if(last && pos[0] !== last[0] && pos[1] !== last[1] && pos[2] !== last[2]){
+        //   stereoCamera.setPosition(pos);
+        // }
         last = pos;
       }
     };
@@ -90,12 +90,18 @@ var APP = {
         request = requestAnimationFrame(animate);
         if(debugScene.on){
           debugScene.update();
-          stereoCamera.updateHelpers();
+          if(last){
+            stereoCamera.setPosition(last);
+          }
           stereoCamera.updateFrustum({width: 100, height: 75});
+          stereoCamera.updateHelpers();
         } else {
+          if(last){
+            stereoCamera.setPosition(last);
+          }
           stereoCamera.render({width: 100, height: 75});
         }
-      }, 1000/15);
+      }, 1000/60);
 
     };
 

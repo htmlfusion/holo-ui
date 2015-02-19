@@ -57,8 +57,9 @@ function StereoCamera(renderer, scene, group){
   
   
   self.updateFrustum = function(screenOpts){
-    var vectorL = new THREE.Vector3();
-    vectorL.setFromMatrixPosition(renderCamL.matrixWorld);
+    var vectorL = group.position.clone();
+    //vectorL.setFromMatrixPosition(renderCamL.matrixWorld);
+    vectorL.x -= 3;
     
     var near = 10;
     
@@ -87,8 +88,8 @@ function StereoCamera(renderer, scene, group){
       60000
     );
 
-    var vectorR = new THREE.Vector3();
-    vectorR.setFromMatrixPosition(renderCamR.matrixWorld);
+    var vectorR = group.position.clone();
+    vectorR.x += 3;
     
     var leftScreen = width/2.0+vectorR.x;
     var left = near / vectorL.z * leftScreen;
