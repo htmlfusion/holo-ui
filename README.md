@@ -9,3 +9,7 @@
 ### Mac
 
     brew install openni
+
+
+    physic library:  physi
+
