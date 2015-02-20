@@ -34,14 +34,14 @@ var APP = {
         // }
         last = pos;
       }
-      if(leftHand){
+      if(bodyPos.left_hand){
         var left_pos = [bodyPos.left_hand.x, bodyPos.left_hand.y, bodyPos.left_hand.z];
         if(left_last && left_pos[0] !== left_last[0] && left_pos[1] !== left_last[1] && left_pos[2] !== left_last[2]){
           leftHand.setPosition(left_pos);
         }
         left_last = left_pos;
 	  }
-      if(rightHand){  
+      if(bodyPos.right_hand){  
         var right_pos = [bodyPos.right_hand.x, bodyPos.right_hand.y, bodyPos.right_hand.z];
         if(right_last && right_pos[0] !== right_last[0] && right_pos[1] !== right_last[1] && right_pos[2] !== right_last[2]){
           rightHand.setPosition(right_pos);
