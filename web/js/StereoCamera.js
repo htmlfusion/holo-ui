@@ -48,6 +48,11 @@ function StereoCamera(renderer, scene, group){
     group.position.x = -position[0]/10;
     group.position.y = position[1]/10;
     group.position.z = position[2]/10;
+    if(this.offset){
+      group = scene.getObjectByName('cameraGroup');
+      var euler = new THREE.Euler(this.offset, 0, 0, 'XYZ' );
+      group.position.applyEuler(euler);
+    }
   };
   
   self.updateHelpers = function(){
@@ -57,9 +62,15 @@ function StereoCamera(renderer, scene, group){
   
   
   self.updateFrustum = function(screenOpts){
-    var vectorL = group.position.clone();
-    //vectorL.setFromMatrixPosition(renderCamL.matrixWorld);
-    vectorL.x -= 3;
+    //var vectorL = group.position.clone();
+    scene.updateMatrixWorld();
+    group.updateMatrixWorld();
+    renderCamL.updateMatrixWorld();
+    renderCamR.updateMatrixWorld();
+
+    var vectorL = new THREE.Vector3();
+    vectorL.setFromMatrixPosition(renderCamL.matrixWorld);
+    //vectorL.x -= 3;
     
     var near = 10;
     
@@ -88,8 +99,10 @@ function StereoCamera(renderer, scene, group){
       60000
     );
 
-    var vectorR = group.position.clone();
-    vectorR.x += 3;
+    //var vectorR = group.position.clone();
+    //vectorR.x += 3;
+    var vectorR = new THREE.Vector3();
+    vectorR.setFromMatrixPosition(renderCamR.matrixWorld);
     
     var leftScreen = width/2.0+vectorR.x;
     var left = near / vectorL.z * leftScreen;

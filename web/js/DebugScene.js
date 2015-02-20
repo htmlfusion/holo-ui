@@ -40,6 +40,17 @@ function DebugScene(renderer, scene, debugCam){
       //debugControls.enabled = on;
     }
   }
+
+  self.gridHelper = function(on){
+    if(on){
+      scene.add( gridHelper );
+      debugCam.aspect = window.innerWidth/window.innerHeight;
+      debugCam.updateProjectionMatrix();
+    } else {
+      scene.remove( gridHelper );
+    }
+    
+  }
   
 
   this.update = function(){

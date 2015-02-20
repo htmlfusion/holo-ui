@@ -52,16 +52,40 @@ var APP = {
     };
 
 
+    var rot = 0;
     function keydown(event) {
       // <d> key for debug cam
+      var group = scene.getObjectByName('cameraGroup');
       if (event.keyCode === 100) {
         debugScene.debug(true);
         stereoCamera.debug(true);
+
+        // var x = Math.floor(Math.random() * 400) + 100;
+        // var y = Math.floor(Math.random() * 400) + 100;
+        // var z = Math.floor(Math.random() * 400) + 100;
+
+        // var pos = [x, y, z];
+        // stereoCamera.setPosition(pos);
         // <r> key for render cam
       } else if (event.keyCode === 114) {
         debugScene.debug(false);
         stereoCamera.debug(false);
+      } else if(event.keyCode === 103){
+        debugScene.gridHelper(true);
+      } else if(event.keyCode === 46){
+        rot += 0.01;
+        var euler = new THREE.Euler( 0.01, 0, 0, 'XYZ' );
+        stereoCamera.offset = rot;
+        group.position.applyEuler(euler);
+      } else if(event.keyCode === 44){
+        rot -= 0.01;
+        var group = scene.getObjectByName('cameraGroup');
+        var euler = new THREE.Euler( -0.01, 0, 0, 'XYZ' );
+        stereoCamera.offset = rot;
+        group.position.applyEuler(euler);
       }
+
+
     }
     $(document).keypress(keydown);
 
@@ -106,6 +130,7 @@ var APP = {
 
       setTimeout(function() {
         request = requestAnimationFrame(animate);
+
         if (debugScene.on) {
           debugScene.update();
           stereoCamera.updateFrustum({
