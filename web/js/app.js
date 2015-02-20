@@ -7,6 +7,7 @@ var APP = {
     var loader = new THREE.ObjectLoader();
     var camera, scene, renderer, debugScene,
       stereoCamera, debugCam, hands, leftHand, rightHand;
+    var francis;   
     var debug = false;
 
     var scripts = {};
@@ -82,6 +83,9 @@ var APP = {
 
       stereoCamera = new StereoCamera(renderer, scene, group);
       debugScene = new DebugScene(renderer, scene, camera);
+      
+      francis = new Francis(scene);
+      
       //hands = new Hands(scene);
       leftHand = new LeftHand(scene);
       rightHand = new RightHand(scene);

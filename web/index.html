@@ -11,6 +11,7 @@
 		}
 		</style>
 	</head>
+	
 	<body ontouchstart="">
 		<script src="bower_components/threejs/build/three.js"></script>
 		<script src="bower_components/physijs/physi.js"></script>
@@ -19,12 +20,18 @@
 		<script src="js/DebugScene.js"></script>
 		<script src="js/StereoCamera.js"></script>
 		<script src="js/Hands.js"></script>
+		<!-- to load francis -->
+		<script src="js/loaders/DDSLoader.js"></script>
+		<script src="js/loaders/MTLLoader.js"></script>
+		<script src="js/loaders/OBJMTLLoader.js"></script>
+		<script src="js/Francis.js"></script>
+		<!-- to load francis -->
 		<script src="js/app.js"></script>
 		<script>
 
 			var player;
 			var loader = new THREE.XHRLoader();
-			loader.load( 'torus.json', function ( text ) {
+			loader.load( 'francis_hands.json', function ( text ) {
 
 				player = new APP.Player();
 				player.load( JSON.parse( text ) );

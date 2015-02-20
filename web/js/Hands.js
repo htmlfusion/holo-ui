@@ -13,7 +13,7 @@ function LeftHand(scene){
 
   self.setPosition = function(position){
     left.position.x = -position[0]/10;
-    left.position.y = position[1]/10;
+    left.position.y = position[1]/10+20;
     left.position.z = position[2]/10;
   };
 
@@ -33,7 +33,7 @@ function RightHand(scene){
 
   self.setPosition = function(position){
     right.position.x = -position[0]/10;
-    right.position.y = position[1]/10;
+    right.position.y = position[1]/10+20;
     right.position.z = position[2]/10;
   };
 
