@@ -67,7 +67,7 @@
 	"object": {
 		"uuid": "3741222A-BD8F-401C-A5D2-5A907E891896",
 		"type": "Scene",
-		"name": "Scene",
+		"name": "Francis",
 		"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1],
 		"children": [
 			{

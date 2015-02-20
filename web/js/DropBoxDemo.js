@@ -3,10 +3,9 @@ function DropBoxDemo(scene) {
   var self = this;
   var scene = scene;
   var shadowBox = scene.getObjectByName('shadowBox');
-  scene.remove(shadowBox);
 
   this.load = function() {
-    console.log(shadowBox);
+    scene.remove(shadowBox);
     var box = new Physijs.BoxMesh(
       shadowBox.geometry,
       shadowBox.material
@@ -15,7 +14,7 @@ function DropBoxDemo(scene) {
     scene.add(box);
   }
 
-  if (shadowBox) {
+  if (scene.name === 'dropBox') {
     this.load();
   }
 }

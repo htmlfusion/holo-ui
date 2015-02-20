@@ -103,7 +103,9 @@ var APP = {
 
       var editorScene = loader.parse(json);
       scene = new Physijs.Scene();
+      scene.name = editorScene.name;
       scene.children = editorScene.children;
+      
       camera = scene.getObjectByName('cameraDebug');
       var group = scene.getObjectByName('cameraGroup');
 
