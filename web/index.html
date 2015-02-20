@@ -24,7 +24,7 @@
 
 			var player;
 			var loader = new THREE.XHRLoader();
-			loader.load( 'app.json', function ( text ) {
+			loader.load( 'torus.json', function ( text ) {
 
 				player = new APP.Player();
 				player.load( JSON.parse( text ) );
