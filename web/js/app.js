@@ -98,7 +98,9 @@ var APP = {
       renderer.setPixelRatio(window.devicePixelRatio);
       this.setSize(window.innerWidth, window.innerHeight)
 
-      scene = loader.parse(json);
+      var editorScene = loader.parse(json);
+      scene = new Physijs.Scene();
+      scene.children = editorScene.children;
       camera = scene.getObjectByName('cameraDebug');
       var group = scene.getObjectByName('cameraGroup');
 
@@ -112,7 +114,7 @@ var APP = {
 
       debugScene.debug(false);
       stereoCamera.debug(false);
-
+      var dropBoxDemo = new DropBoxDemo(scene);
     };
 
 
@@ -130,6 +132,8 @@ var APP = {
 
       setTimeout(function() {
         request = requestAnimationFrame(animate);
+
+        scene.simulate();
 
         if (debugScene.on) {
           debugScene.update();
