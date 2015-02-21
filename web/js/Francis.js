@@ -38,6 +38,7 @@ function Francis(scene){
 	}
 	
 
-  if (scene.name === 'francis') {
-    this.load();
+	if (scene.name === 'Francis') {
+		this.load();
+	}
 }
