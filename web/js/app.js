@@ -6,11 +6,8 @@ var APP = {
 
     var loader = new THREE.ObjectLoader();
     var camera, scene, renderer, debugScene,
-      stereoCamera, debugCam, hands, leftHand, rightHand;
-    var francis;   
+      stereoCamera, debugCam, hands, leftHand, rightHand;   
     var debug = false;
-
-    var francis_demo = true;
 
     var scripts = {};
 
@@ -114,10 +111,8 @@ var APP = {
       stereoCamera = new StereoCamera(renderer, scene, group);
       debugScene = new DebugScene(renderer, scene, camera);
       
-      if (francis_demo) { 
-		francis = new Francis(scene);
-	  }
-      //hands = new Hands(scene);
+	  var francis = new Francis(scene);
+
       leftHand = new LeftHand(scene);
       rightHand = new RightHand(scene);
 

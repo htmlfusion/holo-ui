@@ -34,6 +34,27 @@
 			"phiLength": 6.28,
 			"thetaStart": 0,
 			"thetaLength": 3.14
+		},
+		{
+			"uuid": "06EDFABD-ABC4-4E3E-840D-80A24F1FE165",
+			"type": "TorusKnotGeometry",
+			"radius": 25,
+			"tube": 5,
+			"radialSegments": 120,
+			"tubularSegments": 8,
+			"p": 2,
+			"q": 3,
+			"heightScale": 1
+		},
+		{
+			"uuid": "074B6B00-1BA1-4139-AE55-38A6EFAB5287",
+			"type": "BoxGeometry",
+			"width": 10,
+			"height": 10,
+			"depth": 10,
+			"widthSegments": 1,
+			"heightSegments": 1,
+			"depthSegments": 1
 		}],
 	"materials": [
 		{
@@ -63,11 +84,29 @@
 			"emissive": 0,
 			"specular": 1118481,
 			"shininess": 30
+		},
+		{
+			"uuid": "8E2472AA-E140-40C1-B30D-203DF173ABE6",
+			"type": "MeshPhongMaterial",
+			"color": 35327,
+			"ambient": 16777215,
+			"emissive": 0,
+			"specular": 14079702,
+			"shininess": 30.14
+		},
+		{
+			"uuid": "C3F1883D-7985-4C68-9666-CA67DEFF0E86",
+			"type": "MeshPhongMaterial",
+			"color": 16723456,
+			"ambient": 16777215,
+			"emissive": 0,
+			"specular": 1118481,
+			"shininess": 30
 		}],
 	"object": {
 		"uuid": "3741222A-BD8F-401C-A5D2-5A907E891896",
 		"type": "Scene",
-		"name": "Francis",
+		"name": "Scene",
 		"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1],
 		"children": [
 			{
@@ -98,15 +137,6 @@
 					}]
 			},
 			{
-				"uuid": "19CAD247-DFBE-4096-81AF-0001B87E5A3C",
-				"type": "PointLight",
-				"name": "PointLight 1",
-				"color": 16777215,
-				"intensity": 1,
-				"distance": 0,
-				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,70.5037841796875,231.6297607421875,172.09791564941406,1]
-			},
-			{
 				"uuid": "431E1BB3-92C4-4F47-92FA-49A2C5300D79",
 				"type": "PerspectiveCamera",
 				"name": "cameraDebug",
@@ -130,7 +160,7 @@
 				"name": "RightHand",
 				"geometry": "B0441048-219D-44DD-B782-030021ED34BF",
 				"material": "3820E3B8-363C-4F95-B61E-1AF9F6D2AAB3",
-				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,22.28034782409668,0,77.2489013671875,1]
+				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]
 			},
 			{
 				"uuid": "62A3ED5F-C908-4C1B-A82B-5CD72385935B",
@@ -138,7 +168,39 @@
 				"name": "LeftHand",
 				"geometry": "DDF2BBD4-BD2C-4069-80C0-70977987EE03",
 				"material": "62FC8ED0-08A6-40DB-A690-3D1690855409",
-				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,-24.757854461669922,0.07785893976688385,75.61945343017578,1]
+				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]
+			},
+			{
+				"uuid": "81B71752-E4D4-4F0A-B4A0-15978DC9B59F",
+				"type": "Mesh",
+				"name": "TorusKnot 5",
+				"geometry": "06EDFABD-ABC4-4E3E-840D-80A24F1FE165",
+				"material": "8E2472AA-E140-40C1-B30D-203DF173ABE6",
+				"matrix": [-0.9948797225952148,0.059011876583099365,0.08204874396324158,0,-0.0813554897904396,0.01405989471822977,-0.9965859651565552,0,-0.059964004904031754,-0.9981582760810852,-0.00918696727603674,0,0,0,2.950000047683716,1]
+			},
+			{
+				"uuid": "ECBD5B53-18BD-4E3D-A3E8-E62E60AEB38E",
+				"type": "HemisphereLight",
+				"name": "HemisphereLight 4",
+				"color": 14477977,
+				"groundColor": 5518593,
+				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,153.9738311767578,105.58462524414062,30.766441345214844,1]
+			},
+			{
+				"uuid": "CD93AC86-B16A-4B96-8F34-20C674EA79F4",
+				"type": "DirectionalLight",
+				"name": "DirectionalLight 5",
+				"color": 15062646,
+				"intensity": 0.06,
+				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,125.26000213623047,220.3699951171875,170.47999572753906,1]
+			},
+			{
+				"uuid": "6B4919AF-2722-4819-8126-8851B496EC4C",
+				"type": "Mesh",
+				"name": "Box 1",
+				"geometry": "074B6B00-1BA1-4139-AE55-38A6EFAB5287",
+				"material": "C3F1883D-7985-4C68-9666-CA67DEFF0E86",
+				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,135.8662872314453,1]
 			}]
 	}
 }

@@ -18,20 +18,27 @@ function Francis(scene){
 		console.log('Error downloading obj');
 	};
 
-
-	THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
-
-	var loader = new THREE.OBJMTLLoader();
-	loader.load( 'obj/model_mesh.obj', 'obj/model_mesh.obj.mtl', function ( object ) {
-		object.position.y = 0;
-		object.position.z = 35;
-		object.position.x = 0;
+    this.load = function () {
 		
-		object.scale.set( 100, 100, 100 );
-		scene.add( object );
-		
-		console.log("Object added to scene");
+		THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
 
-	}, onProgress, onError );
+		var loader = new THREE.OBJMTLLoader();
+		loader.load( 'obj/model_mesh.obj', 'obj/model_mesh.obj.mtl', function ( object ) {
+			object.position.y = 0;
+			object.position.z = 35;
+			object.position.x = 0;
+			
+			object.scale.set( 100, 100, 100 );
 
+			scene.add( object );
+			
+			console.log("Object added to scene");
+
+		}, onProgress, onError );
+	}
+	
+
+	if (scene.name === 'Francis') {
+		this.load();
+	}
 }
