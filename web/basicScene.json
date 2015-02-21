@@ -14,9 +14,9 @@
 			"heightSegments": 1
 		},
 		{
-			"uuid": "B0441048-219D-44DD-B782-030021ED34BF",
+			"uuid": "B93CCE35-8BF7-4B86-AE20-BF42DD2FE2B9",
 			"type": "SphereGeometry",
-			"radius": 6,
+			"radius": 2,
 			"widthSegments": 32,
 			"heightSegments": 16,
 			"phiStart": 0,
@@ -25,9 +25,9 @@
 			"thetaLength": 3.14
 		},
 		{
-			"uuid": "DDF2BBD4-BD2C-4069-80C0-70977987EE03",
+			"uuid": "3C6350DC-4442-44A3-B4C1-B3285A1F1DAF",
 			"type": "SphereGeometry",
-			"radius": 6,
+			"radius": 2,
 			"widthSegments": 32,
 			"heightSegments": 16,
 			"phiStart": 0,
@@ -128,7 +128,7 @@
 				"uuid": "C02FADF6-7F90-4FA1-83AA-CBC134D8FDCA",
 				"type": "Mesh",
 				"name": "RightHand",
-				"geometry": "B0441048-219D-44DD-B782-030021ED34BF",
+				"geometry": "B93CCE35-8BF7-4B86-AE20-BF42DD2FE2B9",
 				"material": "3820E3B8-363C-4F95-B61E-1AF9F6D2AAB3",
 				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,22.28034782409668,0,77.2489013671875,1]
 			},
@@ -136,7 +136,7 @@
 				"uuid": "62A3ED5F-C908-4C1B-A82B-5CD72385935B",
 				"type": "Mesh",
 				"name": "LeftHand",
-				"geometry": "DDF2BBD4-BD2C-4069-80C0-70977987EE03",
+				"geometry": "3C6350DC-4442-44A3-B4C1-B3285A1F1DAF",
 				"material": "62FC8ED0-08A6-40DB-A690-3D1690855409",
 				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,-24.757854461669922,0.07785893976688385,75.61945343017578,1]
 			}]
