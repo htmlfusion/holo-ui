@@ -18,7 +18,7 @@ function Francis(scene){
 		console.log('Error downloading obj');
 	};
 
-    this.load = function () {
+  this.load = function () {
 		
 		THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
 

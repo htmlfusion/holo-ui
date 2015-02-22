@@ -40,10 +40,12 @@ var APP = {
       if (bodyPos.left_hand) {
         var left_pos = [bodyPos.left_hand.x, bodyPos.left_hand.y, bodyPos.left_hand.z];
         leftHand.setPosition(left_pos);
+        leftHand.mesh.__dirtyPosition = true;
       }
       if (bodyPos.right_hand) {
         var right_pos = [bodyPos.right_hand.x, bodyPos.right_hand.y, bodyPos.right_hand.z];
         rightHand.setPosition(right_pos);
+        rightHand.mesh.__dirtyPosition = true;
       }
     };
 
@@ -102,6 +104,7 @@ var APP = {
       scene = new Physijs.Scene();
       scene.name = editorScene.name;
       scene.children = editorScene.children;
+      scene.setGravity(new THREE.Vector3(0, -200, 0));
       
       camera = scene.getObjectByName('cameraDebug');
       var group = scene.getObjectByName('cameraGroup');
@@ -111,7 +114,9 @@ var APP = {
       stereoCamera = new StereoCamera(renderer, scene, group);
       debugScene = new DebugScene(renderer, scene, camera);
       
-	  var francis = new Francis(scene);
+      var francis = new Francis(scene);
+      var earth_object = new earthDemo(scene);
+
 
       leftHand = new LeftHand(scene);
       rightHand = new RightHand(scene);
@@ -136,7 +141,11 @@ var APP = {
 
       setTimeout(function() {
         request = requestAnimationFrame(animate);
+    
 
+        //console.log(leftHand);
+        //console.log(rightHand);
+        
         scene.simulate();
 
         if (debugScene.on) {
