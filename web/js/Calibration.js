@@ -3,6 +3,7 @@ function Calibration(scene) {
   var object;
 
   this.load = function() {
+		var indexes = [1, 4, 0, 5, 3, 6];
   	object = scene.getChildByName('Box 1')
   	object.updateMatrixWorld();
   	var points = [];
