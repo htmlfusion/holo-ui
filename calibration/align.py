@@ -50,9 +50,8 @@ if (__name__ == '__main__'):
 
 		print "\nWith transform"
 		averageSample = np.vstack((averageSample,[1,1,1,1,1,1]))
-		#print averageSample.transpose()
-		matrix = np.dot(offset, averageSample).flatten().tolist();
+		print np.dot(offset, averageSample).transpose()
 
 		with open(args.output, 'w') as matrixFile:
-			json.dump(matrix, matrixFile)
+			json.dump(offset.flatten().tolist(), matrixFile)
 
