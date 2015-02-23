@@ -9,7 +9,7 @@ function earthDemo(scene) {
 
     var cloud_material = Physijs.createMaterial(
       new THREE.MeshLambertMaterial({
-        map: THREE.ImageUtils.loadTexture('img/clouds.jpg'),
+        map: THREE.ImageUtils.loadTexture('img/clouds-high.png'),
         transparent: true,
         blending: THREE.CustomBlending,
         blendSrc: THREE.SrcAlphaFactor,
@@ -34,16 +34,17 @@ function earthDemo(scene) {
 
 
     //earth object  specular: 0x555555, 
-    var earthBumpImage = THREE.ImageUtils.loadTexture("img/earthBumpMap.jpg");
+    var earthBumpImage = THREE.ImageUtils.loadTexture("img/earth-bump-high.jpg");
     var geometry = new THREE.SphereGeometry(6, 80, 80)
     var material = new Physijs.createMaterial(
       new THREE.MeshPhongMaterial({
-        map: THREE.ImageUtils.loadTexture('img/earthSatTexture.jpg'),
+        map: THREE.ImageUtils.loadTexture('img/earth-high.jpg'),
         ambient: 0x050505,
         color: 0xFFFFFF,
         specular: 0xFFFFFF,
+        specularMap: THREE.ImageUtils.loadTexture('img/earth-specular-high.png'),
         bumpMap: earthBumpImage,
-        bumpScale: 19,
+        bumpScale: .005,
         metal: true
       }),
       0.9,
