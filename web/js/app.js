@@ -126,6 +126,7 @@ var APP = {
       debugScene.debug(false);
       stereoCamera.debug(false);
       var dropBoxDemo = new DropBoxDemo(scene);
+      var calibration = new Calibration(scene);
     };
 
 

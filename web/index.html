@@ -18,6 +18,7 @@
 		<script src="bower_components/jquery/dist/jquery.js"></script>
 		<script src="js/TrackballControls.js"></script>
 		<script src="js/DropBoxDemo.js"></script>
+		<script src="js/Calibration.js"></script>
 		<script src="js/DebugScene.js"></script>
 		<script src="js/StereoCamera.js"></script>
 		<script src="js/Hands.js"></script>
@@ -35,7 +36,7 @@
 			Physijs.scripts.ammo = '/bower_components/ammo.js/builds/ammo.js'
 			var player;
 			var loader = new THREE.XHRLoader();
-			loader.load( 'earth.json', function ( text ) {
+			loader.load( 'calibration.json', function ( text ) {
 				player = new APP.Player();
 				player.load( JSON.parse( text ) );
 				player.setSize( window.innerWidth, window.innerHeight );

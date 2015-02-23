@@ -3,8 +3,10 @@ function earthDemo(scene) {
   var self = this;
   var scene = scene;
   var clouds, earth;
+  var loaded=false;
 
   this.load = function() {
+    loaded = true;
     //clouds object
 
     var cloud_material = Physijs.createMaterial(
@@ -59,7 +61,9 @@ function earthDemo(scene) {
   }
 
   this.animate = function(){
-    rotate_right();
+    if(loaded){
+      rotate_right();
+    }
   }
 
   var rotate_right = function() {

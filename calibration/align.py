@@ -12,16 +12,19 @@ if (__name__ == '__main__'):
 	parser.add_argument('--output', help='Location to write alignment matrix to', required=True)
 
 	args = parser.parse_args()
+	print args.samples;
 
 	averageSample = None
 	for sample in args.samples:
 		with open(sample) as jsonFile:
 			jsonData = json.load(jsonFile)
-			print jsonData
 			box = jsonData['box']
 			if averageSample is not None:
-				np.add(averageSample , np.array(box))
+				print np.array(box)
+				averageSample = np.add(averageSample , np.array(box))
 			else:
 				averageSample = np.array(box);
-		averageSample
-		print(args);
+				print averageSample
+	averageSample = averageSample/len(args.samples)
+	print averageSample
+
