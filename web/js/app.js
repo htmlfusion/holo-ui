@@ -6,10 +6,10 @@ var APP = {
 
     var loader = new THREE.ObjectLoader();
     var camera, scene, renderer, debugScene,
-      stereoCamera, debugCam, hands, leftHand, rightHand;   
+      stereoCamera, debugCam, hands, leftHand, rightHand;
     var debug = false;
 
-    var scripts = {};
+    var animCallbacks = [];
 
     this.dom = undefined;
 
@@ -117,6 +117,8 @@ var APP = {
       var francis = new Francis(scene);
       var earth_object = new earthDemo(scene);
 
+      animCallbacks.push(earth_object.animate);
+
 
       leftHand = new LeftHand(scene);
       rightHand = new RightHand(scene);
@@ -147,6 +149,10 @@ var APP = {
         //console.log(rightHand);
         
         scene.simulate();
+
+        animCallbacks.forEach(function(cb){
+          cb();
+        });
 
         if (debugScene.on) {
           debugScene.update();

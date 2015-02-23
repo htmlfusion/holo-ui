@@ -17,12 +17,13 @@ function earthDemo(scene) {
         blendEquation: THREE.AddEquation
       }),
       0.9,
-      0.5);
+      0.5
+    );
 
 
 
     clouds = new Physijs.BoxMesh(
-      new THREE.SphereGeometry(6 + 1, 20, 20),
+      new THREE.SphereGeometry(6 + .1, 80, 80),
       cloud_material
     )
 
@@ -34,7 +35,7 @@ function earthDemo(scene) {
 
     //earth object  specular: 0x555555, 
     var earthBumpImage = THREE.ImageUtils.loadTexture("img/earthBumpMap.jpg");
-    var geometry = new THREE.SphereGeometry(6, 20, 20)
+    var geometry = new THREE.SphereGeometry(6, 80, 80)
     var material = new Physijs.createMaterial(
       new THREE.MeshPhongMaterial({
         map: THREE.ImageUtils.loadTexture('img/earthSatTexture.jpg'),
@@ -54,6 +55,10 @@ function earthDemo(scene) {
     earth.add(clouds);
     scene.add(earth);
 
+  }
+
+  this.animate = function(){
+    rotate_right();
   }
 
   var rotate_right = function() {
