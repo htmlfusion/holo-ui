@@ -1,14 +1,14 @@
 'use strict';
 
 
-function LeftHand(scene){
+function LeftHand(scene) {
 
-  var self=this;
-  
+  var self = this;
+
   var renderer = renderer;
   var scene = scene;
   var group = group;
-  
+
   var left = scene.getObjectByName('LeftHand');
 
   var material = Physijs.createMaterial(
@@ -16,7 +16,7 @@ function LeftHand(scene){
     0.1,
     1
   );
-  
+
   var leftHandMesh = new Physijs.BoxMesh(
     left.geometry,
     material,
@@ -31,25 +31,25 @@ function LeftHand(scene){
 
   self.mesh = leftHandMesh;
 
-  self.setPosition = function(position){
+  self.setPosition = function(position) {
     //leftHand.position.set(-position[0]/10, position[1]/10+20, position[2]/10);
-    leftHandMesh.position.x = -position[0]/10;
-    leftHandMesh.position.y = position[1]/10+20;
-    leftHandMesh.position.z = position[2]/10;
+    leftHandMesh.position.x = -position[0] / 10;
+    leftHandMesh.position.y = position[1] / 10 + 20;
+    leftHandMesh.position.z = position[2] / 10;
     leftHandMesh.__dirtyPosition = true;
   };
 
 }
 
 
-function RightHand(scene){
+function RightHand(scene) {
 
-  var self=this;
-  
+  var self = this;
+
   var renderer = renderer;
   var scene = scene;
   var group = group;
-  
+
   var right = scene.getObjectByName('RightHand');
 
   var material = Physijs.createMaterial(
@@ -73,12 +73,12 @@ function RightHand(scene){
 
   self.mesh = rightHandMesh;
 
-  self.setPosition = function(position){
-    rightHandMesh.position.x = -position[0]/10;
-    rightHandMesh.position.y = position[1]/10+20;
-    rightHandMesh.position.z = position[2]/10;
+  self.setPosition = function(position) {
+    rightHandMesh.position.x = -position[0] / 10;
+    rightHandMesh.position.y = position[1] / 10 + 20;
+    rightHandMesh.position.z = position[2] / 10;
     rightHandMesh.__dirtyPosition = true;
-    
+
   };
 
 
