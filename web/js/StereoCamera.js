@@ -64,8 +64,8 @@ self.setPosition = function(position) {
   group.position.y = position[1] / 10;
   group.position.z = position[2] / 10;
   if (this.offset) {
-    // group = scene.getObjectByName('cameraGroup');
-    // var euler = new THREE.Euler(this.offset, 0, 0, 'XYZ' );
+    group.updateMatrix();
+    group.matrix.multiply(self.offset);
   }
 };
 
