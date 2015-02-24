@@ -24,8 +24,15 @@ function StereoCamera(renderer, scene, group) {
 
   var gridHelper = new THREE.GridHelper(size, step);
   self.offset = new THREE.Matrix4();
-  this.offset.set([1.0767210688730582, -0.0224848567940982, 0.03825194115293704, -3.8477102953334557, 0.030423768295330025, 1.05036714077187, -0.2389566986958065, 53.64223320912849, -0.03229820598316467, 0.2398339857981666, 1.0501111965352017, -75.8564358689001, 0.0, 0.0, 0.0, 1.0]);
-  group.applyMatrix(this.offset);
+  self.offset.set(1.0767210688730582, -0.0224848567940982, 0.03825194115293704, -3.8477102953334557, 0.030423768295330025, 1.05036714077187, -0.2389566986958065, 53.64223320912849, -0.03229820598316467, 0.2398339857981666, 1.0501111965352017, -75.8564358689001, 0.0, 0.0, 0.0, 1.0);
+  group.matrixAutoUpdate = false;
+  group.updateMatrix();
+  group.matrix.multiply(self.offset);
+
+  //self.offset = new THREE.Matrix4();
+  //self.offset.getInverse(offset);
+
+  //group.applyMatrix(this.offset);
 
 //self.setIO(8);
 
@@ -54,7 +61,6 @@ self.setPosition = function(position) {
   if (this.offset) {
     // group = scene.getObjectByName('cameraGroup');
     // var euler = new THREE.Euler(this.offset, 0, 0, 'XYZ' );
-    group.position.applyMatrix4(this.offset);
   }
 };
 
