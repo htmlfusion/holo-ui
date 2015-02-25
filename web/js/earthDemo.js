@@ -65,6 +65,7 @@ function earthDemo(scene) {
   var rotate_right = function() {
     clouds.rotation.y += .001;
     earth.rotation.y += .001;
+    
   }
 
   if (scene.name === 'Earth') {

@@ -36,7 +36,7 @@ function LeftHand(scene) {
     leftHandMesh.position.x = -position[0] / 10;
     leftHandMesh.position.y = position[1] / 10 + 20;
     leftHandMesh.position.z = position[2] / 10;
-    leftHandMesh.__dirtyPosition = true;
+    //leftHandMesh.__dirtyPosition = true;
   };
 
 }
@@ -77,7 +77,7 @@ function RightHand(scene) {
     rightHandMesh.position.x = -position[0] / 10;
     rightHandMesh.position.y = position[1] / 10 + 20;
     rightHandMesh.position.z = position[2] / 10;
-    rightHandMesh.__dirtyPosition = true;
+    //rightHandMesh.__dirtyPosition = true;
 
   };
 
