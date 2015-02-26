@@ -97,6 +97,10 @@ var APP = {
       renderer = new THREE.WebGLRenderer({
         antialias: true
       });
+
+      renderer.shadowMapType = THREE.PCFSoftShadowMap;
+      renderer.shadowMapEnabled = true;
+
       renderer.setPixelRatio(window.devicePixelRatio);
       this.setSize(window.innerWidth, window.innerHeight)
 
@@ -104,7 +108,7 @@ var APP = {
       scene = new Physijs.Scene();
       scene.name = editorScene.name;
       scene.children = editorScene.children;
-      scene.setGravity(new THREE.Vector3(0, -200, 0));
+      scene.setGravity(new THREE.Vector3(0, -1000, 0));
       
       camera = scene.getObjectByName('cameraDebug');
       var group = scene.getObjectByName('cameraGroup');
@@ -126,6 +130,8 @@ var APP = {
       debugScene.debug(false);
       stereoCamera.debug(false);
       var dropBoxDemo = new DropBoxDemo(scene);
+      animCallbacks.push(dropBoxDemo.animate);
+
       var calibration = new Calibration(scene);
     };
 
@@ -152,7 +158,7 @@ var APP = {
         scene.simulate();
 
         animCallbacks.forEach(function(cb){
-          cb();
+          cb(time);
         });
 
         if (debugScene.on) {

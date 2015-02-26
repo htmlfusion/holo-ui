@@ -46,14 +46,14 @@
 			"depthSegments": 1
 		},
 		{
-			"uuid": "9185E0DC-D90D-4867-B6A8-D7B164F8323E",
+			"uuid": "B9DB7F0C-89A7-4EA3-847C-19B5BA31118C",
 			"type": "BoxGeometry",
 			"width": 149.4,
 			"height": 2,
 			"depth": 70,
-			"widthSegments": 1,
-			"heightSegments": 1,
-			"depthSegments": 1
+			"widthSegments": 4,
+			"heightSegments": 4,
+			"depthSegments": 4
 		}],
 	"materials": [
 		{
@@ -94,16 +94,15 @@
 			"shininess": 30
 		},
 		{
-			"uuid": "4A978F2B-52E6-4DFD-A9EF-7D487DE06332",
+			"uuid": "DA4A1D72-2B77-416C-94BD-36B1C18ADE1B",
 			"type": "MeshPhongMaterial",
 			"color": 16777215,
 			"ambient": 16777215,
 			"emissive": 0,
 			"specular": 1118481,
 			"shininess": 30,
-			"opacity": 0,
-			"transparent": true,
-			"wireframe": true
+			"opacity": 0.5,
+			"transparent": true
 		}],
 	"object": {
 		"uuid": "3741222A-BD8F-401C-A5D2-5A907E891896",
@@ -137,15 +136,6 @@
 						"far": 10000,
 						"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,-3,0,0,1]
 					}]
-			},
-			{
-				"uuid": "19CAD247-DFBE-4096-81AF-0001B87E5A3C",
-				"type": "PointLight",
-				"name": "PointLight 1",
-				"color": 16777215,
-				"intensity": 1,
-				"distance": 0,
-				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,70.5037841796875,231.6297607421875,172.09791564941406,1]
 			},
 			{
 				"uuid": "431E1BB3-92C4-4F47-92FA-49A2C5300D79",
@@ -190,12 +180,23 @@
 				"matrix": [0.9983112812042236,-0.05809119716286659,0,0,0.05809119716286659,0.9983112812042236,0,0,0,0,1,0,3.7801897525787354,29.9563045501709,-38.69133377075195,1]
 			},
 			{
-				"uuid": "7CEBF7F4-7785-4FD4-A872-8078F9FABFFD",
+				"uuid": "E4199412-1437-478B-A060-CF243BE7A068",
 				"type": "Mesh",
 				"name": "Table",
-				"geometry": "9185E0DC-D90D-4867-B6A8-D7B164F8323E",
-				"material": "4A978F2B-52E6-4DFD-A9EF-7D487DE06332",
-				"matrix": [0.9999316930770874,0.008398273028433323,0.008126361295580864,0,-0.008480815216898918,0.9999122619628906,0.01017680112272501,0,-0.00804018136113882,-0.010245024226605892,0.9999151825904846,0,-8.30194091796875,-39.93334197998047,-22.335186004638672,1]
+				"geometry": "B9DB7F0C-89A7-4EA3-847C-19B5BA31118C",
+				"material": "DA4A1D72-2B77-416C-94BD-36B1C18ADE1B",
+				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,-40.15865707397461,-22.34000015258789,1]
+			},
+			{
+				"uuid": "30CE7EF9-9BE1-40E7-91EC-A8865C068480",
+				"type": "SpotLight",
+				"name": "ProjectorLight",
+				"color": 16777215,
+				"intensity": 1,
+				"distance": 0,
+				"angle": 0.314,
+				"exponent": 15.04,
+				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,13.042179107666016,-348.1390686035156,1]
 			}]
 	}
 }
