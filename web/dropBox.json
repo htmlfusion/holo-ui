@@ -96,13 +96,11 @@
 		{
 			"uuid": "DA4A1D72-2B77-416C-94BD-36B1C18ADE1B",
 			"type": "MeshPhongMaterial",
-			"color": 16777215,
+			"color": 6316128,
 			"ambient": 16777215,
 			"emissive": 0,
 			"specular": 1118481,
-			"shininess": 30,
-			"opacity": 0.5,
-			"transparent": true
+			"shininess": 30
 		}],
 	"object": {
 		"uuid": "3741222A-BD8F-401C-A5D2-5A907E891896",
@@ -197,6 +195,33 @@
 				"angle": 0.314,
 				"exponent": 15.04,
 				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,13.042179107666016,-348.1390686035156,1]
+			},
+			{
+				"uuid": "76B17AEF-91B7-4EA6-A02A-E932076C0C21",
+				"type": "PointLight",
+				"name": "PointLight 2",
+				"color": 16777215,
+				"intensity": 0.5,
+				"distance": 0,
+				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,-112.70999908447266,159.67999267578125,0,1]
+			},
+			{
+				"uuid": "7DD72209-2690-4B59-ACC6-55B3C2823F6E",
+				"type": "PointLight",
+				"name": "PointLight 3",
+				"color": 16777215,
+				"intensity": 0.14,
+				"distance": 0,
+				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,161.52000427246094,0,1]
+			},
+			{
+				"uuid": "6A3FA103-F8B3-400C-98B2-4AE6AB7767EA",
+				"type": "PointLight",
+				"name": "PointLight 4",
+				"color": 16777215,
+				"intensity": 0.4,
+				"distance": 0,
+				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,115.75,142.92999267578125,0,1]
 			}]
 	}
 }

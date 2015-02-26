@@ -59,6 +59,8 @@ function DropBoxDemo(scene) {
     table.position.y = tableBox.position.y-14;
     table.position.z = tableBox.position.z;
 
+    table.rotation.x = -.03;
+
     scene.remove(tableBox);
     scene.add(table);
 
@@ -82,24 +84,33 @@ function DropBoxDemo(scene) {
     if(frame%120===0){
 
       var shape = Math.random(),
-        geo;
+        size = Math.round(getRandomArbitrary(5, 10)),
+        colors = ['#0066FF', '#FF66FF', '#00CC99', '#FF9900'],
+        geo,
+        color;
+
+      var rand = Math.random();
+      rand *= colors.length; //(5)
+      rand = Math.floor(rand);
+
+      color = colors[rand];
 
       if(shape < .5){
         geo = new Physijs.BoxMesh(
-          new THREE.CubeGeometry( 10, 10, 10 , 10, 10, 10),
-          new THREE.MeshBasicMaterial({ color: '#0066FF' })
+          new THREE.CubeGeometry( size, size, size , 10, 10, 10),
+          new THREE.MeshPhongMaterial({ color: color })
         );
       } else {
         geo = new Physijs.SphereMesh(
-          new THREE.SphereGeometry( 10, 40, 40 ),
-          new THREE.MeshBasicMaterial({ color: '#0066FF' })
+          new THREE.SphereGeometry( size, 40, 40 ),
+          new THREE.MeshPhongMaterial({ color: color })
         );
       }
 
 
       geo.position.x = getRandomArbitrary(-5, 5);
       geo.position.y = getRandomArbitrary(29, 50);
-      geo.position.z = getRandomArbitrary(-50, 30);
+      geo.position.z = getRandomArbitrary(-50, 0);
       geo.rotation.x = Math.random();
       geo.rotation.y = Math.random();
       geo.rotation.z = Math.random();
