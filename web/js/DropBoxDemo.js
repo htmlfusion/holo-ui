@@ -39,7 +39,7 @@ function DropBoxDemo(scene) {
     );
     table.receiveShadow = true;
     table.position.x = tableBox.position.x;
-    table.position.y = tableBox.position.y;
+    table.position.y = tableBox.position.y-14;
     table.position.z = tableBox.position.z;
     scene.remove(tableBox);
     scene.add(table);

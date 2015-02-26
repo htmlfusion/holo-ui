@@ -36,7 +36,7 @@
 			Physijs.scripts.ammo = '/bower_components/ammo.js/builds/ammo.js'
 			var player;
 			var loader = new THREE.XHRLoader();
-			loader.load( 'calibration.json', function ( text ) {
+			loader.load( 'dropBox.json', function ( text ) {
 				player = new APP.Player();
 				player.load( JSON.parse( text ) );
 				player.setSize( window.innerWidth, window.innerHeight );

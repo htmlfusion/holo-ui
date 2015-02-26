@@ -23,19 +23,14 @@ function StereoCamera(renderer, scene, group) {
   var pxHeight = window.innerHeight;
 
   var gridHelper = new THREE.GridHelper(size, step);
-  self.offset = new THREE.Matrix4();
-  self.offset.set(
-    1.0767210688730582, -0.0224848567940982, 0.03825194115293704, -3.8477102953334557, 
-    0.030423768295330025, 1.05036714077187, -0.2389566986958065, 53.64223320912849, 
-    -0.03229820598316467, 0.2398339857981666, 1.0501111965352017, -75.8564358689001, 
-    0.0, 0.0, 0.0, 1.0
-  );
-  group.matrixAutoUpdate = false;
-  group.updateMatrix();
-  group.matrix.multiply(self.offset);
+  var transform = new THREE.Matrix4();
+  transform.set(1.0767210688730582, -0.0224848567940982, 0.03825194115293704, -3.8477102953334557, 0.030423768295330025, 1.05036714077187, -0.2389566986958065, 53.64223320912849, -0.03229820598316467, 0.2398339857981666, 1.0501111965352017, -75.8564358689001, 0.0, 0.0, 0.0, 1.0);
+  // group.matrixAutoUpdate = false;
+  // group.updateMatrix();
 
   //self.offset = new THREE.Matrix4();
-  //self.offset.getInverse(offset);
+  self.offset = transform;
+  //group.applyMatrix(self.offset);
 
   //group.applyMatrix(this.offset);
 
@@ -60,13 +55,29 @@ self.setIO = function(distance) {
 };
 
 self.setPosition = function(position) {
-  group.position.x = -position[0] / 10;
-  group.position.y = position[1] / 10;
-  group.position.z = position[2] / 10;
-  if (this.offset) {
-    group.updateMatrix();
-    group.matrix.multiply(self.offset);
-  }
+
+  var pos = this.offset.applyToVector3Array([-position[0]/10, position[1]/10, position[2]/10]);
+  // group.rotation.x = 0;
+  // group.rotation.y = 0;
+  // group.rotation.z = 0;
+
+  // group.scale.x = 1;
+  // group.scale.y = 1;
+  // group.scale.z = 1;
+
+
+
+  group.position.x = pos[0];
+  group.position.y = pos[1];
+  group.position.z = pos[2];
+  // if (this.offset) {
+  //   group.updateMatrix();
+  //   //var newMat = new THREE.Matrix4();
+  //   //newMat.multiplyMatrices(self.offset, group.matrix);
+  //   //group.applyMatrix(newMat);
+  //   group.matrixWorld = self.offset;
+  //   group.updateMatrix();
+  // }
 };
 
 self.updateHelpers = function() {
