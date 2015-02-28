@@ -57,7 +57,7 @@ function DropBoxDemo(scene) {
 
     table.position.x = tableBox.position.x;
     table.position.y = tableBox.position.y-14;
-    table.position.z = tableBox.position.z;
+    table.position.z = tableBox.position.z+5;
 
     table.rotation.x = -.03;
 

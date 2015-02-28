@@ -124,8 +124,8 @@ var APP = {
       animCallbacks.push(earth_object.animate);
 
 
-      leftHand = new LeftHand(scene);
-      rightHand = new RightHand(scene);
+      leftHand = new Hand(scene, 'LeftHand');
+      rightHand = new Hand(scene, 'RightHand');
 
       debugScene.debug(false);
       stereoCamera.debug(false);
