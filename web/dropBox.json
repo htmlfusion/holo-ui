@@ -54,6 +54,16 @@
 			"widthSegments": 4,
 			"heightSegments": 4,
 			"depthSegments": 4
+		},
+		{
+			"uuid": "11AB6CA3-0CBD-4576-B3ED-8FB6F9AAC1FF",
+			"type": "BoxGeometry",
+			"width": 70,
+			"height": 100,
+			"depth": 70,
+			"widthSegments": 1,
+			"heightSegments": 1,
+			"depthSegments": 1
 		}],
 	"materials": [
 		{
@@ -96,8 +106,17 @@
 		{
 			"uuid": "DA4A1D72-2B77-416C-94BD-36B1C18ADE1B",
 			"type": "MeshPhongMaterial",
-			"color": 6316128,
-			"ambient": 16777215,
+			"color": 0,
+			"ambient": 0,
+			"emissive": 0,
+			"specular": 1118481,
+			"shininess": 30
+		},
+		{
+			"uuid": "65D835CF-E9C6-4D45-A279-6A714531A92A",
+			"type": "MeshPhongMaterial",
+			"color": 0,
+			"ambient": 0,
 			"emissive": 0,
 			"specular": 1118481,
 			"shininess": 30
@@ -192,9 +211,9 @@
 				"color": 16777215,
 				"intensity": 1,
 				"distance": 0,
-				"angle": 0.314,
+				"angle": 0.294,
 				"exponent": 15.04,
-				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,13.042179107666016,-348.1390686035156,1]
+				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,13.039999961853027,-348.1400146484375,1]
 			},
 			{
 				"uuid": "76B17AEF-91B7-4EA6-A02A-E932076C0C21",
@@ -222,6 +241,14 @@
 				"intensity": 0.4,
 				"distance": 0,
 				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,115.75,142.92999267578125,0,1]
+			},
+			{
+				"uuid": "BAC6CDDD-D979-4BD0-A758-8BAB951FFB56",
+				"type": "Mesh",
+				"name": "BackTable",
+				"geometry": "11AB6CA3-0CBD-4576-B3ED-8FB6F9AAC1FF",
+				"material": "65D835CF-E9C6-4D45-A279-6A714531A92A",
+				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,-97.28711700439453,-189.83462524414062,1]
 			}]
 	}
 }

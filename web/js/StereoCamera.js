@@ -157,6 +157,10 @@ self.render = function(screenOpts) {
 
   self.updateFrustum(screenOpts);
   renderer.clear();
+
+  renderer.setViewport(0, 0, pxWidth / 2, pxHeight);
+  renderer.render(scene, renderCamL);
+  
   renderer.enableScissorTest(true);
 
   renderer.setScissor(0, 0, pxWidth / 2, pxHeight);
@@ -166,6 +170,8 @@ self.render = function(screenOpts) {
   renderer.setScissor(pxWidth / 2, 0, pxWidth / 2, pxHeight);
   renderer.setViewport(pxWidth / 2, 0, pxWidth / 2, pxHeight);
   renderer.render(scene, renderCamR);
+  renderer.setScissor(pxWidth / 2, 0, pxWidth / 2, pxHeight);
+  renderer.setViewport(pxWidth / 2, 0, pxWidth / 2, pxHeight);
 
   renderer.enableScissorTest(false);
 

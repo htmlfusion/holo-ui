@@ -4,6 +4,7 @@ function DropBoxDemo(scene) {
   var scene = scene;
   var shadowBox = scene.getObjectByName('shadowBox');
   var tableBox = scene.getObjectByName('Table');
+  var backTable = scene.getObjectByName('BackTable');
   var spotLight = scene.getObjectByName('ProjectorLight');
   var loaded = false;
 
@@ -49,6 +50,16 @@ function DropBoxDemo(scene) {
       0 // mass
     );
 
+    var rigidBackTable = new Physijs.BoxMesh(
+      backTable.geometry,
+      backTable.material,
+      0 // mass
+    );
+
+    rigidBackTable.position.x = backTable.position.x;
+    rigidBackTable.position.y = backTable.position.y-8;
+    rigidBackTable.position.z = backTable.position.z;
+
     box.castShadow = true;
     box.receiveShadow= true;
 
@@ -63,6 +74,9 @@ function DropBoxDemo(scene) {
 
     scene.remove(tableBox);
     scene.add(table);
+
+    scene.remove(backTable);
+    scene.add(rigidBackTable);
 
     loaded = true;
   }
@@ -81,7 +95,7 @@ function DropBoxDemo(scene) {
 
     frame++;
 
-    if(frame%120===0){
+    if(frame%30===0){
 
       var shape = Math.random(),
         size = Math.round(getRandomArbitrary(5, 10)),
@@ -97,7 +111,7 @@ function DropBoxDemo(scene) {
 
       if(shape < .5){
         geo = new Physijs.BoxMesh(
-          new THREE.CubeGeometry( size, size, size , 10, 10, 10),
+          new THREE.BoxGeometry( size, size, size , 10, 10, 10),
           new THREE.MeshPhongMaterial({ color: color })
         );
       } else {
@@ -110,7 +124,7 @@ function DropBoxDemo(scene) {
 
       geo.position.x = getRandomArbitrary(-5, 5);
       geo.position.y = getRandomArbitrary(29, 50);
-      geo.position.z = getRandomArbitrary(-50, 0);
+      geo.position.z = getRandomArbitrary(-500, 500);
       geo.rotation.x = Math.random();
       geo.rotation.y = Math.random();
       geo.rotation.z = Math.random();
