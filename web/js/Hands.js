@@ -83,3 +83,28 @@ function RightHand(scene) {
 
 
 }
+
+var Handy = function(scene) {
+		var handy = this;
+		
+		//if (HELPERS) {
+		//var msg = handData.appendChild( document.createElement( 'div' ) );
+		//}
+		var geometry = new THREE.BoxGeometry( 5, 2, 5 );
+		var material = new THREE.MeshNormalMaterial();
+		var box = new THREE.Mesh( geometry, material );
+		scene.add( box );
+
+		handy.outputData = function( index, hand  ) {
+
+		/**	if (HELPERS) {
+			msg.innerHTML = 'Hand id:' + index + ' x:' + hand.stabilizedPalmPosition[0].toFixed(0) + 
+				' y:' + hand.stabilizedPalmPosition[1].toFixed(0) + ' z:' + hand.stabilizedPalmPosition[2].toFixed(0);
+			}**/
+			box.position.set( hand.stabilizedPalmPosition[0]/11, hand.stabilizedPalmPosition[1]/11, hand.stabilizedPalmPosition[2]/11 );
+
+			box.rotation.set( hand.pitch(), -hand.yaw(), hand.roll() );
+
+		};
+
+};

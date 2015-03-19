@@ -5,53 +5,72 @@ var APP = {
   Player: function() {
 
     var loader = new THREE.ObjectLoader();
-    var camera, scene, renderer, debugScene,
+    var camera, scene, renderer, debugScene, controls,
       stereoCamera, debugCam, hands, leftHand, rightHand;
     var debug = false;
 
     var animCallbacks = [];
 
+    var kinnect_hands_tracking = true;
+    var request;
+    
     this.dom = undefined;
 
     this.width = 500;
     this.height = 500;
 
-    var ws = new WebSocket('ws://localhost:8887');
+    var handies = {};
+    var loop = {};
+    
 
-    ws.onopen = function() {
-      ws.send('subscribe');
-      console.log('socket connected');
-    };
+      var ws = new WebSocket('ws://localhost:8887');
 
-    var last = null;
-    ws.onmessage = function(evt) {
-      //var position = evt.data.split(',');
-      try {
-        var bodyPos = JSON.parse(evt.data);
-      } catch (err) {
-        console.log('error', err);
-        return;
-      }
+      ws.onopen = function() {
+        ws.send('subscribe');
+        console.log('socket connected');
+      };
 
-      if (stereoCamera) {
-        var pos = [bodyPos.head.x, bodyPos.head.y, bodyPos.head.z];
-        stereoCamera.setPosition(pos);
-      }
-      if (bodyPos.left_hand) {
-        var left_pos = [bodyPos.left_hand.x, bodyPos.left_hand.y, bodyPos.left_hand.z];
-        leftHand.setPosition(left_pos);
-        leftHand.mesh.__dirtyPosition = true;
-      }
-      if (bodyPos.right_hand) {
-        var right_pos = [bodyPos.right_hand.x, bodyPos.right_hand.y, bodyPos.right_hand.z];
-        rightHand.setPosition(right_pos);
-        rightHand.mesh.__dirtyPosition = true;
-      }
-    };
+      var last = null;
+      ws.onmessage = function(evt) {
+        //var position = evt.data.split(',');
+        try {
+          var bodyPos = JSON.parse(evt.data);
+        } catch (err) {
+          console.log('error', err);
+          return;
+        }
 
-    ws.onclose = function() {
-      console.log('disconnected')
-    };
+        if (stereoCamera) {
+          var pos = [bodyPos.head.x, bodyPos.head.y, bodyPos.head.z];
+          stereoCamera.setPosition(pos);
+        }
+        
+        if (bodyPos.head.z > 1335) {
+        
+          if (bodyPos.left_hand) {
+            var left_pos = [bodyPos.left_hand.x, bodyPos.left_hand.y, bodyPos.left_hand.z];
+            leftHand.setPosition(left_pos);
+            leftHand.mesh.__dirtyPosition = true;
+          }
+          if (bodyPos.right_hand) {
+            var right_pos = [bodyPos.right_hand.x, bodyPos.right_hand.y, bodyPos.right_hand.z];
+            rightHand.setPosition(right_pos);
+            rightHand.mesh.__dirtyPosition = true;
+          }
+        
+        } else {
+          
+          kinnect_hands_tracking = false;
+        }
+          
+      };
+
+      ws.onclose = function() {
+        console.log('disconnected');
+        kinnect_hands_tracking = false;
+      };
+
+
 
 
     var rot = 0;
@@ -137,19 +156,41 @@ var APP = {
 
     };
 
-    var request;
 
+
+	loop.animate = function( frame ) {
+    if (!kinnect_hands_tracking) {
+      frame.hands.forEach( function( hand, index ) {
+        var handy = ( handies[index] || ( handies[index] = new Handy(scene)) );    
+        handy.outputData( index, hand );
+      });
+    }
+    //controls.update();
+    
+    /**
+        clouds.rotation.y+=.002
+        earth.rotation.y+=.001
+        //cameraHelper.visible = true;
+        //cameraHelper2.visible = true;
+        camera.lookAt(earth.position);
+        camera.updateProjectionMatrix();
+        effect.render( scene, camera );
+      **/  
+
+		//if (HELPERS) {
+		//	stats.update();
+		//}   
+
+	}
+
+    loop = Leap.loop( loop.animate );
+    
     var animate = function(time) {
-
       setTimeout(function() {
         request = requestAnimationFrame(animate);
-    
-
         //console.log(leftHand);
         //console.log(rightHand);
-        
         scene.simulate();
-
         animCallbacks.forEach(function(cb){
           cb();
         });
@@ -170,6 +211,7 @@ var APP = {
       }, 1000 / 60);
 
     };
+
 
     this.play = function() {
       request = requestAnimationFrame(animate);
