@@ -57,7 +57,7 @@ function DropBoxDemo(scene) {
     );
 
     rigidBackTable.position.x = backTable.position.x;
-    rigidBackTable.position.y = backTable.position.y-8;
+    rigidBackTable.position.y = backTable.position.y+5;
     rigidBackTable.position.z = backTable.position.z;
 
     box.castShadow = true;
@@ -67,7 +67,7 @@ function DropBoxDemo(scene) {
     table.receiveShadow = true;
 
     table.position.x = tableBox.position.x;
-    table.position.y = tableBox.position.y-14;
+    table.position.y = tableBox.position.y;
     table.position.z = tableBox.position.z+5;
 
     table.rotation.x = -.03;
@@ -92,6 +92,10 @@ function DropBoxDemo(scene) {
   }
 
   this.animate = function(time){
+
+    if(!loaded){
+      return;
+    }
 
     frame++;
 
@@ -124,7 +128,7 @@ function DropBoxDemo(scene) {
 
       geo.position.x = getRandomArbitrary(-5, 5);
       geo.position.y = getRandomArbitrary(29, 50);
-      geo.position.z = getRandomArbitrary(-500, 500);
+      geo.position.z = getRandomArbitrary(-500, 200);
       geo.rotation.x = Math.random();
       geo.rotation.y = Math.random();
       geo.rotation.z = Math.random();

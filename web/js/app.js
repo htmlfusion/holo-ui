@@ -74,17 +74,17 @@ var APP = {
         stereoCamera.debug(false);
       } else if(event.keyCode === 103){
         debugScene.gridHelper(true);
-      } else if(event.keyCode === 46){
-        rot += 0.01;
-        var euler = new THREE.Euler( 0.01, 0, 0, 'XYZ' );
-        stereoCamera.offset = rot;
-        group.position.applyEuler(euler);
-      } else if(event.keyCode === 44){
-        rot -= 0.01;
-        var group = scene.getObjectByName('cameraGroup');
-        var euler = new THREE.Euler( -0.01, 0, 0, 'XYZ' );
-        stereoCamera.offset = rot;
-        group.position.applyEuler(euler);
+      // } else if(event.keyCode === 46){
+      //   rot += 0.01;
+      //   var euler = new THREE.Euler( 0.01, 0, 0, 'XYZ' );
+      //   stereoCamera.offset = rot;
+      //   group.position.applyEuler(euler);
+      // } else if(event.keyCode === 44){
+      //   rot -= 0.01;
+      //   var group = scene.getObjectByName('cameraGroup');
+      //   var euler = new THREE.Euler( -0.01, 0, 0, 'XYZ' );
+      //   stereoCamera.offset = rot;
+      //   group.position.applyEuler(euler);
       }
 
 
@@ -108,7 +108,7 @@ var APP = {
       scene = new Physijs.Scene();
       scene.name = editorScene.name;
       scene.children = editorScene.children;
-      scene.setGravity(new THREE.Vector3(0, -5, 0));
+      scene.setGravity(new THREE.Vector3(0, -5000, 0));
       
       camera = scene.getObjectByName('cameraDebug');
       var group = scene.getObjectByName('cameraGroup');
@@ -164,14 +164,14 @@ var APP = {
         if (debugScene.on) {
           debugScene.update();
           stereoCamera.updateFrustum({
-            width: 100,
-            height: 75
+            width: 80.64,
+            height: 45.72
           });
           stereoCamera.updateHelpers();
         } else {
           stereoCamera.render({
-            width: 100,
-            height: 75
+            width: 80.64,
+            height: 45.72
           });
         }
       }, 1000 / 60);

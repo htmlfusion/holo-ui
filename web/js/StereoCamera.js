@@ -30,6 +30,17 @@ function StereoCamera(renderer, scene, group) {
 
   //self.offset = new THREE.Matrix4();
   self.offset = transform;
+  self.zOffset = 0;
+  function keydown(event) {
+    // <d> key for debug cam
+    if (event.keyCode === 97) {
+      self.zOffset += 1;
+    } else if (event.keyCode === 122) {
+      self.zOffset -= 1;
+    }
+  }
+  $(document).keypress(keydown);
+
   //group.applyMatrix(self.offset);
 
   //group.applyMatrix(this.offset);
@@ -56,6 +67,7 @@ self.setIO = function(distance) {
 
 self.setPosition = function(position) {
 
+  var pos = [-position[0]/10, position[1]/10, position[2]/10];
   var pos = this.offset.applyToVector3Array([-position[0]/10, position[1]/10, position[2]/10]);
   // group.rotation.x = 0;
   // group.rotation.y = 0;
@@ -69,7 +81,7 @@ self.setPosition = function(position) {
 
   group.position.x = pos[0];
   group.position.y = pos[1];
-  group.position.z = pos[2];
+  group.position.z = pos[2]+this.zOffset;
   // if (this.offset) {
   //   group.updateMatrix();
   //   //var newMat = new THREE.Matrix4();
@@ -160,7 +172,7 @@ self.render = function(screenOpts) {
 
   renderer.setViewport(0, 0, pxWidth / 2, pxHeight);
   renderer.render(scene, renderCamL);
-  
+
   renderer.enableScissorTest(true);
 
   renderer.setScissor(0, 0, pxWidth / 2, pxHeight);
