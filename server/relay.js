@@ -1,4 +1,4 @@
-var ws = require("nodejs-websocket")
+var ws = require('nodejs-websocket');
 var fs = require('fs');
 
 var subscribed = [];

@@ -164,13 +164,13 @@ var APP = {
         if (debugScene.on) {
           debugScene.update();
           stereoCamera.updateFrustum({
-            width: 80.64,
+            width: 81.28,
             height: 45.72
           });
           stereoCamera.updateHelpers();
         } else {
           stereoCamera.render({
-            width: 80.64,
+            width: 81.28,
             height: 45.72
           });
         }
