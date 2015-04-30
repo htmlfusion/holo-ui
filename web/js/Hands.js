@@ -34,8 +34,8 @@ function LeftHand(scene) {
   self.setPosition = function(position) {
     //leftHand.position.set(-position[0]/10, position[1]/10+20, position[2]/10);
     leftHandMesh.position.x = -position[0] / 10;
-    leftHandMesh.position.y = position[1] / 10 + 20;
-    leftHandMesh.position.z = position[2] / 10;
+    leftHandMesh.position.y = position[1] / 10 ;
+    leftHandMesh.position.z = position[2] / 10 - 80;
     //leftHandMesh.__dirtyPosition = true;
   };
 
@@ -90,20 +90,84 @@ var Handy = function(scene) {
 		//if (HELPERS) {
 		//var msg = handData.appendChild( document.createElement( 'div' ) );
 		//}
+    
 		var geometry = new THREE.BoxGeometry( 5, 2, 5 );
-		var material = new THREE.MeshNormalMaterial();
-		var box = new THREE.Mesh( geometry, material );
+		//var material = new THREE.MeshNormalMaterial();
+    
+    var friction = .8; // high friction
+    var restitution = .3; // low restitution
+    
+    var material = Physijs.createMaterial(
+                      new THREE.MeshBasicMaterial({ color: 0x888888 }),
+                      friction,
+                      restitution
+                    );
+    
+		var material = new THREE.MeshNormalMaterial();    
+    
+    var box = new Physijs.BoxMesh(
+                    geometry,
+                    material,
+                    1
+                  );
+  
 		scene.add( box );
 
-		handy.outputData = function( index, hand  ) {
-
+		handy.outputData = function( index, hand, camera  ) {
+       var ray, intersections;
+           // Intersect
+      var _vector = new THREE.Vector3;
+			//projector = new THREE.Projector()
 		/**	if (HELPERS) {
 			msg.innerHTML = 'Hand id:' + index + ' x:' + hand.stabilizedPalmPosition[0].toFixed(0) + 
 				' y:' + hand.stabilizedPalmPosition[1].toFixed(0) + ' z:' + hand.stabilizedPalmPosition[2].toFixed(0);
 			}**/
-			box.position.set( hand.stabilizedPalmPosition[0]/11, hand.stabilizedPalmPosition[1]/11, hand.stabilizedPalmPosition[2]/11 );
-
+      box.position.__dirtyPosition = true;
+			box.position.set( hand.stabilizedPalmPosition[0]/11, hand.stabilizedPalmPosition[1]/11 - 20 , hand.stabilizedPalmPosition[2]/11 + 70 );
+      //box.position.__dirtyPosition = false;
+      box.rotation.__dirtyRotation = true;
 			box.rotation.set( hand.pitch(), -hand.yaw(), hand.roll() );
+      //box.rotation.__dirtyRotation = false;
+ 
+       var position = hand.palmPosition;
+      var velocity = hand.palmVelocity;
+      var direction = hand.direction;
+      
+      _vector.set( direction[0], direction[1], direction[2]);
+      
+      /**
+      _vector.set(
+				( hand.stabilizedPalmPosition[0]/11 / window.innerWidth ) * 2 - 1,
+				-( hand.stabilizedPalmPosition[1]/11 - 20 / window.innerHeight ) * 2 + 1,
+				hand.stabilizedPalmPosition[2]/11 + 70
+			);
+      */
+      
+			//projector.unprojectVector( _vector, camera );
+      //_vector.unproject( camera );
+			
+
+      
+    
+      var earth =  scene.getObjectByName('Earth');
+      ray = new THREE.Raycaster( position, _vector.normalize() );
+			//ray = new THREE.Raycaster( camera.position, _vector.sub( camera.position ).normalize() );
+      //ray = new THREE.Raycaster();
+      //ray.setFromCamera(_vector, camera);
+      
+
+      //console.log("p:"+position[0]
+      
+			intersections = ray.intersectObject( earth );
+      
+      if (intersections.length) {
+        console.log(intersections.length);
+        for ( var i = 0; i < intersections.length; i++ ) {
+          intersects[ i ].object.material.color.set( 0xff0000 );
+        }
+      }
+      
+      
 
 		};
 

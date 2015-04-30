@@ -14,6 +14,7 @@ var APP = {
     var kinnect_hands_tracking = true;
     var request;
     
+    
     this.dom = undefined;
 
     this.width = 500;
@@ -120,10 +121,21 @@ var APP = {
       this.setSize(window.innerWidth, window.innerHeight)
 
       var editorScene = loader.parse(json);
-      scene = new Physijs.Scene();
+      scene = new Physijs.Scene({ reportsize: 50, fixedTimeStep: 1 / 60 });
       scene.name = editorScene.name;
       scene.children = editorScene.children;
-      scene.setGravity(new THREE.Vector3(0, -200, 0));
+      //scene.setGravity(new THREE.Vector3(0, -20, 0));
+      scene.setGravity(new THREE.Vector3(0, 0, 0));
+
+  		scene.addEventListener(
+			'update',
+        function() {
+          //scene.simulate( undefined, 2 );
+          //physics_stats.update();
+          //controls.update();
+        }
+      );
+      
       
       camera = scene.getObjectByName('cameraDebug');
       var group = scene.getObjectByName('cameraGroup');
@@ -134,10 +146,12 @@ var APP = {
       debugScene = new DebugScene(renderer, scene, camera);
       
       var francis = new Francis(scene);
-      var earth_object = new earthDemo(scene);
+      //var earth_object = new earthDemo(scene);
+      var earth_object = new earthDemoLight(scene);
 
       animCallbacks.push(earth_object.animate);
 
+      var phy_test = new PhyTest(scene);
 
       leftHand = new LeftHand(scene);
       rightHand = new RightHand(scene);
@@ -158,13 +172,28 @@ var APP = {
 
 
 
-	loop.animate = function( frame ) {
+	  loop.animate = function( frame ) {
+      
+    
     if (!kinnect_hands_tracking) {
       frame.hands.forEach( function( hand, index ) {
         var handy = ( handies[index] || ( handies[index] = new Handy(scene)) );    
-        handy.outputData( index, hand );
+        handy.outputData( index, hand, camera );
+        
+        
       });
+		
     }
+    /**
+    request = requestAnimationFrame(loop.animate);
+    scene.simulate();
+    
+    stereoCamera.render({
+            width: 100,
+            height: 75
+          });
+     **/     
+    //scene.simulate( undefined, 1 );
     //controls.update();
     
     /**

@@ -29,6 +29,9 @@
 		<script src="js/Francis.js"></script>
 		<!-- to load francis -->
     <script src="js/earthDemo.js"></script>
+    <script src="js/earthDemoLight.js"></script>
+    <script src="js/PhyTest.js"></script>
+    
 		<script src="js/app.js"></script>
 		<script>
 
@@ -36,7 +39,7 @@
 			Physijs.scripts.ammo = '/bower_components/ammo.js/builds/ammo.js'
 			var player;
 			var loader = new THREE.XHRLoader();
-			loader.load( 'earth.json', function ( text ) {
+			loader.load( 'earthLight.json', function ( text ) {
 				player = new APP.Player();
 				player.load( JSON.parse( text ) );
 				player.setSize( window.innerWidth, window.innerHeight );
