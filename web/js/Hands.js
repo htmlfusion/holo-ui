@@ -86,14 +86,9 @@ function RightHand(scene) {
 
 var Handy = function(scene) {
 		var handy = this;
-		
-		//if (HELPERS) {
-		//var msg = handData.appendChild( document.createElement( 'div' ) );
-		//}
+  
     
 		var geometry = new THREE.BoxGeometry( 5, 2, 5 );
-		//var material = new THREE.MeshNormalMaterial();
-    
     var friction = .8; // high friction
     var restitution = .3; // low restitution
     
@@ -117,11 +112,7 @@ var Handy = function(scene) {
        var ray, intersections;
            // Intersect
       var _vector = new THREE.Vector3;
-			//projector = new THREE.Projector()
-		/**	if (HELPERS) {
-			msg.innerHTML = 'Hand id:' + index + ' x:' + hand.stabilizedPalmPosition[0].toFixed(0) + 
-				' y:' + hand.stabilizedPalmPosition[1].toFixed(0) + ' z:' + hand.stabilizedPalmPosition[2].toFixed(0);
-			}**/
+
       box.position.__dirtyPosition = true;
 			box.position.set( hand.stabilizedPalmPosition[0]/11, hand.stabilizedPalmPosition[1]/11 - 20 , hand.stabilizedPalmPosition[2]/11 + 70 );
       //box.position.__dirtyPosition = false;
@@ -129,7 +120,7 @@ var Handy = function(scene) {
 			box.rotation.set( hand.pitch(), -hand.yaw(), hand.roll() );
       //box.rotation.__dirtyRotation = false;
  
-       var position = hand.palmPosition;
+      var position = hand.palmPosition;
       var velocity = hand.palmVelocity;
       var direction = hand.direction;
       
@@ -149,9 +140,10 @@ var Handy = function(scene) {
 
       
     
-      var earth =  scene.getObjectByName('Earth');
+      var earth =  scene.getObjectByName('SphereTarget');
       ray = new THREE.Raycaster( position, _vector.normalize() );
 			//ray = new THREE.Raycaster( camera.position, _vector.sub( camera.position ).normalize() );
+      
       //ray = new THREE.Raycaster();
       //ray.setFromCamera(_vector, camera);
       

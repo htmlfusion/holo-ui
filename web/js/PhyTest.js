@@ -27,8 +27,8 @@ function PhyTest(scene) {
  // targetMesh.position.z = target.position.z; 
   
     
-  scene.remove(target);
-  scene.add(targetMesh);
+  //scene.remove(target);
+  //scene.add(targetMesh);
   
   // Left Hand / sphere
     
