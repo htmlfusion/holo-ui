@@ -3,7 +3,8 @@ function earthDemo(scene) {
   var self = this;
   var scene = scene;
   var clouds, earth;
-  var loaded=false;
+  var loaded = false;
+  var radius = 24;
 
   this.load = function() {
     loaded = true;
@@ -25,7 +26,7 @@ function earthDemo(scene) {
 
 
     clouds = new Physijs.BoxMesh(
-      new THREE.SphereGeometry(6 + .1, 80, 80),
+      new THREE.SphereGeometry(radius + .1, 80, 80),
       cloud_material
     )
 
@@ -37,7 +38,7 @@ function earthDemo(scene) {
 
     //earth object  specular: 0x555555, 
     var earthBumpImage = THREE.ImageUtils.loadTexture("img/earth-bump-high.jpg");
-    var geometry = new THREE.SphereGeometry(6, 80, 80)
+    var geometry = new THREE.SphereGeometry(radius, 80, 80)
     var material = new Physijs.createMaterial(
       new THREE.MeshPhongMaterial({
         map: THREE.ImageUtils.loadTexture('img/earth-high.jpg'),
@@ -53,7 +54,7 @@ function earthDemo(scene) {
       0.5);
 
     earth = new Physijs.BoxMesh(geometry, material, 0);
-    earth.position.set(0, 0, 70);
+    earth.position.set(0, 0, 0);
 
     earth.add(clouds);
     scene.add(earth);

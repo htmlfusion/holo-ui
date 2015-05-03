@@ -4,19 +4,19 @@ var net = require('net');
 var ws = require("nodejs-websocket")
 var subscribed = [];
 
-// var websocketServer = ws.createServer(function(conn) {
-//   conn.on("close", function(code, reason) {
-//     console.log("Connection closed")
-//     subscribed = [];
-//   })
-//   conn.on("text", function(str) {
-//     if (str === 'subscribe') {
-//       subscribed.push(conn);
-//       return
-//     }
-//   })
-// 
-// }).listen(8887);
+var websocketServer = ws.createServer(function(conn) {
+  conn.on("close", function(code, reason) {
+    console.log("Connection closed")
+    subscribed = [];
+  })
+  conn.on("text", function(str) {
+    if (str === 'subscribe') {
+      subscribed.push(conn);
+      return
+    }
+  })
+
+}).listen(8887);
 
 var client = net.connect({port: 5000},
   function() { //'connect' listener
