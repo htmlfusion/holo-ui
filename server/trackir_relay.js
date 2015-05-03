@@ -1,25 +1,33 @@
+#!/usr/bin/env node
+
+var net = require('net');
 var ws = require("nodejs-websocket")
-var dgram = require('dgram');
 var subscribed = [];
 
-var websocketServer = ws.createServer(function(conn) {
-  conn.on("close", function(code, reason) {
-    console.log("Connection closed")
-    subscribed = [];
-  })
-  conn.on("text", function(str) {
-    if (str === 'subscribe') {
-      subscribed.push(conn);
-      return
-    }
-  })
+// var websocketServer = ws.createServer(function(conn) {
+//   conn.on("close", function(code, reason) {
+//     console.log("Connection closed")
+//     subscribed = [];
+//   })
+//   conn.on("text", function(str) {
+//     if (str === 'subscribe') {
+//       subscribed.push(conn);
+//       return
+//     }
+//   })
+// 
+// }).listen(8887);
 
-}).listen(8887);
+var client = net.connect({port: 5000},
+  function() { //'connect' listener
+  console.log('connected to server!');
+});
+  
+client.on('end', function() {
+  console.log('disconnected from server');
+});
 
-var server = dgram.createSocket('udp4');
-// Listen for emission of the 'message' event.
-server.on('message', function(message) {
-  console.log('received a message: ' + message);
+client.on('data', function(message) {
   var split = message.toString().split(/\s+/);
   var numbers = [];
   split.forEach(function(val) {
@@ -35,20 +43,5 @@ server.on('message', function(message) {
   subscribed.forEach(function(c) {
     c.sendText(JSON.stringify(body));
   });
-
 });
-
-server.on('listening', function() {
-  var address = server.address();
-  console.log('I am listening on ' +
-    address.address + ':' + address.port);
-});
-
-server.on('error', function(e) {
-  console.log('error', e);
-});
-
-
-// Bind to port 6543
-var port = 6543;
-server.bind(port, '0.0.0.0');
+  
