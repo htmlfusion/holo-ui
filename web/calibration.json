@@ -38,9 +38,9 @@
 		{
 			"uuid": "A35341A0-4FD5-4650-88D1-19D9DF68D7A9",
 			"type": "BoxGeometry",
-			"width": 26.04,
-			"height": 16.0338,
-			"depth": 25.72,
+			"width": 26.035,
+			"height": 16.51,
+			"depth": 26.035,
 			"widthSegments": 1,
 			"heightSegments": 1,
 			"depthSegments": 1
