@@ -115,7 +115,7 @@ var APP = {
 
       this.dom = renderer.domElement;
 
-      stereoCamera = new StereoCamera(renderer, scene, group);
+      stereoCamera = new StereoCamera(renderer, scene, group, {width: 83.185, height: 46.99});
       debugScene = new DebugScene(renderer, scene, camera);
       
       var francis = new Francis(scene);
@@ -132,7 +132,8 @@ var APP = {
       var dropBoxDemo = new DropBoxDemo(scene);
       animCallbacks.push(dropBoxDemo.animate);
 
-      var calibration = new Calibration(scene);
+      var calibration = new Calibration(scene, stereoCamera);
+      animCallbacks.push(calibration.animate);
     };
 
 
@@ -151,10 +152,6 @@ var APP = {
       setTimeout(function() {
         request = requestAnimationFrame(animate);
     
-
-        //console.log(leftHand);
-        //console.log(rightHand);
-        
         scene.simulate();
 
         animCallbacks.forEach(function(cb){
@@ -163,16 +160,10 @@ var APP = {
 
         if (debugScene.on) {
           debugScene.update();
-          stereoCamera.updateFrustum({
-            width: 83.185,
-            height: 46.99
-          });
+          stereoCamera.updateFrustum();
           stereoCamera.updateHelpers();
         } else {
-          stereoCamera.render({
-            width: 83.185,
-            height: 46.99
-          });
+          stereoCamera.render();
         }
       }, 1000 / 60);
 

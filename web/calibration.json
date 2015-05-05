@@ -44,15 +44,6 @@
 			"widthSegments": 1,
 			"heightSegments": 1,
 			"depthSegments": 1
-		},
-		{
-			"uuid": "50DD75FD-A96B-40A2-83CB-5B8BC5A8F9FC",
-			"type": "TorusGeometry",
-			"radius": 3.88,
-			"tube": 1,
-			"radialSegments": 8,
-			"tubularSegments": 40,
-			"arc": 6.28
 		}],
 	"materials": [
 		{
@@ -84,14 +75,6 @@
 			"uuid": "2FA841FB-2CCE-4B7F-96AB-371941AD19E6",
 			"type": "MeshPhongMaterial",
 			"color": 62976,
-			"emissive": 0,
-			"specular": 1118481,
-			"shininess": 30
-		},
-		{
-			"uuid": "3F859FC0-F619-45A3-A3E7-AA47136C9A5F",
-			"type": "MeshPhongMaterial",
-			"color": 16777215,
 			"emissive": 0,
 			"specular": 1118481,
 			"shininess": 30
@@ -176,18 +159,10 @@
 			{
 				"uuid": "C4603472-AB1D-454B-8B90-39FFC7500152",
 				"type": "Mesh",
-				"name": "Box 1",
+				"name": "calibrationTarget",
 				"geometry": "A35341A0-4FD5-4650-88D1-19D9DF68D7A9",
 				"material": "2FA841FB-2CCE-4B7F-96AB-371941AD19E6",
-				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,-22.87700653076172,-114.30000305175781,1]
-			},
-			{
-				"uuid": "DBB6CC3D-E9AE-4DFC-90D0-57DB3FDF4593",
-				"type": "Mesh",
-				"name": "Torus 1",
-				"geometry": "50DD75FD-A96B-40A2-83CB-5B8BC5A8F9FC",
-				"material": "3F859FC0-F619-45A3-A3E7-AA47136C9A5F",
-				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,-27.062318801879883,-6.1197686195373535,0,1]
+				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,-15.865501403808594,-44.316368103027344,1]
 			}]
 	}
 }

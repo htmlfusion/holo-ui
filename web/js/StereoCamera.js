@@ -1,9 +1,11 @@
 'use strict';
 
 
-function StereoCamera(renderer, scene, group) {
+function StereoCamera(renderer, scene, group, screen) {
 
   var self = this;
+
+  this.screen = screen;
 
   var renderer = renderer;
   var scene = scene;
@@ -71,7 +73,7 @@ function StereoCamera(renderer, scene, group) {
   }
 
 
-  self.updateFrustum = function(screenOpts) {
+  self.updateFrustum = function() {
     var vectorL = group.position.clone();
     // scene.updateMatrixWorld();
     // group.updateMatrixWorld();
@@ -86,9 +88,9 @@ function StereoCamera(renderer, scene, group) {
 
     var near = 10;
 
-    var width = screenOpts.width;
+    var width = this.screen.width;
+    var height = this.screen.height;
     var pxSize = pxWidth / width;;
-    var height = screenOpts.height;
 
     var leftScreen = width / 2.0 + vectorL.x;
     var left = near / vectorL.z * leftScreen;
@@ -140,9 +142,9 @@ function StereoCamera(renderer, scene, group) {
     renderCamL.aspect = (window.innerWidth / window.innerHeight) / 2;
   }
 
-  self.render = function(screenOpts) {
+  self.render = function() {
 
-    self.updateFrustum(screenOpts);
+    self.updateFrustum();
     renderer.clear();
 
     renderer.setViewport(0, 0, pxWidth / 2, pxHeight);

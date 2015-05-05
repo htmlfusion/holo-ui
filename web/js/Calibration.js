@@ -1,10 +1,13 @@
-function Calibration(scene) {
-  var scene = scene;
-  var object;
+function Calibration(scene, stereoCamera) {
+
+  var scene = scene,
+    camera = stereoCamera,
+    loaded = false,
+    object;
 
   this.load = function() {
     var indexes = [1, 4, 0, 5, 3, 6];
-    object = scene.getChildByName('Box 1')
+    object = scene.getChildByName('calibrationTarget')
     object.updateMatrixWorld();
     var points = [];
     for (var i = 0; i < 8; i++) {
@@ -16,13 +19,17 @@ function Calibration(scene) {
       box: points
     }));
 
-    var box = scene.getObjectByName('Box 1');
+  };
 
-
-  }
+  this.animate = function(){
+    if(loaded){
+      console.log(camera);
+    }
+  };
 
   if (scene.name === 'Calibration') {
     this.load();
-  }
+  };
+
 
 }
