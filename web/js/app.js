@@ -132,7 +132,7 @@ var APP = {
       var dropBoxDemo = new DropBoxDemo(scene);
       animCallbacks.push(dropBoxDemo.animate);
 
-      var calibration = new Calibration(scene, stereoCamera);
+      var calibration = new Calibration(scene, stereoCamera, debugCam);
       animCallbacks.push(calibration.animate);
     };
 
