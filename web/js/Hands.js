@@ -116,7 +116,7 @@ var Handy = function(scene) {
       box.position.__dirtyPosition = true;
 			box.position.set( hand.stabilizedPalmPosition[0]/11, hand.stabilizedPalmPosition[1]/11 - 20 , hand.stabilizedPalmPosition[2]/11 + 70 );
       //box.position.__dirtyPosition = false;
-      box.rotation.__dirtyRotation = true;
+      box.rotation.__dirtyRotation = true;js
 			box.rotation.set( hand.pitch(), -hand.yaw(), hand.roll() );
       //box.rotation.__dirtyRotation = false;
  

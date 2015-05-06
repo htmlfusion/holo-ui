@@ -13,6 +13,7 @@ var APP = {
 
     var request;
     
+    var phy_test;
     
     this.dom = undefined;
 
@@ -67,7 +68,7 @@ var APP = {
       scene = new Physijs.Scene({ reportsize: 50, fixedTimeStep: 1 / 60 });
       scene.name = editorScene.name;
       scene.children = editorScene.children;
-      //scene.setGravity(new THREE.Vector3(0, -20, 0));
+      //scene.setGravity(new THREE.Vector3(0, -5, 0));
       scene.setGravity(new THREE.Vector3(0, 0, 0));
 
   		scene.addEventListener(
@@ -94,10 +95,10 @@ var APP = {
 
      // animCallbacks.push(earth_object.animate);
 
-      var phy_test = new PhyTest(scene);
-
+      phy_test = new PhyTest(scene);
+      animCallbacks.push(phy_test.animate);
       //leftHand = new LeftHand(scene);
-     //rightHand = new RightHand(scene);
+     // rightHand = new RightHand(scene);
 
       debugScene.debug(false);
       stereoCamera.debug(false);
@@ -116,14 +117,14 @@ var APP = {
 
 
 	  loop.animate = function( frame ) {
-      
+      /**
       frame.hands.forEach( function( hand, index ) {
         var handy = ( handies[index] || ( handies[index] = new Handy(scene)) );    
         handy.outputData( index, hand, camera );
         
         
       });
-		
+		   **/
 
     /**
     request = requestAnimationFrame(loop.animate);
@@ -157,6 +158,7 @@ var APP = {
     
     var animate = function(time) {
       setTimeout(function() {
+        //phy_test.animate();
         request = requestAnimationFrame(animate);
         //console.log(leftHand);
         //console.log(rightHand);

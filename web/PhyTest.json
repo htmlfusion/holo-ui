@@ -36,15 +36,15 @@
 			"thetaLength": 3.14
 		},
 		{
-			"uuid": "C599A45D-8FC3-46D3-BE88-F4BF729A6D5B",
+			"uuid": "35C06FAE-CF72-4179-B956-4EF9C5D4E753",
 			"type": "SphereGeometry",
-			"radius": 75,
+			"radius": 16.56,
 			"widthSegments": 32,
 			"heightSegments": 16,
 			"phiStart": 0,
-			"phiLength": 6.283185307179586,
+			"phiLength": 6.28,
 			"thetaStart": 0,
-			"thetaLength": 3.141592653589793
+			"thetaLength": 3.14
 		}],
 	"materials": [
 		{
@@ -162,9 +162,9 @@
 				"uuid": "96523084-1153-4D6E-B5D4-6E8A6924B80D",
 				"type": "Mesh",
 				"name": "SphereTarget",
-				"geometry": "C599A45D-8FC3-46D3-BE88-F4BF729A6D5B",
+				"geometry": "35C06FAE-CF72-4179-B956-4EF9C5D4E753",
 				"material": "1C7B81CF-5F56-45DC-8932-358BB6DF1079",
-				"matrix": [0.1599999964237213,0,0,0,0,0.1599999964237213,0,0,0,0,0.1599999964237213,0,0.5199999809265137,-1.3300000429153442,-0.20999999344348907,1]
+				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0.5199999809265137,-1.3300000429153442,-0.20999999344348907,1]
 			}]
 	}
 }
