@@ -17,7 +17,7 @@ function LeftHand(scene) {
     1
   );
 
-  var leftHandMesh = new Physijs.BoxMesh(
+  var leftHandMesh = new Physijs.SphereMesh(
     left.geometry,
     material,
     0
@@ -58,7 +58,7 @@ function RightHand(scene) {
     1
   );
 
-  var rightHandMesh = new Physijs.BoxMesh(
+  var rightHandMesh = new Physijs.SphereMesh(
     right.geometry,
     material,
     0
@@ -111,54 +111,21 @@ var Handy = function(scene) {
 		handy.outputData = function( index, hand, camera  ) {
        var ray, intersections;
            // Intersect
-      var _vector = new THREE.Vector3;
+       var _vector = new THREE.Vector3;
 
-      box.position.__dirtyPosition = true;
+      //box.position.__dirtyPosition = true;
+      
 			box.position.set( hand.stabilizedPalmPosition[0]/11, hand.stabilizedPalmPosition[1]/11 - 20 , hand.stabilizedPalmPosition[2]/11 + 70 );
       //box.position.__dirtyPosition = false;
-      box.rotation.__dirtyRotation = true;js
+      //box.rotation.__dirtyRotation = true;
+      
 			box.rotation.set( hand.pitch(), -hand.yaw(), hand.roll() );
       //box.rotation.__dirtyRotation = false;
  
-      var position = hand.palmPosition;
-      var velocity = hand.palmVelocity;
-      var direction = hand.direction;
-      
-      _vector.set( direction[0], direction[1], direction[2]);
-      
-      /**
-      _vector.set(
-				( hand.stabilizedPalmPosition[0]/11 / window.innerWidth ) * 2 - 1,
-				-( hand.stabilizedPalmPosition[1]/11 - 20 / window.innerHeight ) * 2 + 1,
-				hand.stabilizedPalmPosition[2]/11 + 70
-			);
-      */
-      
-			//projector.unprojectVector( _vector, camera );
-      //_vector.unproject( camera );
-			
-
-      
-    
-      var earth =  scene.getObjectByName('SphereTarget');
-      ray = new THREE.Raycaster( position, _vector.normalize() );
-			//ray = new THREE.Raycaster( camera.position, _vector.sub( camera.position ).normalize() );
-      
-      //ray = new THREE.Raycaster();
-      //ray.setFromCamera(_vector, camera);
-      
-
-      //console.log("p:"+position[0]
-      
-			intersections = ray.intersectObject( earth );
-      
-      if (intersections.length) {
-        console.log(intersections.length);
-        for ( var i = 0; i < intersections.length; i++ ) {
-          intersects[ i ].object.material.color.set( 0xff0000 );
-        }
-      }
-      
+      //var position = hand.palmPosition;
+      //var velocity = hand.palmVelocity;
+      //var direction = hand.direction;
+            
       
 
 		};

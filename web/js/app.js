@@ -90,15 +90,15 @@ var APP = {
       debugScene = new DebugScene(renderer, scene, camera);
       
       var francis = new Francis(scene);
-      //var earth_object = new earthDemo(scene);
-      //var earth_object = new earthDemoLight(scene);
+      var earth_object = new earthDemo(scene);
+      var earth_object = new earthDemoLight(scene);
 
-     // animCallbacks.push(earth_object.animate);
+      animCallbacks.push(earth_object.animate);
 
-      phy_test = new PhyTest(scene);
-      animCallbacks.push(phy_test.animate);
-      //leftHand = new LeftHand(scene);
-     // rightHand = new RightHand(scene);
+      //phy_test = new PhyTest(scene);
+      //animCallbacks.push(phy_test.animate);
+      leftHand = new LeftHand(scene);
+      rightHand = new RightHand(scene);
 
       debugScene.debug(false);
       stereoCamera.debug(false);
@@ -117,14 +117,14 @@ var APP = {
 
 
 	  loop.animate = function( frame ) {
-      /**
+    
       frame.hands.forEach( function( hand, index ) {
         var handy = ( handies[index] || ( handies[index] = new Handy(scene)) );    
         handy.outputData( index, hand, camera );
         
         
       });
-		   **/
+		  
 
     /**
     request = requestAnimationFrame(loop.animate);

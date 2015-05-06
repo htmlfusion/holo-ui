@@ -20,7 +20,7 @@ function earthDemoLight(scene) {
       0.5
     );
 
-    clouds = new Physijs.BoxMesh(
+    clouds = new Physijs.SphereMesh(
       new THREE.SphereGeometry(6 + .1, 80, 80),
       cloud_material
     )
@@ -47,7 +47,7 @@ function earthDemoLight(scene) {
       0.9,
       0.5);
 
-    earth = new Physijs.BoxMesh(geometry, material, 1);
+    earth = new Physijs.SphereMesh(geometry, material, 1);
     earth.position.set(0, 0, 70);
     earth.name = "Earth";
     
