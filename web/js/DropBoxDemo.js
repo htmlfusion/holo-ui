@@ -4,7 +4,6 @@ function DropBoxDemo(scene) {
   var scene = scene;
   var shadowBox = scene.getObjectByName('shadowBox');
   var tableBox = scene.getObjectByName('Table');
-  var backTable = scene.getObjectByName('BackTable');
   var spotLight = scene.getObjectByName('ProjectorLight');
   var loaded = false;
 
@@ -50,16 +49,6 @@ function DropBoxDemo(scene) {
       0 // mass
     );
 
-    var rigidBackTable = new Physijs.BoxMesh(
-      backTable.geometry,
-      backTable.material,
-      0 // mass
-    );
-
-    rigidBackTable.position.x = backTable.position.x;
-    rigidBackTable.position.y = backTable.position.y+5;
-    rigidBackTable.position.z = backTable.position.z;
-
     box.castShadow = true;
     box.receiveShadow= true;
 
@@ -68,15 +57,12 @@ function DropBoxDemo(scene) {
 
     table.position.x = tableBox.position.x;
     table.position.y = tableBox.position.y;
-    table.position.z = tableBox.position.z+5;
+    table.position.z = tableBox.position.z-8;
 
     table.rotation.x = -.03;
 
     scene.remove(tableBox);
     scene.add(table);
-
-    scene.remove(backTable);
-    scene.add(rigidBackTable);
 
     loaded = true;
   }
@@ -99,10 +85,10 @@ function DropBoxDemo(scene) {
 
     frame++;
 
-    if(frame%30===0){
+    if(frame%60===0){
 
       var shape = Math.random(),
-        size = Math.round(getRandomArbitrary(5, 10)),
+        size = Math.round(getRandomArbitrary(2, 8)),
         colors = ['#0066FF', '#FF66FF', '#00CC99', '#FF9900'],
         geo,
         color;
@@ -128,12 +114,15 @@ function DropBoxDemo(scene) {
 
       geo.position.x = getRandomArbitrary(-5, 5);
       geo.position.y = getRandomArbitrary(29, 50);
-      geo.position.z = getRandomArbitrary(-500, 200);
+      geo.position.z = getRandomArbitrary(-10, 100);
       geo.rotation.x = Math.random();
       geo.rotation.y = Math.random();
       geo.rotation.z = Math.random();
       geo.castShadow = true;
       geo.receiveShadow= true;
+      geo.setCcdMotionThreshold(1);
+      geo.setCcdSweptSphereRadius(size/5);
+
 
       scene.add( geo );
 

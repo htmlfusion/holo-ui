@@ -27,6 +27,6 @@
     "mathjs": "~1.6.0"
   },
   "resolutions": {
-    "threejs": "74e7d09c26"
+    "threejs": "d49bb0e85f"
   }
 }

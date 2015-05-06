@@ -4,7 +4,7 @@ function earthDemo(scene) {
   var scene = scene;
   var clouds, earth;
   var loaded = false;
-  var radius = 24;
+  var radius = 12;
 
   this.load = function() {
     loaded = true;
@@ -54,7 +54,7 @@ function earthDemo(scene) {
       0.5);
 
     earth = new Physijs.BoxMesh(geometry, material, 0);
-    earth.position.set(0, 0, 0);
+    earth.position.set(0, 10, 20);
 
     earth.add(clouds);
     scene.add(earth);

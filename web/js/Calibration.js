@@ -103,13 +103,27 @@ function Calibration(scene, stereoCamera) {
             }), cornerCalib[i].points.length);
 
 
+          cornerCalib[i].points.forEach(function(p){
+
+            var red = new THREE.MeshLambertMaterial({
+              color: 'green'
+            });
+
+            // target
+            marker = new THREE.Mesh(new THREE.SphereGeometry(.5, 10, 10), red);
+            marker.position.set(p[0], p[1], p[2]);
+            debugMarkers.push(marker);
+            scene.add(marker);
+
+          });
+
           // material
           var red = new THREE.MeshLambertMaterial({
             color: 'red'
           });
 
           // target
-          marker = new THREE.Mesh(new THREE.SphereGeometry(1, 10, 10), red);
+          marker = new THREE.Mesh(new THREE.SphereGeometry(.5, 10, 10), red);
           marker.position.set(p[0], p[1], p[2]);
           debugMarkers.push(marker);
           scene.add(marker);
@@ -145,8 +159,12 @@ function Calibration(scene, stereoCamera) {
     // project ray
     Mousetrap.bind('space', function() {
       console.log('Bang');
+      var cameraPos = stereoCamera.group.position.toArray();
+      cameraPos[0] += stereoCamera.renderCamR.position.x;
+      //var cameraPos = debugCamera.position.toArray();
+
       var line = [target.position.clone().toArray(), 
-        debugCamera.position.clone().toArray()];
+        cameraPos];
 
       if( cornerCalib[cornerIndex].lines.length > 0){
         var lines = cornerCalib[cornerIndex].lines;
@@ -156,6 +174,7 @@ function Calibration(scene, stereoCamera) {
           cornerCalib[cornerIndex].points.push(center);
         });
       }
+
       cornerCalib[cornerIndex].lines.push(line)
 
     }.bind(this));

@@ -44,18 +44,28 @@
 			"widthSegments": 1,
 			"heightSegments": 1,
 			"depthSegments": 1
+		},
+		{
+			"uuid": "CD6FA637-D8E8-46B5-AD5E-1FBAB87A9064",
+			"type": "BoxGeometry",
+			"width": 15,
+			"height": 16.51,
+			"depth": 15,
+			"widthSegments": 1,
+			"heightSegments": 1,
+			"depthSegments": 1
 		}],
 	"materials": [
 		{
 			"uuid": "2DA90E35-103A-4CB8-BE84-48E89860DA46",
 			"type": "MeshPhongMaterial",
 			"color": 16721664,
-			"opacity": 0.5,
-			"transparent": true,
 			"emissive": 0,
 			"specular": 1118481,
 			"shininess": 30,
-			"side": 2
+			"side": 2,
+			"opacity": 0.5,
+			"transparent": true
 		},
 		{
 			"uuid": "3820E3B8-363C-4F95-B61E-1AF9F6D2AAB3",
@@ -76,10 +86,12 @@
 		{
 			"uuid": "2FA841FB-2CCE-4B7F-96AB-371941AD19E6",
 			"type": "MeshPhongMaterial",
-			"color": 62976,
+			"color": 16672273,
 			"emissive": 0,
 			"specular": 1118481,
-			"shininess": 30
+			"shininess": 30,
+			"opacity": 0.5,
+			"transparent": true
 		}],
 	"object": {
 		"uuid": "3741222A-BD8F-401C-A5D2-5A907E891896",
@@ -122,7 +134,7 @@
 				"intensity": 1,
 				"distance": 0,
 				"decay": 1,
-				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,70.5037841796875,231.6297607421875,172.09791564941406,1]
+				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,158.0240478515625,152.23582458496094,172.09791564941406,1]
 			},
 			{
 				"uuid": "431E1BB3-92C4-4F47-92FA-49A2C5300D79",
@@ -164,7 +176,25 @@
 				"name": "calibrationTarget",
 				"geometry": "A35341A0-4FD5-4650-88D1-19D9DF68D7A9",
 				"material": "2FA841FB-2CCE-4B7F-96AB-371941AD19E6",
-				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,-15.865501403808594,-44.316368103027344,1]
+				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,-25.865501403808594,-160.6199951171875,1]
+			},
+			{
+				"uuid": "0634459A-617C-4D62-A6A7-016C1F0685E3",
+				"type": "Mesh",
+				"name": "frontTableBox",
+				"geometry": "CD6FA637-D8E8-46B5-AD5E-1FBAB87A9064",
+				"material": "2FA841FB-2CCE-4B7F-96AB-371941AD19E6",
+				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,-25.865501403808594,-35.35297775268555,1]
+			},
+			{
+				"uuid": "24F3C2CC-0132-45D3-953F-5B5961A0CF4B",
+				"type": "PointLight",
+				"name": "PointLight 1",
+				"color": 16777215,
+				"intensity": 1,
+				"distance": 0,
+				"decay": 1,
+				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,-128.31202697753906,106.43653869628906,0,1]
 			}]
 	}
 }

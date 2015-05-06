@@ -37,16 +37,16 @@ var APP = {
         var pos = [bodyPos.head.x, bodyPos.head.y, bodyPos.head.z];
         stereoCamera.setPosition(pos);
       }
-      if (bodyPos.left_hand) {
-        var left_pos = [bodyPos.left_hand.x, bodyPos.left_hand.y, bodyPos.left_hand.z];
-        leftHand.setPosition(left_pos);
-        leftHand.mesh.__dirtyPosition = true;
-      }
-      if (bodyPos.right_hand) {
-        var right_pos = [bodyPos.right_hand.x, bodyPos.right_hand.y, bodyPos.right_hand.z];
-        rightHand.setPosition(right_pos);
-        rightHand.mesh.__dirtyPosition = true;
-      }
+      // if (bodyPos.left_hand) {
+      //   var left_pos = [bodyPos.left_hand.x, bodyPos.left_hand.y, bodyPos.left_hand.z];
+      //   leftHand.setPosition(left_pos);
+      //   leftHand.mesh.__dirtyPosition = true;
+      // }
+      // if (bodyPos.right_hand) {
+      //   var right_pos = [bodyPos.right_hand.x, bodyPos.right_hand.y, bodyPos.right_hand.z];
+      //   rightHand.setPosition(right_pos);
+      //   rightHand.mesh.__dirtyPosition = true;
+      // }
     };
 
     ws.onclose = function() {
@@ -108,14 +108,14 @@ var APP = {
       scene = new Physijs.Scene();
       scene.name = editorScene.name;
       scene.children = editorScene.children;
-      scene.setGravity(new THREE.Vector3(0, -5000, 0));
+      scene.setGravity(new THREE.Vector3(0, -5, 0));
       
       camera = scene.getObjectByName('cameraDebug');
       var group = scene.getObjectByName('cameraGroup');
 
       this.dom = renderer.domElement;
 
-      stereoCamera = new StereoCamera(renderer, scene, group, {width: 83.185, height: 46.99});
+      stereoCamera = new StereoCamera(renderer, scene, group, {width: 91.44, height: 48.26});
       debugScene = new DebugScene(renderer, scene, camera);
       
       var francis = new Francis(scene);
@@ -165,7 +165,7 @@ var APP = {
         } else {
           stereoCamera.render();
         }
-      }, 1000 / 60);
+      }, 1000 / 120);
 
     };
 

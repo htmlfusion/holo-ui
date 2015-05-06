@@ -9,13 +9,15 @@ function StereoCamera(renderer, scene, group, screen) {
 
   var renderer = renderer;
   var scene = scene;
-  var group = group;
+  this.group = group;
 
-  var renderCamL = group.getChildByName('cameraLeft');
-  var renderCamR = group.getChildByName('cameraRight');
+  this.renderCamL = this.group.getChildByName('cameraLeft');
+  this.renderCamR = this.group.getChildByName('cameraRight');
+  this.renderCamR.aspect = (window.innerWidth / window.innerHeight) / 2;
+  this.renderCamL.aspect = (window.innerWidth / window.innerHeight) / 2;
 
-  var camHelperL = new THREE.CameraHelper(renderCamL);
-  var camHelperR = new THREE.CameraHelper(renderCamR);
+  var camHelperL = new THREE.CameraHelper(this.renderCamL);
+  var camHelperR = new THREE.CameraHelper(this.renderCamR);
 
   var size = 500;
   var step = 50;
@@ -36,9 +38,9 @@ function StereoCamera(renderer, scene, group, screen) {
   }
   $(document).keypress(keydown);
 
-  //group.applyMatrix(self.offset);
+  //this.group.applyMatrix(self.offset);
 
-  //group.applyMatrix(this.offset);
+  //this.group.applyMatrix(this.offset);
 
   //self.setIO(8);
 
@@ -56,15 +58,15 @@ function StereoCamera(renderer, scene, group, screen) {
   };
 
   self.setIO = function(distance) {
-    renderCamL.position.x = -distance / 2;
-    renderCamR.position.x = distance / 2;
+    this.renderCamL.position.x = -distance / 2;
+    this.renderCamR.position.x = distance / 2;
   };
 
   self.setPosition = function(position) {
-    var pos = [(position[0] / 10), (position[1] / 10) + 22.86, (position[2] / 10)];
-    group.position.x = pos[0];
-    group.position.y = pos[1];
-    group.position.z = pos[2];
+    var pos = [(position[0] / 10), (position[1] / 10) + this.screen.height/2+25, (position[2] / 10)];
+    this.group.position.x = pos[0];
+    this.group.position.y = pos[1];
+    this.group.position.z = pos[2];
   };
 
   self.updateHelpers = function() {
@@ -74,17 +76,18 @@ function StereoCamera(renderer, scene, group, screen) {
 
 
   self.updateFrustum = function() {
-    var vectorL = group.position.clone();
+    var vectorL = this.group.position.clone();
     // scene.updateMatrixWorld();
-    // group.updateMatrixWorld();
-    // renderCamL.updateMatrixWorld();
-    // renderCamR.updateMatrixWorld();
+    // this.group.updateMatrixWorld();
+    // this.renderCamL.updateMatrixWorld();
+    // this.renderCamR.updateMatrixWorld();
 
     // var vectorL = new THREE.Vector3();
     // vectorL.setFromMatrixPosition(renderCamL.matrixWorld);
 
     // interocular distance, 6cm between eyes
-    vectorL.x -= 3;
+    var io = 6;
+    vectorL.x -= io/2;
 
     var near = 10;
 
@@ -104,16 +107,16 @@ function StereoCamera(renderer, scene, group, screen) {
     var topScreen = height / 2.0 - vectorL.y;
     var top = near / vectorL.z * topScreen;
 
-    renderCamL.projectionMatrix.makeFrustum(-left, //left
+    this.renderCamL.projectionMatrix.makeFrustum(-left, //left
       right, //right
       bottom, //bottom
       top, //top
       near,
-      60000
+      1000
     );
 
-    var vectorR = group.position.clone();
-    vectorR.x += 3;
+    var vectorR = this.group.position.clone();
+    vectorR.x += io/2;
     // var vectorR = new THREE.Vector3();
     // vectorR.setFromMatrixPosition(renderCamR.matrixWorld);
 
@@ -129,39 +132,33 @@ function StereoCamera(renderer, scene, group, screen) {
     var topScreen = height / 2.0 - vectorR.y;
     var top = near / vectorR.z * topScreen;
 
-    renderCamR.projectionMatrix.makeFrustum(-left, //left
+    this.renderCamR.projectionMatrix.makeFrustum(-left, //left
       right, //right
       bottom, //bottom
       top, //top
       near,
-      60000
+      1000
     );
 
 
-    renderCamR.aspect = (window.innerWidth / window.innerHeight) / 2;
-    renderCamL.aspect = (window.innerWidth / window.innerHeight) / 2;
+
+
   }
 
   self.render = function() {
 
     self.updateFrustum();
     renderer.clear();
-
-    renderer.setViewport(0, 0, pxWidth / 2, pxHeight);
-    renderer.render(scene, renderCamL);
-
     renderer.enableScissorTest(true);
-
-    renderer.setScissor(0, 0, pxWidth / 2, pxHeight);
-    renderer.setViewport(0, 0, pxWidth / 2, pxHeight);
-    renderer.render(scene, renderCamL);
-
-    renderer.setScissor(pxWidth / 2, 0, pxWidth / 2, pxHeight);
-    renderer.setViewport(pxWidth / 2, 0, pxWidth / 2, pxHeight);
-    renderer.render(scene, renderCamR);
-    renderer.setScissor(pxWidth / 2, 0, pxWidth / 2, pxHeight);
-    renderer.setViewport(pxWidth / 2, 0, pxWidth / 2, pxHeight);
-
+    
+    renderer.setScissor(0, 0, pxWidth/2, pxHeight);
+    renderer.setViewport(0, 0, pxWidth/2, pxHeight);
+    renderer.render(scene, this.renderCamL);
+    
+    renderer.setScissor(pxWidth/2, 0, pxWidth/2, pxHeight);
+    renderer.setViewport(pxWidth/2, 0, pxWidth/2, pxHeight);
+    renderer.render(scene, this.renderCamR);
+    
     renderer.enableScissorTest(false);
 
   };
