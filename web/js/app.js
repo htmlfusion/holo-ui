@@ -6,14 +6,14 @@ var APP = {
 
     var loader = new THREE.ObjectLoader();
     var camera, scene, renderer, debugScene, controls,
-      stereoCamera, debugCam, hands, leftHand, rightHand;
+      stereoCamera, debugCam, leftHand, rightHand;
     var debug = false;
 
     var animCallbacks = [];
 
-    var kinnect_hands_tracking = true;
     var request;
     
+    var phy_test;
     
     this.dom = undefined;
 
@@ -24,70 +24,14 @@ var APP = {
     var loop = {};
     
 
-      var ws = new WebSocket('ws://localhost:8887');
-
-      ws.onopen = function() {
-        ws.send('subscribe');
-        console.log('socket connected');
-      };
-
-      var last = null;
-      ws.onmessage = function(evt) {
-        //var position = evt.data.split(',');
-        try {
-          var bodyPos = JSON.parse(evt.data);
-        } catch (err) {
-          console.log('error', err);
-          return;
-        }
-
-        if (stereoCamera) {
-          var pos = [bodyPos.head.x, bodyPos.head.y, bodyPos.head.z];
-          stereoCamera.setPosition(pos);
-        }
-        
-        if (bodyPos.head.z > 1335) {
-        
-          if (bodyPos.left_hand) {
-            var left_pos = [bodyPos.left_hand.x, bodyPos.left_hand.y, bodyPos.left_hand.z];
-            leftHand.setPosition(left_pos);
-            leftHand.mesh.__dirtyPosition = true;
-          }
-          if (bodyPos.right_hand) {
-            var right_pos = [bodyPos.right_hand.x, bodyPos.right_hand.y, bodyPos.right_hand.z];
-            rightHand.setPosition(right_pos);
-            rightHand.mesh.__dirtyPosition = true;
-          }
-        
-        } else {
-          
-          kinnect_hands_tracking = false;
-        }
-          
-      };
-
-      ws.onclose = function() {
-        console.log('disconnected');
-        kinnect_hands_tracking = false;
-      };
-
-
-
-
     var rot = 0;
     function keydown(event) {
       // <d> key for debug cam
       var group = scene.getObjectByName('cameraGroup');
+      console.log(event.keyCode);
       if (event.keyCode === 100) {
         debugScene.debug(true);
         stereoCamera.debug(true);
-
-        // var x = Math.floor(Math.random() * 400) + 100;
-        // var y = Math.floor(Math.random() * 400) + 100;
-        // var z = Math.floor(Math.random() * 400) + 100;
-
-        // var pos = [x, y, z];
-        // stereoCamera.setPosition(pos);
         // <r> key for render cam
       } else if (event.keyCode === 114) {
         debugScene.debug(false);
@@ -124,13 +68,13 @@ var APP = {
       scene = new Physijs.Scene({ reportsize: 50, fixedTimeStep: 1 / 60 });
       scene.name = editorScene.name;
       scene.children = editorScene.children;
-      //scene.setGravity(new THREE.Vector3(0, -20, 0));
+      //scene.setGravity(new THREE.Vector3(0, -5, 0));
       scene.setGravity(new THREE.Vector3(0, 0, 0));
 
   		scene.addEventListener(
 			'update',
         function() {
-          //scene.simulate( undefined, 2 );
+          scene.simulate( undefined, 2 );
           //physics_stats.update();
           //controls.update();
         }
@@ -147,14 +91,14 @@ var APP = {
       
       var francis = new Francis(scene);
       //var earth_object = new earthDemo(scene);
-      var earth_object = new earthDemoLight(scene);
+      //var earth_object = new earthDemoLight(scene);
 
-      animCallbacks.push(earth_object.animate);
+     // animCallbacks.push(earth_object.animate);
 
-      var phy_test = new PhyTest(scene);
-
-      leftHand = new LeftHand(scene);
-      rightHand = new RightHand(scene);
+      phy_test = new PhyTest(scene);
+      animCallbacks.push(phy_test.animate);
+      //leftHand = new LeftHand(scene);
+     // rightHand = new RightHand(scene);
 
       debugScene.debug(false);
       stereoCamera.debug(false);
@@ -173,17 +117,15 @@ var APP = {
 
 
 	  loop.animate = function( frame ) {
-      
-    
-    if (!kinnect_hands_tracking) {
+      /**
       frame.hands.forEach( function( hand, index ) {
         var handy = ( handies[index] || ( handies[index] = new Handy(scene)) );    
         handy.outputData( index, hand, camera );
         
         
       });
-		
-    }
+		   **/
+
     /**
     request = requestAnimationFrame(loop.animate);
     scene.simulate();
@@ -210,12 +152,13 @@ var APP = {
 		//	stats.update();
 		//}   
 
-	}
+	  }
 
     loop = Leap.loop( loop.animate );
     
     var animate = function(time) {
       setTimeout(function() {
+        //phy_test.animate();
         request = requestAnimationFrame(animate);
         //console.log(leftHand);
         //console.log(rightHand);
