@@ -108,10 +108,10 @@ var Handy = function(scene) {
   
 		scene.add( box );
 
-		handy.outputData = function( index, hand, camera  ) {
-       var ray, intersections;
+		handy.outputData = function( index, hand ) {
+       //var ray, intersections;
            // Intersect
-       var _vector = new THREE.Vector3;
+       //var _vector = new THREE.Vector3;
 
       //box.position.__dirtyPosition = true;
       

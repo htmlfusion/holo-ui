@@ -74,7 +74,7 @@ var APP = {
   		scene.addEventListener(
 			'update',
         function() {
-          scene.simulate( undefined, 2 );
+          //scene.simulate( undefined, 2 );
           //physics_stats.update();
           //controls.update();
         }
@@ -89,16 +89,16 @@ var APP = {
       stereoCamera = new StereoCamera(renderer, scene, group);
       debugScene = new DebugScene(renderer, scene, camera);
       
-      var francis = new Francis(scene);
-      var earth_object = new earthDemo(scene);
+      //var francis = new Francis(scene);
+      //var earth_object = new earthDemo(scene);
       var earth_object = new earthDemoLight(scene);
 
       animCallbacks.push(earth_object.animate);
 
       //phy_test = new PhyTest(scene);
       //animCallbacks.push(phy_test.animate);
-      leftHand = new LeftHand(scene);
-      rightHand = new RightHand(scene);
+      //leftHand = new LeftHand(scene);
+      //rightHand = new RightHand(scene);
 
       debugScene.debug(false);
       stereoCamera.debug(false);
@@ -120,7 +120,7 @@ var APP = {
     
       frame.hands.forEach( function( hand, index ) {
         var handy = ( handies[index] || ( handies[index] = new Handy(scene)) );    
-        handy.outputData( index, hand, camera );
+        handy.outputData( index, hand );
         
         
       });
