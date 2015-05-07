@@ -61,6 +61,36 @@ function Calibration(scene, stereoCamera) {
     cornerMarker = new THREE.Mesh(new THREE.SphereGeometry(1, 10, 10), blue);
     this.setupControls();
 
+
+    THREE.Loader.Handlers.add(/\.dds$/i, new THREE.DDSLoader());
+
+    var loader = new THREE.OBJMTLLoader();
+    loader.load('obj/Room.obj', '', function(object) {
+      //object.position.y = 0;
+      //object.position.z = 35;
+      //object.position.x = 0;
+
+      object.scale.set(-100, -100, 100);
+      object.rotation.set(0, 45*Math.PI/180, 0);
+      object.position.set(-120, 300, -750);
+
+      var wireframe = new THREE.MeshBasicMaterial({wireframe: true, color: 'grey'});
+
+      object.children.forEach(function(c){
+        c.material = wireframe;
+      });
+
+      scene.add(object);
+
+      console.log("Object added to scene");
+
+    }, function(progress){
+      console.log(progress);
+    }, function(err){
+      console.log(err);
+    });
+
+
     loaded = true;
 
   };
