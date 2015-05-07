@@ -11,7 +11,7 @@
 		}
 		</style>
 	</head>
-	
+
 	<body ontouchstart="">
 		<script src="bower_components/threejs/build/three.js"></script>
 		<script src="bower_components/physijs/physi.js"></script>
@@ -38,7 +38,7 @@
 			Physijs.scripts.ammo = '/bower_components/ammo.js/builds/ammo.js'
 			var player;
 			var loader = new THREE.XHRLoader();
-			loader.load( 'earth.json', function ( text ) {
+			loader.load( 'calibration.json', function ( text ) {
 				player = new APP.Player();
 				player.load( JSON.parse( text ) );
 				player.setSize( window.innerWidth, window.innerHeight );

@@ -108,16 +108,17 @@ var APP = {
       scene = new Physijs.Scene();
       scene.name = editorScene.name;
       scene.children = editorScene.children;
-      scene.setGravity(new THREE.Vector3(0, -5, 0));
-      
+      scene.setGravity(new THREE.Vector3(0, -50, 0));
+
       camera = scene.getObjectByName('cameraDebug');
       var group = scene.getObjectByName('cameraGroup');
 
       this.dom = renderer.domElement;
 
-      stereoCamera = new StereoCamera(renderer, scene, group, {width: 91.44, height: 48.26});
+      //Screen size
+      stereoCamera = new StereoCamera(renderer, scene, group, {width: 90.4875, height: 49.53});
       debugScene = new DebugScene(renderer, scene, camera);
-      
+
       var francis = new Francis(scene);
       var earth_object = new earthDemo(scene);
 
@@ -151,7 +152,7 @@ var APP = {
 
       setTimeout(function() {
         request = requestAnimationFrame(animate);
-    
+
         scene.simulate();
 
         animCallbacks.forEach(function(cb){
@@ -165,7 +166,7 @@ var APP = {
         } else {
           stereoCamera.render();
         }
-      }, 1000 / 120);
+      }, 1000 / 30);
 
     };
 

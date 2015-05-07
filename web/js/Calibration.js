@@ -11,7 +11,17 @@ function Calibration(scene, stereoCamera) {
     debugMarkers = [],
     globalCorners,
     displayTimeout,
-    cornerCalib = {};
+    cornerCalib = {},
+    verticalOffset = 0;
+
+  function pairwise(list) {
+    if (list.length < 2) { return []; }
+    var first = list[0],
+      rest  = list.slice(1),
+      pairs = rest.map(function (x) { return [first, x]; });
+    return pairs.concat(pairwise(rest));
+  }
+
 
   this.load = function() {
     object = scene.getChildByName('calibrationTarget')
@@ -132,6 +142,33 @@ function Calibration(scene, stereoCamera) {
 
     }.bind(this));
 
+
+    this.calibrate = function(){
+
+      for(var i=0; i<8; i++){
+
+        var lines = cornerCalib[i].lines;
+
+        var combinations = pairwise(lines);
+        var points = []
+
+        combinations.forEach(function(pair){
+
+          var lineA = JSON.parse(JSON.stringify(pair[0]));
+          var lineB = JSON.parse(JSON.stringify(pair[1]));
+
+          lineA[1][1] += verticalOffset;
+          lineB[1][1] += verticalOffset;
+
+          var closest = closestDistanceBetweenLines(lineA[0], lineA[1], lineB[0], lineB[1]);
+          var center = mathjs.divide(mathjs.add(closest[0], closest[1]), 2);
+          points.push(center);
+        });
+
+        cornerCalib[i].points = points;
+      }
+    };
+
     // hide corners
     Mousetrap.bind('h', function() {
 
@@ -146,7 +183,7 @@ function Calibration(scene, stereoCamera) {
       this.nextCorner();
     }.bind(this));
 
-    // previous corner 
+    // previous corner
     Mousetrap.bind('p', function() {
       this.prevCorner();
     }.bind(this));
@@ -163,27 +200,65 @@ function Calibration(scene, stereoCamera) {
       cameraPos[0] += stereoCamera.renderCamR.position.x;
       //var cameraPos = debugCamera.position.toArray();
 
-      var line = [target.position.clone().toArray(), 
+      var line = [target.position.clone().toArray(),
         cameraPos];
 
-      if( cornerCalib[cornerIndex].lines.length > 0){
-        var lines = cornerCalib[cornerIndex].lines;
-        lines.forEach(function(l){
-          var closest = closestDistanceBetweenLines(l[0], l[1], line[0], line[1]);
-          var center = mathjs.divide(mathjs.add(closest[0], closest[1]), 2);
-          cornerCalib[cornerIndex].points.push(center);
-        });
-      }
+      //if( cornerCalib[cornerIndex].lines.length > 0){
+      //  var lines = cornerCalib[cornerIndex].lines;
+      //  lines.forEach(function(l){
+      //    var closest = closestDistanceBetweenLines(l[0], l[1], line[0], line[1]);
+      //    var center = mathjs.divide(mathjs.add(closest[0], closest[1]), 2);
+      //    cornerCalib[cornerIndex].points.push(center);
+      //  });
+      //}
 
       cornerCalib[cornerIndex].lines.push(line)
 
+    }.bind(this));
+
+
+    Mousetrap.bind('up', function(){
+      var incr = .1;
+      //verticalOffset += incr;
+      stereoCamera.verticalOffset += incr;
+      this.calibrate();
+    }.bind(this));
+
+    Mousetrap.bind('down', function(){
+      var incr = .1;
+      //verticalOffset -= incr;
+      stereoCamera.verticalOffset -= incr;
+      this.calibrate();
+    }.bind(this));
+
+    //Rotate up
+    Mousetrap.bind('i', function(){
+      var incr = .1;
+      stereoCamera.xRotationOffset += incr;
+    }.bind(this));
+
+    //Rotate down
+    Mousetrap.bind('k', function(){
+      var incr = .1;
+      stereoCamera.xRotationOffset -= incr;
+    }.bind(this));
+
+    //Rotate left
+    Mousetrap.bind('j', function(){
+      var incr = .1;
+      stereoCamera.yRotationOffset += incr;
+    }.bind(this));
+
+    //Rotate right
+    Mousetrap.bind('l', function(){
+      var incr = .1;
+      stereoCamera.yRotationOffset -= incr;
     }.bind(this));
 
   };
 
   this.animate = function() {
     if (loaded) {
-      console.log(camera);
     }
   }.bind(this);
 

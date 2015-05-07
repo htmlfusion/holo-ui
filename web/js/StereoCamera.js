@@ -15,6 +15,9 @@ function StereoCamera(renderer, scene, group, screen) {
   this.renderCamR = this.group.getChildByName('cameraRight');
   this.renderCamR.aspect = (window.innerWidth / window.innerHeight) / 2;
   this.renderCamL.aspect = (window.innerWidth / window.innerHeight) / 2;
+  this.verticalOffset = 44.925;
+  this.xRotationOffset = 0;
+  this.yRotationOffset = 0;
 
   var camHelperL = new THREE.CameraHelper(this.renderCamL);
   var camHelperR = new THREE.CameraHelper(this.renderCamR);
@@ -27,16 +30,6 @@ function StereoCamera(renderer, scene, group, screen) {
   var pxHeight = window.innerHeight;
 
   var gridHelper = new THREE.GridHelper(size, step);
-
-  function keydown(event) {
-    // <d> key for debug cam
-    if (event.keyCode === 97) {
-      self.zOffset += 1;
-    } else if (event.keyCode === 122) {
-      self.zOffset -= 1;
-    }
-  }
-  $(document).keypress(keydown);
 
   //this.group.applyMatrix(self.offset);
 
@@ -58,21 +51,38 @@ function StereoCamera(renderer, scene, group, screen) {
   };
 
   self.setIO = function(distance) {
+
     this.renderCamL.position.x = -distance / 2;
     this.renderCamR.position.x = distance / 2;
+
   };
 
   self.setPosition = function(position) {
-    var pos = [(position[0] / 10), (position[1] / 10) + this.screen.height/2+25, (position[2] / 10)];
+
+    // 34.925 is the camera's vertical offset
+    var pos = [ (position[0] / 10), (position[1] / 10) + this.verticalOffset, (position[2] / 10) ];
     this.group.position.x = pos[0];
     this.group.position.y = pos[1];
     this.group.position.z = pos[2];
+
+    var m = new THREE.Matrix4();
+    var rx = new THREE.Matrix4();
+    var ry = new THREE.Matrix4();
+
+    rx.makeRotationX( this.xRotationOffset * Math.PI / 180 );
+    ry.makeRotationY( this.yRotationOffset * Math.PI / 180 );
+
+    m.multiplyMatrices( rx, ry );
+    this.group.position.applyMatrix4(m);
+
   };
 
   self.updateHelpers = function() {
+
     camHelperL.update();
     camHelperR.update();
-  }
+
+  };
 
 
   self.updateFrustum = function() {
@@ -143,22 +153,22 @@ function StereoCamera(renderer, scene, group, screen) {
 
 
 
-  }
+  };
 
   self.render = function() {
 
     self.updateFrustum();
     renderer.clear();
     renderer.enableScissorTest(true);
-    
+
     renderer.setScissor(0, 0, pxWidth/2, pxHeight);
     renderer.setViewport(0, 0, pxWidth/2, pxHeight);
     renderer.render(scene, this.renderCamL);
-    
+
     renderer.setScissor(pxWidth/2, 0, pxWidth/2, pxHeight);
     renderer.setViewport(pxWidth/2, 0, pxWidth/2, pxHeight);
     renderer.render(scene, this.renderCamR);
-    
+
     renderer.enableScissorTest(false);
 
   };

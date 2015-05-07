@@ -27,8 +27,16 @@ client.on('end', function() {
   console.log('disconnected from server');
 });
 
+var lastMessage = null;
+
 client.on('data', function(message) {
-  var split = message.toString().split(/\s+/);
+  message = message.toString();
+  if(message === lastMessage){
+    return;
+  }
+  console.log('lastMessage', lastMessage);
+  lastMessage = message;
+  var split = message.split(/\s+/);
   var numbers = [];
   split.forEach(function(val) {
     var num = parseFloat(val);
