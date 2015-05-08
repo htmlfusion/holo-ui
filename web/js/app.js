@@ -108,7 +108,7 @@ var APP = {
       scene = new Physijs.Scene();
       scene.name = editorScene.name;
       scene.children = editorScene.children;
-      scene.setGravity(new THREE.Vector3(0, -50, 0));
+      scene.setGravity(new THREE.Vector3(0, -500, 0));
 
       camera = scene.getObjectByName('cameraDebug');
       var group = scene.getObjectByName('cameraGroup');

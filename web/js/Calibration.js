@@ -24,6 +24,7 @@ function Calibration(scene, stereoCamera) {
 
 
   this.load = function() {
+
     object = scene.getChildByName('calibrationTarget')
     object.updateMatrixWorld();
     var points = [];
@@ -173,6 +174,18 @@ function Calibration(scene, stereoCamera) {
     }.bind(this));
 
 
+    this.loadCalibration = function(){
+      try {
+        var camOffsets = JSON.parse(localStorage.getItem('holo-ui:offsets'));
+        stereoCamera.verticalOffset = camOffsets.verticalOffset;
+        stereoCamera.xRotationOffset = camOffsets.xRotationOffset;
+        stereoCamera.yRotationOffset = camOffsets.yRotationOffset;
+      } catch(err){
+        console.log('failed to load offsets', err);
+      }
+
+    };
+
     this.calibrate = function(){
 
       for(var i=0; i<8; i++){
@@ -198,6 +211,14 @@ function Calibration(scene, stereoCamera) {
         cornerCalib[i].points = points;
       }
     };
+
+    Mousetrap.bind('s', function() {
+      localStorage.setItem('holo-ui:offsets', JSON.stringify({
+        verticalOffset: stereoCamera.verticalOffset,
+        xRotationOffset: stereoCamera.xRotationOffset,
+        yRotationOffset: stereoCamera.yRotationOffset
+      }));
+    }.bind(this));
 
     // hide corners
     Mousetrap.bind('h', function() {
@@ -292,9 +313,12 @@ function Calibration(scene, stereoCamera) {
     }
   }.bind(this);
 
-  if (scene.name === 'Calibration') {
+  if (scene.name === 'Calibration' ) {
     this.load();
-  };
+  } else {
+    this.setupControls();
+    this.loadCalibration();
+  }
 
 
 }

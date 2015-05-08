@@ -159,15 +159,21 @@ function StereoCamera(renderer, scene, group, screen) {
 
     self.updateFrustum();
     renderer.clear();
-    renderer.enableScissorTest(true);
 
-    renderer.setScissor(0, 0, pxWidth/2, pxHeight);
-    renderer.setViewport(0, 0, pxWidth/2, pxHeight);
+    renderer.setViewport(0, 0, pxWidth / 2, pxHeight);
     renderer.render(scene, this.renderCamL);
 
-    renderer.setScissor(pxWidth/2, 0, pxWidth/2, pxHeight);
-    renderer.setViewport(pxWidth/2, 0, pxWidth/2, pxHeight);
+    renderer.enableScissorTest(true);
+
+    renderer.setScissor(0, 0, pxWidth / 2, pxHeight);
+    renderer.setViewport(0, 0, pxWidth / 2, pxHeight);
+    renderer.render(scene, this.renderCamL);
+
+    renderer.setScissor(pxWidth / 2, 0, pxWidth / 2, pxHeight);
+    renderer.setViewport(pxWidth / 2, 0, pxWidth / 2, pxHeight);
     renderer.render(scene, this.renderCamR);
+    renderer.setScissor(pxWidth / 2, 0, pxWidth / 2, pxHeight);
+    renderer.setViewport(pxWidth / 2, 0, pxWidth / 2, pxHeight);
 
     renderer.enableScissorTest(false);
 

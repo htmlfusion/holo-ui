@@ -4,7 +4,7 @@ function DropBoxDemo(scene) {
   var scene = scene;
   var shadowBox = scene.getObjectByName('shadowBox');
   var tableBox = scene.getObjectByName('Table');
-  var spotLight = scene.getObjectByName('ProjectorLight');
+  var spotLight = scene.getObjectByName('lamp');
   var loaded = false;
 
   this.load = function() {
@@ -14,8 +14,13 @@ function DropBoxDemo(scene) {
     //spotLight.shadowDarkness = 0.5;
     spotLight.shadowMapWidth = 1024*8;
     spotLight.shadowMapHeight = 1024*8;
+    //spotLight.shadowCameraVisible = true;
+    spotLight.position.x = 60;
+    spotLight.shadowCameraNear = 5;
+    spotLight.shadowCameraFov = 120;
+    spotLight.target.position.set(0, 5, -50);
 
-
+    shadowBox.material.side = THREE.DoubleSide
 
     var box_material = Physijs.createMaterial(
       shadowBox.material
@@ -35,7 +40,7 @@ function DropBoxDemo(scene) {
     shadowBox.material.color = 'black';
 
     scene.remove(shadowBox);
-    scene.add(box);
+    //scene.add(box);
 
 
     // Floor
@@ -51,12 +56,12 @@ function DropBoxDemo(scene) {
 
     // Furniture 1
     var tableB = new Physijs.BoxMesh(
-      new THREE.BoxGeometry( 55, 2, 55, 0, 0, 0),
+      new THREE.BoxGeometry( 55, 50, 55, 0, 0, 0),
       shadowBox.material,
       0
     );
     tableB.position.x = -10;
-    tableB.position.y = -35;
+    tableB.position.y = -65;
     tableB.position.z = -200;
     scene.add(tableB);
 
@@ -71,9 +76,23 @@ function DropBoxDemo(scene) {
     tableC.position.z = -200;
     scene.add(tableC);
 
+
+    //Cup
+    var cup = new Physijs.ConcaveMesh(
+      new THREE.CylinderGeometry(9.525/2, 9.525/2, 11.43, 20, 20, true, 0, Math.PI * 2),
+      new THREE.MeshPhongMaterial({ color: 'black' }),
+      0
+    );
+
+    cup.castShadow = true;
+    cup.position.set(3.7801897525787354, tableBox.position.y, -38.69133377075195);
+    cup.material.side = THREE.DoubleSide
+    scene.add(cup);
+
+
     // Screen
     var screen = new Physijs.BoxMesh(
-      new THREE.BoxGeometry( 70, 25, 2, 0, 0, 0),
+      new THREE.BoxGeometry( 70, 45, 2, 0, 0, 0),
       shadowBox.material,
       0
     );
@@ -113,27 +132,27 @@ function DropBoxDemo(scene) {
 
     THREE.Loader.Handlers.add(/\.dds$/i, new THREE.DDSLoader());
 
-    var loader = new THREE.OBJMTLLoader();
-    loader.load('obj/Room.obj', '', function(object) {
-      //object.position.y = 0;
-      //object.position.z = 35;
-      //object.position.x = 0;
-
-      var wireframe = new THREE.MeshBasicMaterial({wireframe: true, color: 'grey'});
-
-      object.scale.set(-100, -100, 100);
-      object.rotation.set(0, 45*Math.PI/180, 0);
-      object.position.set(-120, 300, -750);
-
-      //scene.add(object);
-
-      console.log("Object added to scene");
-
-    }, function(progress){
-      console.log(progress);
-    }, function(err){
-      console.log(err);
-    });
+    //var loader = new THREE.OBJMTLLoader();
+    //loader.load('obj/Room.obj', '', function(object) {
+    //  //object.position.y = 0;
+    //  //object.position.z = 35;
+    //  //object.position.x = 0;
+    //
+    //  var wireframe = new THREE.MeshBasicMaterial({wireframe: true, color: 'grey'});
+    //
+    //  object.scale.set(-100, -100, 100);
+    //  object.rotation.set(0, 45*Math.PI/180, 0);
+    //  object.position.set(-120, 300, -750);
+    //
+    //  //scene.add(object);
+    //
+    //  console.log("Object added to scene");
+    //
+    //}, function(progress){
+    //  console.log(progress);
+    //}, function(err){
+    //  console.log(err);
+    //});
 
 
     loaded = true;
@@ -157,7 +176,7 @@ function DropBoxDemo(scene) {
 
     frame++;
 
-    if(frame%60===0){
+    if(frame%30===0){
 
       var shape = Math.random(),
         size = Math.round(getRandomArbitrary(2, 8)),
@@ -186,7 +205,7 @@ function DropBoxDemo(scene) {
 
       geo.position.x = getRandomArbitrary(-5, 5);
       geo.position.y = getRandomArbitrary(29, 50);
-      geo.position.z = getRandomArbitrary(0, -400);
+      geo.position.z = getRandomArbitrary(0, -50);
       geo.rotation.x = Math.random();
       geo.rotation.y = Math.random();
       geo.rotation.z = Math.random();
