@@ -50,7 +50,7 @@
 			"type": "BoxGeometry",
 			"width": 149.4,
 			"height": 2,
-			"depth": 70,
+			"depth": 80,
 			"widthSegments": 20,
 			"heightSegments": 20,
 			"depthSegments": 8 
