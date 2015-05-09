@@ -155,6 +155,25 @@ function DropBoxDemo(scene) {
     //});
 
 
+    leapFrame = 0;
+    Leap.loop( function(frame) {
+      frame.hands.forEach(function (hand, index) {
+        if(hand.grabStrength === 0 && leapFrame % 12 === 0){
+          var geo = new Physijs.SphereMesh(
+            new THREE.SphereGeometry( 4, 40, 40 ),
+            new THREE.MeshPhongMaterial({ color: 'yellow' })
+          );
+          geo.receiveShadow = true;
+          geo.position.set(hand.palmPosition[0]/10-10, hand.palmPosition[1]/10 - 30, hand.palmPosition[2]/10 + 25);
+          scene.add(geo);
+          geo.setLinearVelocity(new THREE.Vector3( 0, 0, -50));
+          leapFrame = 0;
+        }
+      });
+      leapFrame++;
+    });
+
+
     loaded = true;
   }
 
@@ -220,6 +239,5 @@ function DropBoxDemo(scene) {
     }
 
   }
-
 
 }
