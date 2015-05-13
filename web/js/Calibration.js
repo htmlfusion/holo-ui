@@ -66,16 +66,17 @@ function Calibration(scene, stereoCamera) {
     THREE.Loader.Handlers.add(/\.dds$/i, new THREE.DDSLoader());
 
     var loader = new THREE.OBJMTLLoader();
-    loader.load('obj/Room.obj', '', function(object) {
+    loader.load('obj/full-room-oriented.obj', '', function(object) {
       //object.position.y = 0;
       //object.position.z = 35;
       //object.position.x = 0;
 
-      object.scale.set(-100, -100, 100);
-      object.rotation.set(0, 45*Math.PI/180, 0);
-      object.position.set(-120, 300, -750);
+      object.scale.set(100, 100, 100);
+      object.rotation.y = -90 * Math.PI/180;
+      // object.rotation.set(0, 45*Math.PI/180, 0);
+      // object.position.set(-120, 300, -750);
 
-      var wireframe = new THREE.MeshBasicMaterial({wireframe: true, color: 'grey'});
+      var wireframe = new THREE.MeshBasicMaterial({wireframe: true, color: 'blue'});
 
       object.children.forEach(function(c){
         c.material = wireframe;
@@ -177,9 +178,9 @@ function Calibration(scene, stereoCamera) {
     this.loadCalibration = function(){
       try {
         var camOffsets = JSON.parse(localStorage.getItem('holo-ui:offsets'));
-        stereoCamera.verticalOffset = camOffsets.verticalOffset;
-        stereoCamera.xRotationOffset = camOffsets.xRotationOffset;
-        stereoCamera.yRotationOffset = camOffsets.yRotationOffset;
+        // stereoCamera.verticalOffset = camOffsets.verticalOffset;
+        // stereoCamera.xRotationOffset = camOffsets.xRotationOffset;
+        // stereoCamera.yRotationOffset = camOffsets.yRotationOffset;
       } catch(err){
         console.log('failed to load offsets', err);
       }
@@ -304,6 +305,16 @@ function Calibration(scene, stereoCamera) {
     Mousetrap.bind('l', function(){
       var incr = .1;
       stereoCamera.yRotationOffset -= incr;
+    }.bind(this));
+
+    Mousetrap.bind('a', function(){
+      var incr = .1;
+      stereoCamera.depthOffset += incr;
+    }.bind(this));
+
+    Mousetrap.bind('z', function(){
+      var incr = .1;
+      stereoCamera.depthOffset -= incr;
     }.bind(this));
 
   };

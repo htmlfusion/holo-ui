@@ -15,6 +15,7 @@ function StereoCamera(renderer, scene, group, screen) {
   this.renderCamR = this.group.getChildByName('cameraRight');
   this.renderCamR.aspect = (window.innerWidth / window.innerHeight) / 2;
   this.renderCamL.aspect = (window.innerWidth / window.innerHeight) / 2;
+  this.depthOffset = 0;
   this.verticalOffset = 44.925;
   this.xRotationOffset = 0;
   this.yRotationOffset = 0;
@@ -60,7 +61,10 @@ function StereoCamera(renderer, scene, group, screen) {
   self.setPosition = function(position) {
 
     // 34.925 is the camera's vertical offset
-    var pos = [ (position[0] / 10), (position[1] / 10) + this.verticalOffset, (position[2] / 10) ];
+    var pos = [ 
+      (position[0] / 10), (position[1] / 10) + this.verticalOffset, 
+      (position[2] / 10) + this.depthOffset
+    ];
     this.group.position.x = pos[0];
     this.group.position.y = pos[1];
     this.group.position.z = pos[2];
