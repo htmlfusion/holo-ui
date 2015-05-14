@@ -23,7 +23,8 @@ function StereoCamera(renderer, scene, group, screen) {
     rx: 0,
     ry: 0,
     rz: 0
-  }
+  };
+  
   this.io = null;
 
   var camHelperL = new THREE.CameraHelper(this.renderCamL);

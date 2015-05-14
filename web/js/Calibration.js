@@ -65,32 +65,37 @@ function Calibration(scene, stereoCamera) {
 
     THREE.Loader.Handlers.add(/\.dds$/i, new THREE.DDSLoader());
 
-    var loader = new THREE.OBJMTLLoader();
-    loader.load('obj/full-room-oriented.obj', '', function(object) {
-      //object.position.y = 0;
-      //object.position.z = 35;
-      //object.position.x = 0;
+    var load = false;
+    if(load){
+      
+      var loader = new THREE.OBJMTLLoader();
+      loader.load('obj/full-room-oriented.obj', '', function(object) {
+        //object.position.y = 0;
+        //object.position.z = 35;
+        //object.position.x = 0;
 
-      object.scale.set(100, 100, 100);
-      object.rotation.y = -90 * Math.PI/180;
-      // object.rotation.set(0, 45*Math.PI/180, 0);
-      // object.position.set(-120, 300, -750);
+        object.scale.set(100, 100, 100);
+        object.rotation.y = -90 * Math.PI/180;
+        // object.rotation.set(0, 45*Math.PI/180, 0);
+        // object.position.set(-120, 300, -750);
 
-      var wireframe = new THREE.MeshBasicMaterial({wireframe: true, color: 'blue'});
+        var wireframe = new THREE.MeshBasicMaterial({wireframe: true, color: 'blue'});
 
-      object.children.forEach(function(c){
-        c.material = wireframe;
+        object.children.forEach(function(c){
+          c.material = wireframe;
+        });
+
+        scene.add(object);
+
+        console.log("Object added to scene");
+
+      }, function(progress){
+        console.log(progress);
+      }, function(err){
+        console.log(err);
       });
 
-      scene.add(object);
-
-      console.log("Object added to scene");
-
-    }, function(progress){
-      console.log(progress);
-    }, function(err){
-      console.log(err);
-    });
+    }
 
 
     loaded = true;
@@ -324,6 +329,8 @@ function Calibration(scene, stereoCamera) {
     this.setupControls();
     this.loadCalibration();
   }
+
+  this.loadCalibration();
 
 
 }
