@@ -117,6 +117,7 @@ var APP = {
 
       //Screen size
       stereoCamera = new StereoCamera(renderer, scene, group, {width: 90.4875, height: 49.53});
+      stereoCamera.setIO(5);
       debugScene = new DebugScene(renderer, scene, camera);
 
       var francis = new Francis(scene);

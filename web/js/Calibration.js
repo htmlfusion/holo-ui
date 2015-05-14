@@ -178,9 +178,7 @@ function Calibration(scene, stereoCamera) {
     this.loadCalibration = function(){
       try {
         var camOffsets = JSON.parse(localStorage.getItem('holo-ui:offsets'));
-        // stereoCamera.verticalOffset = camOffsets.verticalOffset;
-        // stereoCamera.xRotationOffset = camOffsets.xRotationOffset;
-        // stereoCamera.yRotationOffset = camOffsets.yRotationOffset;
+        stereoCamera.offset = camOffsets;
       } catch(err){
         console.log('failed to load offsets', err);
       }
@@ -214,11 +212,7 @@ function Calibration(scene, stereoCamera) {
     };
 
     Mousetrap.bind('s', function() {
-      localStorage.setItem('holo-ui:offsets', JSON.stringify({
-        verticalOffset: stereoCamera.verticalOffset,
-        xRotationOffset: stereoCamera.xRotationOffset,
-        yRotationOffset: stereoCamera.yRotationOffset
-      }));
+      localStorage.setItem('holo-ui:offsets', JSON.stringify(stereoCamera.offset));
     }.bind(this));
 
     // hide corners
@@ -272,49 +266,49 @@ function Calibration(scene, stereoCamera) {
     Mousetrap.bind('up', function(){
       var incr = .1;
       //verticalOffset += incr;
-      stereoCamera.verticalOffset += incr;
+      stereoCamera.offset.ty += incr;
       this.calibrate();
     }.bind(this));
 
     Mousetrap.bind('down', function(){
       var incr = .1;
       //verticalOffset -= incr;
-      stereoCamera.verticalOffset -= incr;
+      stereoCamera.offset.ty -= incr;
       this.calibrate();
     }.bind(this));
 
     //Rotate up
     Mousetrap.bind('i', function(){
       var incr = .1;
-      stereoCamera.xRotationOffset += incr;
+      stereoCamera.offset.rx += incr;
     }.bind(this));
 
     //Rotate down
     Mousetrap.bind('k', function(){
       var incr = .1;
-      stereoCamera.xRotationOffset -= incr;
+      stereoCamera.offset.rx -= incr;
     }.bind(this));
 
     //Rotate left
     Mousetrap.bind('j', function(){
       var incr = .1;
-      stereoCamera.yRotationOffset += incr;
+      stereoCamera.offset.ry += incr;
     }.bind(this));
 
     //Rotate right
     Mousetrap.bind('l', function(){
       var incr = .1;
-      stereoCamera.yRotationOffset -= incr;
+      stereoCamera.offset.ry -= incr;
     }.bind(this));
 
     Mousetrap.bind('a', function(){
       var incr = .1;
-      stereoCamera.depthOffset += incr;
+      stereoCamera.offset.tz += incr;
     }.bind(this));
 
     Mousetrap.bind('z', function(){
       var incr = .1;
-      stereoCamera.depthOffset -= incr;
+      stereoCamera.offset.tz -= incr;
     }.bind(this));
 
   };

@@ -15,10 +15,16 @@ function StereoCamera(renderer, scene, group, screen) {
   this.renderCamR = this.group.getChildByName('cameraRight');
   this.renderCamR.aspect = (window.innerWidth / window.innerHeight) / 2;
   this.renderCamL.aspect = (window.innerWidth / window.innerHeight) / 2;
-  this.depthOffset = 0;
-  this.verticalOffset = 44.925;
-  this.xRotationOffset = 0;
-  this.yRotationOffset = 0;
+
+  this.offset = {
+    tx: 0,
+    ty: 44.925,
+    tz: 10,
+    rx: 0,
+    ry: 0,
+    rz: 0
+  }
+  this.io = null;
 
   var camHelperL = new THREE.CameraHelper(this.renderCamL);
   var camHelperR = new THREE.CameraHelper(this.renderCamR);
@@ -31,12 +37,6 @@ function StereoCamera(renderer, scene, group, screen) {
   var pxHeight = window.innerHeight;
 
   var gridHelper = new THREE.GridHelper(size, step);
-
-  //this.group.applyMatrix(self.offset);
-
-  //this.group.applyMatrix(this.offset);
-
-  //self.setIO(8);
 
   self.debug = function(on) {
     debug = on;
@@ -53,6 +53,7 @@ function StereoCamera(renderer, scene, group, screen) {
 
   self.setIO = function(distance) {
 
+    this.io = distance;
     this.renderCamL.position.x = -distance / 2;
     this.renderCamR.position.x = distance / 2;
 
@@ -62,8 +63,8 @@ function StereoCamera(renderer, scene, group, screen) {
 
     // 34.925 is the camera's vertical offset
     var pos = [ 
-      (position[0] / 10), (position[1] / 10) + this.verticalOffset, 
-      (position[2] / 10) + this.depthOffset
+      (position[0] / 10) + this.offset.tx, (position[1] / 10) + this.offset.ty, 
+      (position[2] / 10) + this.offset.tz
     ];
     this.group.position.x = pos[0];
     this.group.position.y = pos[1];
@@ -73,8 +74,8 @@ function StereoCamera(renderer, scene, group, screen) {
     var rx = new THREE.Matrix4();
     var ry = new THREE.Matrix4();
 
-    rx.makeRotationX( this.xRotationOffset * Math.PI / 180 );
-    ry.makeRotationY( this.yRotationOffset * Math.PI / 180 );
+    rx.makeRotationX( this.offset.rx * Math.PI / 180 );
+    ry.makeRotationY( this.offset.ry * Math.PI / 180 );
 
     m.multiplyMatrices( rx, ry );
     this.group.position.applyMatrix4(m);
@@ -100,45 +101,50 @@ function StereoCamera(renderer, scene, group, screen) {
     // vectorL.setFromMatrixPosition(renderCamL.matrixWorld);
 
     // interocular distance, 6cm between eyes
-    var io = 6;
-    vectorL.x -= io/2;
+    vectorL.x -= this.io/2;
 
     var near = 10;
 
     var width = this.screen.width;
     var height = this.screen.height;
+    var aspect = width/height;
     var pxSize = pxWidth / width;;
 
+    var scalr = 1; 
+
     var leftScreen = width / 2.0 + vectorL.x;
-    var left = near / vectorL.z * leftScreen;
+    var left = near / vectorL.z * leftScreen * scalr;
 
     var rightScreen = width / 2.0 - vectorL.x;
-    var right = near / vectorL.z * rightScreen;
+    var right = near / vectorL.z * rightScreen * scalr;
 
-    var bottomScreen = -height / 2.0 - vectorL.y;
+    var bottomScreen = - height / 2.0 - vectorL.y;
     var bottom = near / vectorL.z * bottomScreen;
 
     var topScreen = height / 2.0 - vectorL.y;
     var top = near / vectorL.z * topScreen;
 
-    this.renderCamL.projectionMatrix.makeFrustum(-left, //left
+    var far = 6000;
+
+    this.renderCamL.projectionMatrix.makeFrustum(
+      -left, //left
       right, //right
       bottom, //bottom
       top, //top
       near,
-      1000
+      far
     );
 
     var vectorR = this.group.position.clone();
-    vectorR.x += io/2;
+    vectorR.x += this.io/2;
     // var vectorR = new THREE.Vector3();
     // vectorR.setFromMatrixPosition(renderCamR.matrixWorld);
 
     var leftScreen = width / 2.0 + vectorR.x;
-    var left = near / vectorL.z * leftScreen;
+    var left = near / vectorR.z * leftScreen * scalr;
 
     var rightScreen = width / 2.0 - vectorR.x;
-    var right = near / vectorL.z * rightScreen;
+    var right = near / vectorR.z * rightScreen * scalr;
 
     var bottomScreen = -height / 2.0 - vectorR.y;
     var bottom = near / vectorR.z * bottomScreen;
@@ -146,12 +152,13 @@ function StereoCamera(renderer, scene, group, screen) {
     var topScreen = height / 2.0 - vectorR.y;
     var top = near / vectorR.z * topScreen;
 
-    this.renderCamR.projectionMatrix.makeFrustum(-left, //left
+    this.renderCamR.projectionMatrix.makeFrustum(
+      -left, //left
       right, //right
       bottom, //bottom
       top, //top
       near,
-      1000
+      far
     );
 
 
