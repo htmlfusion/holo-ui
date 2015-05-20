@@ -12,48 +12,6 @@
 	  "height": 75,
 	  "widthSegments": 1,
 	  "heightSegments": 1
-	},
-	{
-	  "uuid": "CAE75E4C-41E9-48FB-93F9-83FC3F814B72",
-	  "type": "SphereGeometry",
-	  "radius": -2,
-	  "widthSegments": 32,
-	  "heightSegments": 16,
-	  "phiStart": 0,
-	  "phiLength": 6.28,
-	  "thetaStart": 0,
-	  "thetaLength": 3.14
-	},
-	{
-	  "uuid": "D6B35126-3B31-443E-A497-5A1B88FA6B5E",
-	  "type": "SphereGeometry",
-	  "radius": 2,
-	  "widthSegments": 32,
-	  "heightSegments": 16,
-	  "phiStart": 0,
-	  "phiLength": 6.28,
-	  "thetaStart": 0,
-	  "thetaLength": 3.14
-	},
-	{
-	  "uuid": "77C8DC86-CCF6-4C17-B38E-7DDAD6944834",
-	  "type": "BoxGeometry",
-	  "width": 10,
-	  "height": 10,
-	  "depth": 10,
-	  "widthSegments": 1,
-	  "heightSegments": 1,
-	  "depthSegments": 1
-	},
-	{
-	  "uuid": "B9DB7F0C-89A7-4EA3-847C-19B5BA31118C",
-	  "type": "BoxGeometry",
-	  "width": 149.4,
-	  "height": 2,
-	  "depth": 80,
-	  "widthSegments": 20,
-	  "heightSegments": 20,
-	  "depthSegments": 8
 	}],
   "materials": [
 	{
