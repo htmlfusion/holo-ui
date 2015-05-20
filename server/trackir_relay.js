@@ -34,7 +34,6 @@ client.on('data', function(message) {
   if(message === lastMessage){
     return;
   }
-  console.log('lastMessage', lastMessage);
   lastMessage = message;
   var split = message.split(/\s+/);
   var numbers = [];
@@ -45,7 +44,10 @@ client.on('data', function(message) {
     }
   });
   var body = {
-    head: {x: numbers[3], y: numbers[4], z: numbers[5]}
+    head: {
+      x: numbers[3], y: numbers[4], z: numbers[5],
+      rx: numbers[0], ry: numbers[1], rz: numbers[2],
+    }
   };
   console.log(body);
   subscribed.forEach(function(c) {

@@ -39,16 +39,31 @@ function StereoCamera(renderer, scene, group, screen) {
 
   var gridHelper = new THREE.GridHelper(size, step);
 
+
+  var lineMaterial = new THREE.LineBasicMaterial({
+    color: 'green'
+  });
+
+  var lineLength = 100000;
+  var lineIndex = 0;
+  var cameraPathGeo = new THREE.Geometry();
+  for(var i=0; i<lineLength; i++){
+    cameraPathGeo.vertices.push(new THREE.Vector3(0,0,0));
+  }
+  var cameraPath = new THREE.Line(cameraPathGeo, lineMaterial);
+
   self.debug = function(on) {
     debug = on;
     if (on) {
       scene.add(camHelperL);
       scene.add(camHelperR);
       scene.add(gridHelper);
+      scene.add(cameraPath);
     } else {
       scene.remove(camHelperL);
       scene.remove(camHelperR);
       scene.remove(gridHelper);
+      scene.remove(cameraPath);
     }
   };
 
@@ -67,9 +82,17 @@ function StereoCamera(renderer, scene, group, screen) {
       (position[0] / 10) + this.offset.tx, (position[1] / 10) + this.offset.ty, 
       (position[2] / 10) + this.offset.tz
     ];
+
     this.group.position.x = pos[0];
     this.group.position.y = pos[1];
     this.group.position.z = pos[2];
+
+    cameraPath.geometry.vertices[lineIndex] = this.group.position.clone();
+    cameraPath.geometry.verticesNeedUpdate = true;
+    lineIndex++;
+    if(lineIndex>lineLength){
+      lineIndex = 0;
+    }
 
     var m = new THREE.Matrix4();
     var rx = new THREE.Matrix4();
@@ -80,6 +103,9 @@ function StereoCamera(renderer, scene, group, screen) {
 
     m.multiplyMatrices( rx, ry );
     this.group.position.applyMatrix4(m);
+
+    cameraPath.matrixAutoUpdate = false
+    cameraPath.matrix = m;
 
   };
 
