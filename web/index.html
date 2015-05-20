@@ -22,6 +22,7 @@
 		<script src="bower_components/mathjs/dist/math.js"></script>
 		<script src="js/TrackballControls.js"></script>
 		<script src="js/DropBoxDemo.js"></script>
+		<script src="js/Refrigerator.js"></script>
 		<script src="js/Calibration.js"></script>
 		<script src="js/DebugScene.js"></script>
 		<script src="js/StereoCamera.js"></script>
@@ -40,7 +41,7 @@
 			Physijs.scripts.ammo = '/bower_components/ammo.js/builds/ammo.js'
 			var player;
 			var loader = new THREE.XHRLoader();
-			loader.load( 'dropBox.json', function ( text ) {
+			loader.load( 'refrigerator.json', function ( text ) {
 				player = new APP.Player();
 				player.load( JSON.parse( text ) );
 				player.setSize( window.innerWidth, window.innerHeight );
