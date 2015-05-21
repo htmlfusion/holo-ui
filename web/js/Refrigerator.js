@@ -1,9 +1,38 @@
-function DropBoxDemo(scene) {
+function Refrigerator(scene, stereoCamera) {
 
   var self = this;
   var scene = scene;
   var spotLight = scene.getObjectByName('lamp');
   var loaded = false;
+  var raycaster = new THREE.Raycaster();
+  var center = new THREE.Vector2(0, 0);
+  var sphere;
+
+  this.selection = function(time) {
+
+      sphere.material.color.set('yellow');
+      raycaster.setFromCamera(center, stereoCamera.proxyCamera);
+
+      // calculate objects intersecting the picking ray
+      var objects = [sphere];
+      objects.forEach(function(obj) {
+        obj.selected = false;
+        obj.material.color.set('yellow');
+        var distance = obj.position.distanceTo(stereoCamera.proxyCamera.position)
+        obj.scale.x = distance/400;
+        obj.scale.y = distance/400;
+        obj.scale.z = distance/400;
+      });
+
+      var intersects = raycaster.intersectObjects(objects);
+
+      for (var i = 0; i < intersects.length; i++) {
+
+        intersects[i].object.material.color.set(0xff0000);
+        intersects[i].object.selected = true;
+
+      }
+  };
 
   this.load = function() {
 
@@ -20,46 +49,59 @@ function DropBoxDemo(scene) {
 
     THREE.Loader.Handlers.add(/\.dds$/i, new THREE.DDSLoader());
 
-    var loader = new THREE.OBJMTLLoader();
-    loader.load('obj/full-room-modeled.obj', '', function(object) {
+    // var loader = new THREE.OBJMTLLoader();
+    // loader.load('obj/full-room-modeled.obj', '', function(object) {
 
-      var wireframe = new THREE.MeshBasicMaterial({
-        wireframe: true,
-        color: 'grey'
-      });
+    //   var wireframe = new THREE.MeshBasicMaterial({
+    //     wireframe: true,
+    //     color: 'grey'
+    //   });
 
-      var children = object.children;
-      object.children = [];
-      children.forEach(function(child) {
+    //   var children = object.children;
+    //   object.children = [];
+    //   children.forEach(function(child) {
 
-        var rigidMaterial = Physijs.createMaterial(
-          wireframe,
-          .8,
-          .3
-        );
+    //     var rigidMaterial = Physijs.createMaterial(
+    //       wireframe,
+    //       .8,
+    //       .3
+    //     );
 
-        // Ground
-        var childObject = new Physijs.ConvexMesh(
-          child.geometry,
-          rigidMaterial,
-          0 // mass
-        );
+    //     // Ground
+    //     var childObject = new Physijs.ConvexMesh(
+    //       child.geometry,
+    //       rigidMaterial,
+    //       0 // mass
+    //     );
 
-        object.add(childObject);
-        //scene.add(childObject);
-      });
+    //     object.add(childObject);
+    //     //scene.add(childObject);
+    //   });
 
-      object.rotation.set(-2*Math.PI/180, -95 * Math.PI / 180, 0);
-      object.position.y = 5;
-      scene.add(object);
+    //   object.rotation.set(-2 * Math.PI / 180, -95 * Math.PI / 180, 0);
+    //   object.position.y = 5;
+    //   scene.add(object);
 
-      console.log("Object added to scene");
+    //   console.log("Object added to scene");
 
-    }, function(progress) {
-      console.log(progress);
-    }, function(err) {
-      console.log(err);
+    // }, function(progress) {
+    //   console.log(progress);
+    // }, function(err) {
+    //   console.log(err);
+    // });
+
+
+    var geometry = new THREE.SphereGeometry(100, 32, 32);
+    var material = new THREE.MeshBasicMaterial({
+      color: 0xffff00
     });
+    sphere = new THREE.Mesh(geometry, material);
+    sphere.position.z = -60;
+    sphere.position.x = 40;
+    sphere.position.y = -20;
+    scene.add(sphere);
+
+    setInterval(this.selection, 1000/10);;
 
 
     // leapFrame = 0;
@@ -92,7 +134,14 @@ function DropBoxDemo(scene) {
   }
 
 
+
+
+
   this.animate = function(time) {
+    if (loaded) {
+
+    }
+
 
   }
 

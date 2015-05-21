@@ -105,8 +105,12 @@ var APP = {
       var dropBoxDemo = new DropBoxDemo(scene);
       animCallbacks.push(dropBoxDemo.animate);
 
+      var refrigerator = new Refrigerator(scene, stereoCamera);
+      animCallbacks.push(refrigerator.animate);
+
       var calibration = new Calibration(scene, stereoCamera, debugCam);
       animCallbacks.push(calibration.animate);
+
     };
 
 
@@ -138,7 +142,7 @@ var APP = {
         } else {
           stereoCamera.render();
         }
-      }, 1000 / 30);
+      }, 1000 / 60);
 
     };
 
