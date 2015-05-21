@@ -2,22 +2,21 @@ function Refrigerator(scene, stereoCamera) {
 
   var self = this;
   var scene = scene;
-  var spotLight = scene.getObjectByName('lamp');
   var loaded = false;
   var raycaster = new THREE.Raycaster();
   var center = new THREE.Vector2(0, 0);
   var sphere;
+  var pointer;
 
   this.selection = function(time) {
 
       sphere.material.color.set('yellow');
       raycaster.setFromCamera(center, stereoCamera.proxyCamera);
 
-      // calculate objects intersecting the picking ray
+      // List of selectable objects
       var objects = [sphere];
+
       objects.forEach(function(obj) {
-        obj.selected = false;
-        obj.material.color.set('yellow');
         var distance = obj.position.distanceTo(stereoCamera.proxyCamera.position)
         obj.scale.x = distance/400;
         obj.scale.y = distance/400;
@@ -25,27 +24,30 @@ function Refrigerator(scene, stereoCamera) {
       });
 
       var intersects = raycaster.intersectObjects(objects);
+      var selectedObjects = []
 
       for (var i = 0; i < intersects.length; i++) {
 
         intersects[i].object.material.color.set(0xff0000);
+        if( !intersects[i].object.selected && intersects[i].object.onFocus ){
+          intersects[i].object.onFocus();
+        }
         intersects[i].object.selected = true;
+        selectedObjects.push(intersects[i].object);
 
       }
+
+      objects.forEach(function(obj) {
+        if( selectedObjects.indexOf(obj) === -1){
+          if( obj.selected && obj.onBlur ){
+            obj.onBlur();
+          }
+          obj.selected = false;
+        }
+      });
   };
 
   this.load = function() {
-
-    spotLight.castShadow = true;
-
-    //spotLight.shadowDarkness = 0.5;
-    spotLight.shadowMapWidth = 1024 * 8;
-    spotLight.shadowMapHeight = 1024 * 8;
-
-    spotLight.position.x = 60;
-    spotLight.shadowCameraNear = 5;
-    spotLight.shadowCameraFov = 120;
-    spotLight.target.position.set(0, 5, -50);
 
     THREE.Loader.Handlers.add(/\.dds$/i, new THREE.DDSLoader());
 
@@ -99,31 +101,31 @@ function Refrigerator(scene, stereoCamera) {
     sphere.position.z = -60;
     sphere.position.x = 40;
     sphere.position.y = -20;
+    sphere.visible = false;
+
     scene.add(sphere);
+
+    var pointerGeo = new THREE.SphereGeometry(2, 32, 32);
+    var material = new THREE.MeshLambertMaterial({
+      color: 'white'
+    });
+    pointer = new THREE.Object3D();
+    pointerObj = new THREE.Mesh(pointerGeo, material);
+    pointerObj.position.z = -200;
+    pointer.add(pointerObj);
+    scene.add(pointer);
 
     setInterval(this.selection, 1000/10);;
 
+    sphere.onFocus = function(){
+      console.log('sphere selected');
+      pointerObj.material.color.set('red');
+    }
 
-    // leapFrame = 0;
-    // Leap.loop(function(frame) {
-    //   frame.hands.forEach(function(hand, index) {
-    //     if (hand.grabStrength === 0 && leapFrame % 12 === 0) {
-    //       var geo = new Physijs.SphereMesh(
-    //         new THREE.SphereGeometry(4, 40, 40),
-    //         new THREE.MeshPhongMaterial({
-    //           color: 'yellow'
-    //         })
-    //       );
-    //       geo.receiveShadow = true;
-    //       geo.position.set(hand.palmPosition[0] / 10 - 10, hand.palmPosition[1] / 10 - 30, hand.palmPosition[2] / 10 + 25);
-    //       scene.add(geo);
-    //       geo.setLinearVelocity(new THREE.Vector3(0, 0, -50));
-    //       leapFrame = 0;
-    //     }
-    //   });
-    //   leapFrame++;
-    // });
-
+    sphere.onBlur = function(){
+      console.log('sphere unselected');
+      pointerObj.material.color.set('white');
+    }
 
     loaded = true;
   }
@@ -139,7 +141,13 @@ function Refrigerator(scene, stereoCamera) {
 
   this.animate = function(time) {
     if (loaded) {
+      pointer.position.x = stereoCamera.proxyCamera.position.x;
+      pointer.position.y = stereoCamera.proxyCamera.position.y;
+      pointer.position.z = stereoCamera.proxyCamera.position.z;
 
+      pointer.rotation.x = stereoCamera.proxyCamera.rotation.x;
+      pointer.rotation.y = stereoCamera.proxyCamera.rotation.y;
+      pointer.rotation.z = stereoCamera.proxyCamera.rotation.z;
     }
 
 
