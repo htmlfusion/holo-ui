@@ -7,44 +7,87 @@ function Refrigerator(scene, stereoCamera) {
   var center = new THREE.Vector2(0, 0);
   var sphere;
   var pointer;
+  var tweens = [];
+
+  var createLabel = function(url) {
+    var texture = THREE.ImageUtils.loadTexture(url);
+    var material = new THREE.MeshBasicMaterial({
+      map: texture,
+      transparent: true
+    });
+    var plane = new THREE.Mesh(new THREE.PlaneGeometry(20, 20 / 1.6), material);
+    return plane;
+  };
+
+  var showLabel = function(label){
+    var scale = { y: 0 };
+    var target = { y: 1 };
+    var tween = new TWEEN.Tween(scale).to(target, 1500);
+    tween.easing(TWEEN.Easing.Elastic.InOut)
+    tween.onUpdate(function(){
+      label.scale.y = scale.y;
+    });
+
+    tweens.push(tween);
+    tween.start();
+    tween.onComplete(function(){
+      tween.stop();
+    })
+  };
+
+  var hideLabel = function(label){
+    var scale = { y: 1 };
+    var target = { y: 0 };
+    var tween = new TWEEN.Tween(scale).to(target, 1500);
+    tween.easing(TWEEN.Easing.Elastic.InOut)
+    tween.onUpdate(function(){
+      label.scale.y = scale.y;
+    });
+
+    tweens.push(tween);
+    tween.start();
+    tween.onComplete(function(){
+      tween.stop();
+    })
+  };
 
   this.selection = function(time) {
 
-      sphere.material.color.set('yellow');
-      raycaster.setFromCamera(center, stereoCamera.proxyCamera);
+    sphere.material.color.set('yellow');
+    raycaster.setFromCamera(center, stereoCamera.proxyCamera);
 
-      // List of selectable objects
-      var objects = [sphere];
+    // List of selectable objects
+    var objects = [sphere];
 
-      objects.forEach(function(obj) {
-        var distance = obj.position.distanceTo(stereoCamera.proxyCamera.position)
-        obj.scale.x = distance/400;
-        obj.scale.y = distance/400;
-        obj.scale.z = distance/400;
-      });
+    objects.forEach(function(obj) {
+      var distance = obj.position.distanceTo(stereoCamera.proxyCamera.position)
+      obj.scale.x = distance / 400;
+      obj.scale.y = distance / 400;
+      obj.scale.z = distance / 400;
+    });
 
-      var intersects = raycaster.intersectObjects(objects);
-      var selectedObjects = []
+    var intersects = raycaster.intersectObjects(objects);
+    var selectedObjects = []
 
-      for (var i = 0; i < intersects.length; i++) {
+    for (var i = 0; i < intersects.length; i++) {
 
-        intersects[i].object.material.color.set(0xff0000);
-        if( !intersects[i].object.selected && intersects[i].object.onFocus ){
-          intersects[i].object.onFocus();
-        }
-        intersects[i].object.selected = true;
-        selectedObjects.push(intersects[i].object);
-
+      intersects[i].object.material.color.set(0xff0000);
+      if (!intersects[i].object.selected && intersects[i].object.onFocus) {
+        intersects[i].object.onFocus();
       }
+      intersects[i].object.selected = true;
+      selectedObjects.push(intersects[i].object);
 
-      objects.forEach(function(obj) {
-        if( selectedObjects.indexOf(obj) === -1){
-          if( obj.selected && obj.onBlur ){
-            obj.onBlur();
-          }
-          obj.selected = false;
+    }
+
+    objects.forEach(function(obj) {
+      if (selectedObjects.indexOf(obj) === -1) {
+        if (obj.selected && obj.onBlur) {
+          obj.onBlur();
         }
-      });
+        obj.selected = false;
+      }
+    });
   };
 
   this.load = function() {
@@ -115,18 +158,30 @@ function Refrigerator(scene, stereoCamera) {
     pointer.add(pointerObj);
     scene.add(pointer);
 
-    setInterval(this.selection, 1000/10);;
+    setInterval(this.selection, 1000 / 10);;
 
-    sphere.onFocus = function(){
+
+    var milkLabel = createLabel('./img/milk-info-5.png');
+    milkLabel.position.z = -50;
+    milkLabel.position.x = 40;
+    milkLabel.position.y = -5;
+    scene.add(milkLabel);
+
+
+
+    sphere.onFocus = function() {
       console.log('sphere selected');
       pointerObj.material.color.set('red');
+      showLabel(milkLabel);
     }
 
-    sphere.onBlur = function(){
+    sphere.onBlur = function() {
       console.log('sphere unselected');
       pointerObj.material.color.set('white');
+      hideLabel(milkLabel);
     }
 
+    milkLabel.scale.y = 0;
     loaded = true;
   }
 
@@ -148,6 +203,11 @@ function Refrigerator(scene, stereoCamera) {
       pointer.rotation.x = stereoCamera.proxyCamera.rotation.x;
       pointer.rotation.y = stereoCamera.proxyCamera.rotation.y;
       pointer.rotation.z = stereoCamera.proxyCamera.rotation.z;
+
+      tweens.forEach(function(tween){
+        tween.update(time);
+      });
+
     }
 
 
