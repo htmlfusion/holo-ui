@@ -46,7 +46,7 @@ client.on('data', function(message) {
   var body = {
     head: {
       x: numbers[3], y: numbers[4], z: numbers[5],
-      rx: numbers[0], ry: numbers[1], rz: numbers[2],
+      rx: numbers[1], ry: numbers[0], rz: numbers[2],
     }
   };
   console.log(body);

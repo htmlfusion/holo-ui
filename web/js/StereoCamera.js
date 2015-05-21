@@ -16,6 +16,9 @@ function StereoCamera(renderer, scene, group, screen) {
   this.renderCamR.aspect = (window.innerWidth / window.innerHeight) / 2;
   this.renderCamL.aspect = (window.innerWidth / window.innerHeight) / 2;
 
+  this.proxyCamera = new THREE.PerspectiveCamera( 4, window.innerWidth / window.innerHeight, 1, 1000 );
+  scene.add(this.proxyCamera);
+
   this.offset = {
     tx: 0,
     ty: 44.925,
@@ -29,6 +32,7 @@ function StereoCamera(renderer, scene, group, screen) {
 
   var camHelperL = new THREE.CameraHelper(this.renderCamL);
   var camHelperR = new THREE.CameraHelper(this.renderCamR);
+  var proxyCamHelper = new THREE.CameraHelper(this.proxyCamera);
 
   var size = 500;
   var step = 50;
@@ -55,15 +59,17 @@ function StereoCamera(renderer, scene, group, screen) {
   self.debug = function(on) {
     debug = on;
     if (on) {
-      scene.add(camHelperL);
-      scene.add(camHelperR);
+      // scene.add(camHelperL);
+      // scene.add(camHelperR);
       scene.add(gridHelper);
       scene.add(cameraPath);
+      scene.add(proxyCamHelper);
     } else {
       scene.remove(camHelperL);
       scene.remove(camHelperR);
       scene.remove(gridHelper);
       scene.remove(cameraPath);
+      scene.remove(proxyCamHelper);
     }
   };
 
@@ -75,12 +81,12 @@ function StereoCamera(renderer, scene, group, screen) {
 
   };
 
-  self.setPosition = function(position) {
+  self.setHead = function(head) {
 
     // 34.925 is the camera's vertical offset
     var pos = [ 
-      (position[0] / 10) + this.offset.tx, (position[1] / 10) + this.offset.ty, 
-      (position[2] / 10) + this.offset.tz
+      (head.x / 10) + this.offset.tx, (head.y / 10) + this.offset.ty, 
+      (head.z / 10) + this.offset.tz
     ];
 
     this.group.position.x = pos[0];
@@ -103,6 +109,13 @@ function StereoCamera(renderer, scene, group, screen) {
 
     m.multiplyMatrices( rx, ry );
     this.group.position.applyMatrix4(m);
+    this.proxyCamera.position.x = this.group.position.x;
+    this.proxyCamera.position.y = this.group.position.y;
+    this.proxyCamera.position.z = this.group.position.z;
+
+    this.proxyCamera.rotation.x = head.rx * Math.PI / 180;
+    this.proxyCamera.rotation.y = head.ry * Math.PI / 180;
+    this.proxyCamera.rotation.z = head.rz * Math.PI / 180;
 
     cameraPath.matrixAutoUpdate = false
     cameraPath.matrix = m;
@@ -113,6 +126,7 @@ function StereoCamera(renderer, scene, group, screen) {
 
     camHelperL.update();
     camHelperR.update();
+    proxyCamHelper.update();
 
   };
 

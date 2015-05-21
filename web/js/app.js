@@ -34,19 +34,8 @@ var APP = {
       }
 
       if (stereoCamera) {
-        var pos = [bodyPos.head.x, bodyPos.head.y, bodyPos.head.z];
-        stereoCamera.setPosition(pos);
+        stereoCamera.setHead(bodyPos.head);
       }
-      // if (bodyPos.left_hand) {
-      //   var left_pos = [bodyPos.left_hand.x, bodyPos.left_hand.y, bodyPos.left_hand.z];
-      //   leftHand.setPosition(left_pos);
-      //   leftHand.mesh.__dirtyPosition = true;
-      // }
-      // if (bodyPos.right_hand) {
-      //   var right_pos = [bodyPos.right_hand.x, bodyPos.right_hand.y, bodyPos.right_hand.z];
-      //   rightHand.setPosition(right_pos);
-      //   rightHand.mesh.__dirtyPosition = true;
-      // }
     };
 
     ws.onclose = function() {
@@ -55,40 +44,22 @@ var APP = {
 
 
     var rot = 0;
+
     function keydown(event) {
       // <d> key for debug cam
       var group = scene.getObjectByName('cameraGroup');
       if (event.keyCode === 100) {
         debugScene.debug(true);
         stereoCamera.debug(true);
-
-        // var x = Math.floor(Math.random() * 400) + 100;
-        // var y = Math.floor(Math.random() * 400) + 100;
-        // var z = Math.floor(Math.random() * 400) + 100;
-
-        // var pos = [x, y, z];
-        // stereoCamera.setPosition(pos);
-        // <r> key for render cam
       } else if (event.keyCode === 114) {
         debugScene.debug(false);
         stereoCamera.debug(false);
       } else if(event.keyCode === 103){
         debugScene.gridHelper(true);
-      // } else if(event.keyCode === 46){
-      //   rot += 0.01;
-      //   var euler = new THREE.Euler( 0.01, 0, 0, 'XYZ' );
-      //   stereoCamera.offset = rot;
-      //   group.position.applyEuler(euler);
-      // } else if(event.keyCode === 44){
-      //   rot -= 0.01;
-      //   var group = scene.getObjectByName('cameraGroup');
-      //   var euler = new THREE.Euler( -0.01, 0, 0, 'XYZ' );
-      //   stereoCamera.offset = rot;
-      //   group.position.applyEuler(euler);
       }
 
-
     }
+
     $(document).keypress(keydown);
 
     this.load = function(json) {
