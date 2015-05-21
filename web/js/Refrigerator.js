@@ -9,6 +9,19 @@ function Refrigerator(scene, stereoCamera) {
   var pointer;
   var tweens = [];
 
+  var highlightGeo = new THREE.CylinderGeometry(5, 5, 20, 32);
+  var highlightMaterial = new THREE.MeshBasicMaterial({
+    color: 'white'
+  });
+  var highlight = new THREE.Mesh(highlightGeo, highlightMaterial);
+
+  var milk = new THREE.Mesh(new THREE.CylinderGeometry(5, 5, 20, 32),
+    new THREE.MeshBasicMaterial({
+      color: 'white'
+    }));
+  milk.visible = false;
+
+
   var createLabel = function(url) {
     var texture = THREE.ImageUtils.loadTexture(url);
     var material = new THREE.MeshBasicMaterial({
@@ -19,34 +32,57 @@ function Refrigerator(scene, stereoCamera) {
     return plane;
   };
 
-  var showLabel = function(label){
-    var scale = { y: 0 };
-    var target = { y: 1 };
+  var highlightObject = function(object) {
+    highlight.visible = true;
+    highlight.position.x = object.position.x;
+    highlight.position.y = object.position.y;
+    highlight.position.z = object.position.z;
+  };
+
+  var unhighlightObject = function(object) {
+    highlight.visible = false;
+  };
+
+  var showLabel = function(label, object) {
+    label.position.x = object.position.x+10;
+    label.position.y = object.position.y+20;
+    label.position.z = object.position.z;
+    var scale = {
+      y: 0
+    };
+    var target = {
+      y: 1
+    };
     var tween = new TWEEN.Tween(scale).to(target, 1500);
     tween.easing(TWEEN.Easing.Elastic.InOut)
-    tween.onUpdate(function(){
+    tween.onUpdate(function() {
       label.scale.y = scale.y;
     });
 
     tweens.push(tween);
     tween.start();
-    tween.onComplete(function(){
+    tween.onComplete(function() {
       tween.stop();
     })
   };
 
-  var hideLabel = function(label){
-    var scale = { y: 1 };
-    var target = { y: 0 };
+
+  var hideLabel = function(label) {
+    var scale = {
+      y: 1
+    };
+    var target = {
+      y: 0
+    };
     var tween = new TWEEN.Tween(scale).to(target, 1500);
     tween.easing(TWEEN.Easing.Elastic.InOut)
-    tween.onUpdate(function(){
+    tween.onUpdate(function() {
       label.scale.y = scale.y;
     });
 
     tweens.push(tween);
     tween.start();
-    tween.onComplete(function(){
+    tween.onComplete(function() {
       tween.stop();
     })
   };
@@ -136,14 +172,19 @@ function Refrigerator(scene, stereoCamera) {
     // });
 
 
-    var geometry = new THREE.SphereGeometry(100, 32, 32);
+    scene.add(highlight);
+    scene.add(milk);
+    milk.position.z = -50;
+    milk.position.x = 35;
+    milk.position.y = -20;
+    var geometry = new THREE.SphereGeometry(50, 32, 32);
     var material = new THREE.MeshBasicMaterial({
       color: 0xffff00
     });
     sphere = new THREE.Mesh(geometry, material);
-    sphere.position.z = -60;
-    sphere.position.x = 40;
-    sphere.position.y = -20;
+    sphere.position.x = milk.position.x;
+    sphere.position.y = milk.position.y;
+    sphere.position.z = milk.position.z;
     sphere.visible = false;
 
     scene.add(sphere);
@@ -167,18 +208,18 @@ function Refrigerator(scene, stereoCamera) {
     milkLabel.position.y = -5;
     scene.add(milkLabel);
 
-
-
     sphere.onFocus = function() {
       console.log('sphere selected');
       pointerObj.material.color.set('red');
-      showLabel(milkLabel);
+      showLabel(milkLabel, milk);
+      highlightObject(milk);
     }
 
     sphere.onBlur = function() {
       console.log('sphere unselected');
       pointerObj.material.color.set('white');
       hideLabel(milkLabel);
+      unhighlightObject(milk);
     }
 
     milkLabel.scale.y = 0;
@@ -204,7 +245,7 @@ function Refrigerator(scene, stereoCamera) {
       pointer.rotation.y = stereoCamera.proxyCamera.rotation.y;
       pointer.rotation.z = stereoCamera.proxyCamera.rotation.z;
 
-      tweens.forEach(function(tween){
+      tweens.forEach(function(tween) {
         tween.update(time);
       });
 
