@@ -5,40 +5,47 @@ function ARObject(object, scene, url) {
   this.group = new THREE.Object3D();
   this.tweens = [];
 
-  var highlightGeo = new THREE.CylinderGeometry(5, 5, 20, 32);
+  var box = new THREE.Box3().setFromObject(this.object);
+
+
+  var radius = (Math.max(box.size().x, box.size().z)/2)*1.1;
+
+  var highlightGeo = new THREE.CylinderGeometry(radius, radius, box.size().y*1.01, 32);
   var highlightMaterial = new THREE.MeshBasicMaterial({
     color: 'white',
     transparent: true,
     opacity: 0.3
   });
 
-  this.highlight = new THREE.Mesh(highlightGeo, highlightMaterial);
+  this.highlighter = new THREE.Mesh(highlightGeo, highlightMaterial);
 
-  var box = new THREE.Box3().setFromObject(this.object);
-  var largestSide = Math.max.apply(Math.max, box.size().toArray());
-
+  var largestSide = (Math.max.apply(Math.max, box.size().toArray())/2)*1.1;
   var geometry = new THREE.SphereGeometry(largestSide, 32, 32);
   var material = new THREE.MeshBasicMaterial({
     color: 0xffff00,
     transparent: true,
     opacity: 0.5
   });
-
   this.hotspot = new THREE.Mesh(geometry, material);
+  this.hotspot.visible = false;
 
   this.hotspot.onFocus = function() {
+
     this.highlight();
     this.showLabel();
+
   }.bind(this);
 
   this.hotspot.onBlur = function() {
+
     this.unhighlight();
     this.hideLabel();
+
   }.bind(this);
 
 
   this.group.add(this.hotspot);
-  this.group.add(this.hightlight);
+  this.group.add(this.highlighter);
   this.group.add(this.object);
   this.group.add(this.label);
 
@@ -81,15 +88,16 @@ ARObject.prototype.createLabel = function( url ) {
 
 
 ARObject.prototype.unhighlight = function(){
-  this.highlight.visible = false;
+  this.highlighter.scale.y = 0;
+  this.highlighter.visible = false;
 }
 
 ARObject.prototype.highlight = function() {
   var box = new THREE.Box3().setFromObject(this.object);
-  this.highlight.visible = true;
-  this.highlight.position.x = this.object.position.x;
-  this.highlight.position.y = box.min.y;
-  this.highlight.position.z = this.object.position.z;
+  this.highlighter.visible = true;
+  this.highlighter.position.x = this.object.position.x;
+  this.highlighter.position.y = box.min.y;
+  this.highlighter.position.z = this.object.position.z;
   var scale = {
     y: 1
   };
@@ -100,21 +108,22 @@ ARObject.prototype.highlight = function() {
   tween.easing(TWEEN.Easing.Elastic.InOut);
 
   tween.onUpdate(function() {
-    highlight.scale.y = scale.y;
-  });
+    this.highlighter.scale.y = scale.y;
+  }.bind(this));
 
-  this.tweens.push(tween);
   tween.start();
   tween.onComplete(function() {
     tween.stop();
   });
+
+  this.tweens.push(tween);
 };
 
 
 ARObject.prototype.showLabel = function() {
   var box = new THREE.Box3().setFromObject(this.object);
   this.label.position.x = this.object.position.x + 10;
-  this.label.position.y = box.max.y + 25;
+  this.label.position.y = box.size().y + 10;
   this.label.position.z = this.object.position.z;
   var scale = {
     y: 0
@@ -126,14 +135,14 @@ ARObject.prototype.showLabel = function() {
   tween.easing(TWEEN.Easing.Elastic.InOut);
   tween.onUpdate(function() {
     this.label.scale.y = scale.y;
-  });
+  }.bind(this));
   tween.delay(500);
 
-  this.tweens.push(tween);
   tween.start();
   tween.onComplete(function() {
     tween.stop();
   });
+  this.tweens.push(tween);
 };
 
 
@@ -148,7 +157,7 @@ ARObject.prototype.hideLabel = function() {
   tween.easing(TWEEN.Easing.Elastic.InOut)
   tween.onUpdate(function() {
     this.label.scale.y = scale.y;
-  });
+  }.bind(this));
   tween.delay(500);
 
   this.tweens.push(tween);
@@ -158,11 +167,16 @@ ARObject.prototype.hideLabel = function() {
   })
 };
 
-ARObject.prototype.play = function(time){
-  // setTimeout(function() {
-  //   request = requestAnimationFrame(this.play);
-  //   this.tweens.forEach(function(tween) {
-  //     tween.update(time);
-  //   }.bind(this));
-  // }.bind(this), 1000/60);
+ARObject.prototype.play = function(){
+  var self = this;
+  var reqFrame = function(time){
+    setTimeout(function() {
+      request = requestAnimationFrame(reqFrame);
+      self.tweens.forEach(function(tween) {
+        tween.update(time);
+      });
+    }, 1000/60);
+  }
+
+  reqFrame(0);
 };
