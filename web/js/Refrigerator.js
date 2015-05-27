@@ -18,9 +18,9 @@ function Refrigerator(scene, stereoCamera) {
     hotspots.forEach(function(obj) {
       var distance = obj.position.distanceTo(stereoCamera.proxyCamera.position)
       obj.material.color.set('yellow');
-      // obj.scale.x = distance / 400;
-      // obj.scale.y = distance / 400;
-      // obj.scale.z = distance / 400;
+      // obj.scale.x = distance / 800;
+      // obj.scale.y = distance / 800;
+      // obj.scale.z = distance / 800;
     });
 
     var intersects = raycaster.intersectObjects(hotspots);
@@ -74,7 +74,7 @@ function Refrigerator(scene, stereoCamera) {
     var teaAnnotation = new ARObject(tea, scene, './img/milk-info-5.png');
     teaAnnotation.group.position.z = -50;
     teaAnnotation.group.position.x = -35;
-    teaAnnotation.group.position.y = -30.5;
+    teaAnnotation.group.position.y = -28;
     objects.push(teaAnnotation);
 
     /*

@@ -18,9 +18,13 @@ function ARObject(object, scene, url) {
   });
 
   this.highlighter = new THREE.Mesh(highlightGeo, highlightMaterial);
+  this.highlighter.geometry.applyMatrix( new THREE.Matrix4().makeTranslation( 0, box.size().y, 0 ) );
+  this.highlighter.position.y = +box.min.y;
+
+
 
   var largestSide = (Math.max.apply(Math.max, box.size().toArray())/2)*1.1;
-  var geometry = new THREE.SphereGeometry(largestSide, 32, 32);
+  var geometry = new THREE.SphereGeometry(largestSide*1.5, 32, 32);
   var material = new THREE.MeshBasicMaterial({
     color: 0xffff00,
     transparent: true,
@@ -95,9 +99,9 @@ ARObject.prototype.unhighlight = function(){
 ARObject.prototype.highlight = function() {
   var box = new THREE.Box3().setFromObject(this.object);
   this.highlighter.visible = true;
-  this.highlighter.position.x = this.object.position.x;
-  this.highlighter.position.y = box.min.y;
-  this.highlighter.position.z = this.object.position.z;
+  // this.highlighter.position.x = this.object.position.x;
+  // this.highlighter.position.y = box.min.y;
+  // this.highlighter.position.z = this.object.position.z;
   var scale = {
     y: 1
   };
