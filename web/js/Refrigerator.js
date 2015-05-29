@@ -71,7 +71,7 @@ function Refrigerator(scene, stereoCamera) {
         color: 'black'
       }));
 
-    var teaAnnotation = new ARObject(tea, scene, './img/milk-info-5.png');
+    var teaAnnotation = new ARObject(tea, scene, './img/champaign.png');
     teaAnnotation.group.position.z = -50;
     teaAnnotation.group.position.x = -35;
     teaAnnotation.group.position.y = -28;
