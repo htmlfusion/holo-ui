@@ -31,19 +31,28 @@ function ARObject(object, scene, url) {
     opacity: 0.5
   });
   this.hotspot = new THREE.Mesh(geometry, material);
+  this.hotspot.scale.y = 2;
   this.hotspot.visible = false;
 
   this.hotspot.onFocus = function() {
 
-    this.highlight();
-    this.showLabel();
+    if(this.timeout){
+      window.clearTimeout(this.timeout);
+    } else {
+      this.highlight();
+      this.showLabel();
+    }
+
 
   }.bind(this);
 
   this.hotspot.onBlur = function() {
 
-    this.unhighlight();
-    this.hideLabel();
+    this.timeout = window.setTimeout(function(){
+      this.unhighlight();
+      this.hideLabel();
+      this.timeout = null;
+    }.bind(this), 1000);
 
   }.bind(this);
 
