@@ -108,9 +108,6 @@ ARObject.prototype.unhighlight = function(){
 ARObject.prototype.highlight = function() {
   var box = new THREE.Box3().setFromObject(this.object);
   this.highlighter.visible = true;
-  // this.highlighter.position.x = this.object.position.x;
-  // this.highlighter.position.y = box.min.y;
-  // this.highlighter.position.z = this.object.position.z;
   var scale = {
     y: 1
   };
