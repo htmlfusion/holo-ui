@@ -28,7 +28,7 @@ function earthDemo(scene) {
     clouds = new Physijs.BoxMesh(
       new THREE.SphereGeometry(radius + .1, 80, 80),
       cloud_material
-    )
+    );
 
     clouds.position.set(0, 0, 0)
     clouds.receiveShadow = true
