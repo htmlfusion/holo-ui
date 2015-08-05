@@ -31,7 +31,7 @@ function Refrigerator(scene, stereoCamera) {
 
       intersects[i].object.material.color.set(0xff0000);
       if (!intersects[i].object.selected && intersects[i].object.onFocus) {
-        //intersects[i].object.onFocus();
+        intersects[i].object.onFocus();
       }
       
       
@@ -43,9 +43,9 @@ function Refrigerator(scene, stereoCamera) {
     hotspots.forEach(function(obj) {
       if (selectedObjects.indexOf(obj) === -1) {
         if (obj.selected && obj.onBlur) {
-          //obj.onBlur();
+          obj.onBlur();
         }
-        
+        obj.selected = false;
       }
     });
     

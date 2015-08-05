@@ -61,6 +61,7 @@ Retical.prototype.focus = function(object) {
   this.timeout = setTimeout(function(){
     this.timeout = null;
     this.toggleFocus(true);
+    //this.focusOn.object.onFocus();
   }.bind(this), this.debounceTimeout);
   
 };
@@ -73,6 +74,7 @@ Retical.prototype.blur = function(){
   this.timeout = setTimeout(function(){
     this.toggleFocus(false);
     this.timeout = null;
+    //this.focusOn.object.onBlur();
   }.bind(this), this.debounceTimeout);
 };
   
