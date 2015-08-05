@@ -5,7 +5,7 @@ function Refrigerator(scene, stereoCamera) {
   var loaded = false;
   var raycaster = new THREE.Raycaster();
   var center = new THREE.Vector2(0, 0);
-  var pointer;
+  var retical;
   var objects = [];
 
   this.selection = function(time) {
@@ -14,24 +14,25 @@ function Refrigerator(scene, stereoCamera) {
 
     var hotspots = objects.map(function(o){ return o.hotspot; });
 
-    // List of selectable objects
-    hotspots.forEach(function(obj) {
-      var distance = obj.position.distanceTo(stereoCamera.proxyCamera.position)
-      obj.material.color.set('yellow');
-      // obj.scale.x = distance / 800;
-      // obj.scale.y = distance / 800;
-      // obj.scale.z = distance / 800;
-    });
-
     var intersects = raycaster.intersectObjects(hotspots);
-    var selectedObjects = []
+    var selectedObjects = [];
 
+    if(!retical.hasFocus && intersects.length){
+      retical.focus();
+    }
+    
+    if(retical.hasFocus && !intersects.length){
+      retical.blur();
+    }
+      
     for (var i = 0; i < intersects.length; i++) {
 
       intersects[i].object.material.color.set(0xff0000);
       if (!intersects[i].object.selected && intersects[i].object.onFocus) {
-        intersects[i].object.onFocus();
+        //intersects[i].object.onFocus();
       }
+      
+      
       intersects[i].object.selected = true;
       selectedObjects.push(intersects[i].object);
 
@@ -40,11 +41,12 @@ function Refrigerator(scene, stereoCamera) {
     hotspots.forEach(function(obj) {
       if (selectedObjects.indexOf(obj) === -1) {
         if (obj.selected && obj.onBlur) {
-          obj.onBlur();
+          //obj.onBlur();
         }
-        obj.selected = false;
+        
       }
     });
+    
   };
 
   this.load = function() {
@@ -114,20 +116,9 @@ function Refrigerator(scene, stereoCamera) {
     objects.push(coffeeAnnotation);
 
     /*
-      Pointer Object and setup
+      Retical Object and setup
      */
-    var pointerGeo = new THREE.SphereGeometry(2, 32, 32);
-    var material = new THREE.MeshLambertMaterial({
-      color: 'white',
-      transparent: true,
-      opacity: 0.5
-    });
-
-    pointer = new THREE.Object3D();
-    pointerObj = new THREE.Mesh(pointerGeo, material);
-    pointerObj.position.z = -200;
-    pointer.add(pointerObj);
-    scene.add(pointer);
+    retical = new Retical(stereoCamera.proxyCamera, scene);
 
     setInterval(this.selection, 1000 / 10);;
 
@@ -141,14 +132,7 @@ function Refrigerator(scene, stereoCamera) {
 
   this.animate = function(time) {
     if (loaded) {
-      pointer.position.x = stereoCamera.proxyCamera.position.x;
-      pointer.position.y = stereoCamera.proxyCamera.position.y;
-      pointer.position.z = stereoCamera.proxyCamera.position.z;
-
-      pointer.rotation.x = stereoCamera.proxyCamera.rotation.x;
-      pointer.rotation.y = stereoCamera.proxyCamera.rotation.y;
-      pointer.rotation.z = stereoCamera.proxyCamera.rotation.z;
-
+      retical.update();
     }
   };
 
