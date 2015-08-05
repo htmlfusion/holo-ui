@@ -1,3 +1,5 @@
+
+
 function Refrigerator(scene, stereoCamera) {
 
   var self = this;
@@ -104,16 +106,16 @@ function Refrigerator(scene, stereoCamera) {
     /*
       Coffee Object
      */
-    var coffee = new THREE.Mesh(new THREE.BoxGeometry(17.78, 7.62, 10.16, 32),
-      new THREE.MeshBasicMaterial({
-        color: 'black'
-      }));
-
-    var coffeeAnnotation = new ARObject(coffee, scene, './img/coffee.png');
-    coffeeAnnotation.group.position.z = -34;
-    coffeeAnnotation.group.position.x = 8;
-    coffeeAnnotation.group.position.y = -33;
-    objects.push(coffeeAnnotation);
+    // var coffee = new THREE.Mesh(new THREE.BoxGeometry(17.78, 7.62, 10.16, 32),
+    //   new THREE.MeshBasicMaterial({
+    //     color: 'black'
+    //   }));
+    // 
+    // var coffeeAnnotation = new ARObject(coffee, scene, './img/coffee.png');
+    // coffeeAnnotation.group.position.z = -34;
+    // coffeeAnnotation.group.position.x = 8;
+    // coffeeAnnotation.group.position.y = -33;
+    // objects.push(coffeeAnnotation);
 
     /*
       Retical Object and setup

@@ -1,15 +1,22 @@
+'use strict';
+
 function Retical(camera, scene) {
 
   this.camera = camera
   this.group = new THREE.Object3D();
+  this.timeout = null;
+  this.debounceTimeout = 500;
+  this.animationDuration = 250;
 
-  var geometry = new THREE.SphereGeometry( 5, 32, 32 );
-  var material = new THREE.MeshBasicMaterial( {color: 'white' } );
-  this.sphere = new THREE.Mesh( geometry, material );
+  var geometry = new THREE.SphereGeometry( .25, 32, 32 );
+  this.material = new THREE.MeshBasicMaterial( { 
+    color: 'white', opacity: 0.5, transparent: true,
+  });
   
-  var geometry = new THREE.TorusGeometry( 10, 3, 16, 100 );
-  var material = new THREE.MeshBasicMaterial( { color: 'white' } );
-  this.ring = new THREE.Mesh( geometry, material );
+  this.sphere = new THREE.Mesh( geometry, this.material );
+  
+  var geometry = new THREE.TorusGeometry( 1, .25, 16, 100 );
+  this.ring = new THREE.Mesh( geometry, this.material );
 
 
   this.sphere.position.z = -200;
@@ -20,7 +27,7 @@ function Retical(camera, scene) {
   this.tweens = [];
   scene.add(this.group);
   
-  this.hasFocus = false;
+  this.toggleFocus(false);
   this.play();
 };
 
@@ -37,53 +44,67 @@ Retical.prototype.update = function() {
 };
 
 Retical.prototype.focus = function(){
-  
   this.hasFocus = true;
-  var scale = {
-    y: 0
-  };
-  var target = {
-    y: 1
-  };
-  var tween = new TWEEN.Tween(scale).to(target, 1500);
-  tween.easing(TWEEN.Easing.Elastic.InOut);
-  tween.onUpdate(function() {
-    this.ring.scale.x = scale.y;
-    this.ring.scale.y = scale.y;
-    this.ring.scale.z = scale.y;
-  }.bind(this));
-  tween.delay(500);
-
-  tween.start();
-  tween.onComplete(function() {
-    tween.stop();
-  });
-  this.tweens.push(tween);
+  if(this.timeout){
+    clearTimeout(this.timeout);
+  }
+  this.timeout = setTimeout(function(){
+    this.timeout = null;
+    this.toggleFocus(true);
+  }.bind(this), this.debounceTimeout);
 }
 
 Retical.prototype.blur = function(){
   this.hasFocus = false;
+  if(this.timeout){
+    clearTimeout(this.timeout);
+  }
+  this.timeout = setTimeout(function(){
+    this.toggleFocus(false);
+    this.timeout = null;
+  }.bind(this), this.debounceTimeout);
+}
+  
+Retical.prototype.toggleFocus = function(show){
+  
   var scale = {
-    y: 1
+    y: 1,
+    opacity: 1
   };
+  
   var target = {
-    y: 0
+    y: 0,
+    opacity: 0.2
   };
-  var tween = new TWEEN.Tween(scale).to(target, 1500);
-  tween.easing(TWEEN.Easing.Elastic.InOut);
+  
+  if(show){
+    target.y = 1;
+    scale.y = 0;
+    target.opacity = 1;
+    scale.opacity = 0.2;
+  }
+  
+  var tween = new TWEEN.Tween(scale).to(target, this.animationDuration);
+  tween.easing(TWEEN.Easing.Quadratic.InOut);
   tween.onUpdate(function() {
+    console.log(show);
+    console.log(scale.y);
     this.ring.scale.x = scale.y;
     this.ring.scale.y = scale.y;
     this.ring.scale.z = scale.y;
+    this.material.opacity = scale.opacity;
   }.bind(this));
-  tween.delay(500);
 
   tween.start();
   tween.onComplete(function() {
     tween.stop();
-  });
+    var index = this.tweens.indexOf(tween);
+    if(index!==-1){
+      this.tweens.splice(index, 1);
+    }
+  }.bind(this));
   this.tweens.push(tween);
-}
+};
 
 
 Retical.prototype.play = function(){
