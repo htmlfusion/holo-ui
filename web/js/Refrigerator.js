@@ -20,11 +20,11 @@ function Refrigerator(scene, stereoCamera) {
     var selectedObjects = [];
 
     if(!retical.hasFocus && intersects.length){
-      retical.focus();
+      retical.focus(intersects[0]);
     }
     
     if(retical.hasFocus && !intersects.length){
-      retical.blur();
+      retical.blur(intersects[0]);
     }
       
     for (var i = 0; i < intersects.length; i++) {

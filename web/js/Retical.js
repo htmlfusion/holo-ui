@@ -7,6 +7,8 @@ function Retical(camera, scene) {
   this.timeout = null;
   this.debounceTimeout = 500;
   this.animationDuration = 250;
+  this.reticalDistance = -200;
+  this.focusOn = null
 
   var geometry = new THREE.SphereGeometry( .25, 32, 32 );
   this.material = new THREE.MeshBasicMaterial( { 
@@ -19,8 +21,8 @@ function Retical(camera, scene) {
   this.ring = new THREE.Mesh( geometry, this.material );
 
 
-  this.sphere.position.z = -200;
-  this.ring.position.z = -200;
+  this.sphere.position.z = this.reticalDistance;
+  this.ring.position.z = this.reticalDistance;
   this.group.add(this.sphere);
   this.group.add(this.ring);
   
@@ -41,9 +43,17 @@ Retical.prototype.update = function() {
   this.group.rotation.y = this.camera.rotation.y;
   this.group.rotation.z = this.camera.rotation.z;
   
+  
+  if(this.focusOn){
+    var distance = this.camera.position.distanceTo(this.focusOn.point);
+    this.ring.position.z = -distance;
+    this.sphere.position.z = -distance;
+  }
+  
 };
 
-Retical.prototype.focus = function(){
+Retical.prototype.focus = function(object){
+  this.focusOn = object;
   this.hasFocus = true;
   if(this.timeout){
     clearTimeout(this.timeout);
@@ -67,32 +77,42 @@ Retical.prototype.blur = function(){
   
 Retical.prototype.toggleFocus = function(show){
   
-  var scale = {
-    y: 1,
-    opacity: 1
-  };
-  
-  var target = {
-    y: 0,
-    opacity: 0.2
-  };
-  
-  if(show){
-    target.y = 1;
-    scale.y = 0;
-    target.opacity = 1;
-    scale.opacity = 0.2;
+  var targetScale = 0;
+  var targetOpacity = 1;
+  var targetDistance;
+  if(this.focusOn){
+    targetDistance = -this.focusOn.distance+10;
+  } else {
+    targetDistance = this.reticalDistance;
   }
   
-  var tween = new TWEEN.Tween(scale).to(target, this.animationDuration);
+  if(show){
+    targetScale = 1;
+    targetOpacity = .3;
+    targetDistance = -this.focusOn.distance+10;
+  }
+  
+  var target = {
+    scale: this.ring.scale.x,
+    opacity: this.material.opacity,
+    distance: this.ring.position.z
+  };
+  
+  var tween = new TWEEN.Tween(target).to({
+    scale: targetScale,
+    opacity: targetOpacity,
+    distance: targetDistance
+  }, this.animationDuration);
+  
   tween.easing(TWEEN.Easing.Quadratic.InOut);
   tween.onUpdate(function() {
-    console.log(show);
-    console.log(scale.y);
-    this.ring.scale.x = scale.y;
-    this.ring.scale.y = scale.y;
-    this.ring.scale.z = scale.y;
-    this.material.opacity = scale.opacity;
+    this.ring.scale.x = target.scale;
+    this.ring.scale.y = target.scale;
+    this.ring.scale.z = target.scale;
+    
+    // this.ring.position.z = target.distance;
+    // this.sphere.position.z = target.distance;
+    this.material.opacity = target.opacity;
   }.bind(this));
 
   tween.start();
