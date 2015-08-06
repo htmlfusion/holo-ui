@@ -1,3 +1,5 @@
+
+
 function Refrigerator(scene, stereoCamera) {
 
   var self = this;
@@ -5,8 +7,9 @@ function Refrigerator(scene, stereoCamera) {
   var loaded = false;
   var raycaster = new THREE.Raycaster();
   var center = new THREE.Vector2(0, 0);
-  var pointer;
+  var retical;
   var objects = [];
+  var glanceable = false;
 
   this.selection = function(time) {
 
@@ -14,37 +17,43 @@ function Refrigerator(scene, stereoCamera) {
 
     var hotspots = objects.map(function(o){ return o.hotspot; });
 
-    // List of selectable objects
-    hotspots.forEach(function(obj) {
-      var distance = obj.position.distanceTo(stereoCamera.proxyCamera.position)
-      obj.material.color.set('yellow');
-      // obj.scale.x = distance / 800;
-      // obj.scale.y = distance / 800;
-      // obj.scale.z = distance / 800;
-    });
-
     var intersects = raycaster.intersectObjects(hotspots);
-    var selectedObjects = []
+    var selectedObjects = [];
 
-    for (var i = 0; i < intersects.length; i++) {
+    if(glanceable){
+      
+      for (var i = 0; i < intersects.length; i++) {
 
-      intersects[i].object.material.color.set(0xff0000);
-      if (!intersects[i].object.selected && intersects[i].object.onFocus) {
-        intersects[i].object.onFocus();
-      }
-      intersects[i].object.selected = true;
-      selectedObjects.push(intersects[i].object);
-
-    }
-
-    hotspots.forEach(function(obj) {
-      if (selectedObjects.indexOf(obj) === -1) {
-        if (obj.selected && obj.onBlur) {
-          obj.onBlur();
+        intersects[i].object.material.color.set(0xff0000);
+        if (!intersects[i].object.selected && intersects[i].object.onFocus) {
+          intersects[i].object.onFocus();
         }
-        obj.selected = false;
+        
+        intersects[i].object.selected = true;
+        selectedObjects.push(intersects[i].object);
+
       }
-    });
+
+      hotspots.forEach(function(obj) {
+        if (selectedObjects.indexOf(obj) === -1) {
+          if (obj.selected && obj.onBlur) {
+            obj.onBlur();
+          }
+          obj.selected = false;
+        }
+      });
+      
+    }
+    
+    if(!retical.hasFocus && intersects.length){
+      retical.focus(intersects[0]);
+    }
+    
+    if(retical.hasFocus && !intersects.length){
+      retical.blur(intersects[0]);
+    }
+      
+    
   };
 
   this.load = function() {
@@ -102,34 +111,23 @@ function Refrigerator(scene, stereoCamera) {
     /*
       Coffee Object
      */
-    var coffee = new THREE.Mesh(new THREE.BoxGeometry(17.78, 7.62, 10.16, 32),
-      new THREE.MeshBasicMaterial({
-        color: 'black'
-      }));
-
-    var coffeeAnnotation = new ARObject(coffee, scene, './img/coffee.png');
-    coffeeAnnotation.group.position.z = -34;
-    coffeeAnnotation.group.position.x = 8;
-    coffeeAnnotation.group.position.y = -33;
-    objects.push(coffeeAnnotation);
+    // var coffee = new THREE.Mesh(new THREE.BoxGeometry(17.78, 7.62, 10.16, 32),
+    //   new THREE.MeshBasicMaterial({
+    //     color: 'black'
+    //   }));
+    // 
+    // var coffeeAnnotation = new ARObject(coffee, scene, './img/coffee.png');
+    // coffeeAnnotation.group.position.z = -34;
+    // coffeeAnnotation.group.position.x = 8;
+    // coffeeAnnotation.group.position.y = -33;
+    // objects.push(coffeeAnnotation);
 
     /*
-      Pointer Object and setup
+      Retical Object and setup
      */
-    var pointerGeo = new THREE.SphereGeometry(2, 32, 32);
-    var material = new THREE.MeshLambertMaterial({
-      color: 'white',
-      transparent: true,
-      opacity: 0.5
-    });
+    retical = new Retical(stereoCamera.proxyCamera, scene, objects);
 
-    pointer = new THREE.Object3D();
-    pointerObj = new THREE.Mesh(pointerGeo, material);
-    pointerObj.position.z = -200;
-    pointer.add(pointerObj);
-    scene.add(pointer);
-
-    setInterval(this.selection, 1000 / 10);;
+    setInterval(this.selection, 1000 / 60);;
 
     loaded = true;
   }
@@ -141,14 +139,7 @@ function Refrigerator(scene, stereoCamera) {
 
   this.animate = function(time) {
     if (loaded) {
-      pointer.position.x = stereoCamera.proxyCamera.position.x;
-      pointer.position.y = stereoCamera.proxyCamera.position.y;
-      pointer.position.z = stereoCamera.proxyCamera.position.z;
-
-      pointer.rotation.x = stereoCamera.proxyCamera.rotation.x;
-      pointer.rotation.y = stereoCamera.proxyCamera.rotation.y;
-      pointer.rotation.z = stereoCamera.proxyCamera.rotation.z;
-
+      retical.update();
     }
   };
 
