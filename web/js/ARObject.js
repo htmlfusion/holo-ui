@@ -52,7 +52,7 @@ function ARObject(object, scene, url) {
       this.unhighlight();
       this.hideLabel();
       this.timeout = null;
-    }.bind(this), 1000);
+    }.bind(this), 250);
 
   }.bind(this);
 
@@ -141,12 +141,11 @@ ARObject.prototype.showLabel = function() {
   var target = {
     y: 1
   };
-  var tween = new TWEEN.Tween(scale).to(target, 1500);
+  var tween = new TWEEN.Tween(scale).to(target, 500);
   tween.easing(TWEEN.Easing.Elastic.InOut);
   tween.onUpdate(function() {
     this.label.scale.y = scale.y;
   }.bind(this));
-  tween.delay(500);
 
   tween.start();
   tween.onComplete(function() {
@@ -163,12 +162,11 @@ ARObject.prototype.hideLabel = function() {
   var target = {
     y: 0
   };
-  var tween = new TWEEN.Tween(scale).to(target, 1500);
+  var tween = new TWEEN.Tween(scale).to(target, 500);
   tween.easing(TWEEN.Easing.Elastic.InOut)
   tween.onUpdate(function() {
     this.label.scale.y = scale.y;
   }.bind(this));
-  tween.delay(500);
 
   this.tweens.push(tween);
   tween.start();
@@ -189,4 +187,5 @@ ARObject.prototype.play = function(){
   }
 
   reqFrame(0);
+  this.hotspot.onBlur();
 };

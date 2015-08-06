@@ -9,6 +9,7 @@ function Refrigerator(scene, stereoCamera) {
   var center = new THREE.Vector2(0, 0);
   var retical;
   var objects = [];
+  var glanceable = false;
 
   this.selection = function(time) {
 
@@ -19,6 +20,31 @@ function Refrigerator(scene, stereoCamera) {
     var intersects = raycaster.intersectObjects(hotspots);
     var selectedObjects = [];
 
+    if(glanceable){
+      
+      for (var i = 0; i < intersects.length; i++) {
+
+        intersects[i].object.material.color.set(0xff0000);
+        if (!intersects[i].object.selected && intersects[i].object.onFocus) {
+          intersects[i].object.onFocus();
+        }
+        
+        intersects[i].object.selected = true;
+        selectedObjects.push(intersects[i].object);
+
+      }
+
+      hotspots.forEach(function(obj) {
+        if (selectedObjects.indexOf(obj) === -1) {
+          if (obj.selected && obj.onBlur) {
+            obj.onBlur();
+          }
+          obj.selected = false;
+        }
+      });
+      
+    }
+    
     if(!retical.hasFocus && intersects.length){
       retical.focus(intersects[0]);
     }
@@ -27,27 +53,6 @@ function Refrigerator(scene, stereoCamera) {
       retical.blur(intersects[0]);
     }
       
-    for (var i = 0; i < intersects.length; i++) {
-
-      intersects[i].object.material.color.set(0xff0000);
-      if (!intersects[i].object.selected && intersects[i].object.onFocus) {
-        intersects[i].object.onFocus();
-      }
-      
-      
-      intersects[i].object.selected = true;
-      selectedObjects.push(intersects[i].object);
-
-    }
-
-    hotspots.forEach(function(obj) {
-      if (selectedObjects.indexOf(obj) === -1) {
-        if (obj.selected && obj.onBlur) {
-          obj.onBlur();
-        }
-        obj.selected = false;
-      }
-    });
     
   };
 
@@ -120,9 +125,9 @@ function Refrigerator(scene, stereoCamera) {
     /*
       Retical Object and setup
      */
-    retical = new Retical(stereoCamera.proxyCamera, scene);
+    retical = new Retical(stereoCamera.proxyCamera, scene, objects);
 
-    setInterval(this.selection, 1000 / 10);;
+    setInterval(this.selection, 1000 / 60);;
 
     loaded = true;
   }

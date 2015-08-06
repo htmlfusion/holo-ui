@@ -1,6 +1,6 @@
 'use strict';
 
-function Retical(camera, scene) {
+function Retical(camera, scene, objects) {
 
   this.camera = camera
   this.group = new THREE.Object3D();
@@ -9,6 +9,7 @@ function Retical(camera, scene) {
   this.animationDuration = 250;
   this.reticalDistance = -200;
   this.focusOn = null
+  this.objects = objects
 
   var geometry = new THREE.SphereGeometry( .25, 32, 32 );
   this.material = new THREE.MeshBasicMaterial( { 
@@ -31,6 +32,23 @@ function Retical(camera, scene) {
   
   this.toggleFocus(false);
   this.play();
+  
+  window.onclick = function(){
+    
+    if(this.focusOn){
+      
+      if(this.focusOn.object.selected){
+        this.focusOn.object.onBlur();
+        this.focusOn.object.selected = false;
+      } else {
+        this.focusOn.object.onFocus();
+        this.focusOn.object.selected = true;
+      }
+      
+    }
+    
+  }.bind(this);
+  
 };
 
 Retical.prototype.update = function() {
